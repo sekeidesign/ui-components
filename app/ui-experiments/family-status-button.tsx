@@ -44,6 +44,7 @@ const FamilyStatusButton = () => {
   return (
     <motion.div
       layout
+      transition={{ duration: 0.2 }}
       className={`rounded-full font-[550] text-lg flex items-center justify-center pr-6 pl-4 gap-2 py-3 overflow-hidden relative ${statuses[status].color}`}
     >
       <AnimatePresence mode="popLayout" initial={false}>
@@ -74,13 +75,13 @@ const FamilyStatusButton = () => {
 const iconVariants = {
   initial: { scale: 0, opacity: 0 },
   animate: { scale: 1, opacity: 1 },
-  exit: { scale: 0, opacity: 0 },
+  exit: { scale: 0.3, opacity: 0 },
 };
 
 const Icon = ({ status }: { status: keyof typeof statuses }) => {
   return (
     <div className="flex items-center justify-center size-6">
-      <AnimatePresence mode="popLayout" initial={false}>
+      <AnimatePresence mode="popLayout" initial={true}>
         <motion.div
           key={status}
           variants={iconVariants}
