@@ -114,7 +114,7 @@ const Icon = ({ status }: { status: keyof typeof statuses }) => {
               initial={{ rotate: 0 }}
               animate={{ rotate: 360 }}
               transition={{
-                duration: 0.6,
+                duration: 0.75,
                 repeat: Infinity,
                 ease: "easeInOut",
                 repeatDelay: 0.5,
@@ -123,7 +123,7 @@ const Icon = ({ status }: { status: keyof typeof statuses }) => {
               <motion.path
                 initial={{ rotate: 0 }}
                 animate={{ rotate: 360 }}
-                transition={{ duration: 0.4, repeat: Infinity, ease: "linear" }}
+                transition={{ duration: 0.5, repeat: Infinity, ease: "linear" }}
                 d="M10 1.5C14.6944 1.5 18.5 5.30558 18.5 10C18.5 14.6944 14.6944 18.5 10 18.5C5.30558 18.5 1.5 14.6944 1.5 10C1.5 5.30558 5.30558 1.5 10 1.5Z"
                 stroke="currentColor"
                 strokeWidth="3"
