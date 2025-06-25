@@ -49,6 +49,7 @@ const FamilyStatusButton = () => {
       <AnimatePresence mode="popLayout" initial={false}>
         <Icon status={status} />
         <motion.span
+          layoutId={status}
           initial={{ opacity: 0, x: -24 }}
           animate={{
             opacity: 1,

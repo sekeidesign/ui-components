@@ -69,6 +69,7 @@ const FamilyStatusButton = ()=>{
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].span, {
+                    layoutId: status,
                     initial: {
                         opacity: 0,
                         x: -24
@@ -152,12 +153,12 @@ const Icon = ({ status })=>{
                             clipRule: "evenodd"
                         }, void 0, false, {
                             fileName: "[project]/app/ui-experiments/family-status-button.tsx",
-                            lineNumber: 98,
+                            lineNumber: 99,
                             columnNumber: 15
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/ui-experiments/family-status-button.tsx",
-                        lineNumber: 92,
+                        lineNumber: 93,
                         columnNumber: 13
                     }, this),
                     status === "analyzing" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].svg, {
@@ -200,7 +201,7 @@ const Icon = ({ status })=>{
                                 pathLength: 0.75
                             }, void 0, false, {
                                 fileName: "[project]/app/ui-experiments/family-status-button.tsx",
-                                lineNumber: 122,
+                                lineNumber: 123,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
@@ -210,13 +211,13 @@ const Icon = ({ status })=>{
                                 strokeWidth: "3"
                             }, void 0, false, {
                                 fileName: "[project]/app/ui-experiments/family-status-button.tsx",
-                                lineNumber: 134,
+                                lineNumber: 135,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, "analyzing-icon", true, {
                         fileName: "[project]/app/ui-experiments/family-status-button.tsx",
-                        lineNumber: 106,
+                        lineNumber: 107,
                         columnNumber: 13
                     }, this),
                     status === "warning" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].svg, {
@@ -244,28 +245,28 @@ const Icon = ({ status })=>{
                             clipRule: "evenodd"
                         }, void 0, false, {
                             fileName: "[project]/app/ui-experiments/family-status-button.tsx",
-                            lineNumber: 156,
+                            lineNumber: 157,
                             columnNumber: 15
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/ui-experiments/family-status-button.tsx",
-                        lineNumber: 143,
+                        lineNumber: 144,
                         columnNumber: 13
                     }, this)
                 ]
             }, status, true, {
                 fileName: "[project]/app/ui-experiments/family-status-button.tsx",
-                lineNumber: 83,
+                lineNumber: 84,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/ui-experiments/family-status-button.tsx",
-            lineNumber: 82,
+            lineNumber: 83,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/ui-experiments/family-status-button.tsx",
-        lineNumber: 81,
+        lineNumber: 82,
         columnNumber: 5
     }, this);
 };
