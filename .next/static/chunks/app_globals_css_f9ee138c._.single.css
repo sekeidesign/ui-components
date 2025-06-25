@@ -451,12 +451,20 @@
     text-align: center;
   }
 
+  .font-\[\"ui-rounded\"\] {
+    font-family: "ui-rounded";
+  }
+
   .font-\[family-name\:var\(--font-geist-mono\)\] {
     font-family: var(--font-geist-mono);
   }
 
   .font-\[family-name\:var\(--font-geist-sans\)\] {
     font-family: var(--font-geist-sans);
+  }
+
+  .font-\[ui-rounded\] {
+    font-family: ui-rounded;
   }
 
   .text-lg {

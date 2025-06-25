@@ -44,7 +44,7 @@ const FamilyStatusButton = () => {
   return (
     <motion.div
       layout
-      className={`rounded-full font-[550] font-family-[ui-rounded] text-lg flex items-center justify-center pr-6 pl-4 gap-2 py-3 overflow-hidden relative ${statuses[status].color}`}
+      className={`rounded-full font-[550] text-lg flex items-center justify-center pr-6 pl-4 gap-2 py-3 overflow-hidden relative ${statuses[status].color}`}
     >
       <AnimatePresence mode="popLayout" initial={false}>
         <Icon status={status} />
@@ -53,7 +53,7 @@ const FamilyStatusButton = () => {
           animate={{
             opacity: 1,
             x: 0,
-            transition: { type: "spring", duration: 0.7, bounce: 0.4 },
+            transition: { type: "spring", duration: 0.9, bounce: 0.3 },
           }}
           exit={{
             opacity: 0,
@@ -86,6 +86,7 @@ const Icon = ({ status }: { status: keyof typeof statuses }) => {
           initial="initial"
           animate="animate"
           exit="exit"
+          transition={{ duration: 0.25 }}
         >
           {status === "success" && (
             <svg
