@@ -29,7 +29,7 @@ export default function Home() {
 						<Tooltip.Root positioning={{ placement: "top" }} openDelay={0} closeDelay={0}>
               <Tooltip.Trigger asChild>
                 <Link
-                  href="https://github.com/joshuajohnson/motion-tailwind-nextjs-ui-experiments"
+                  href="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/family-status-button.tsx"
                   target="_blank"
                   className="absolute top-2 right-2 bg-gray-200/60 hover:bg-gray-200 hover:text-gray-700 size-7 flex items-center justify-center rounded-md text-gray-500"
                   >
@@ -46,7 +46,7 @@ export default function Home() {
 						<h3 className="text-sm text-gray-600 font-[500] leading-none">
 							Learnings
 						</h3>
-						<p className="text-sm text-gray-500 leading-relaxed space-y-1">
+						<p className="text-sm text-gray-500 font-[420] leading-relaxed space-y-1">
 							
 								In my first attempt at animating the text, it had a "jelly"
 								effect, particularly when switching between the "Analyzing" and
@@ -64,8 +64,7 @@ export default function Home() {
 							
 								The fix was simply to add a unique key to the text element for
 								each state, which ensures only the button magically transforms
-								between states, while the label only has its initial, animate,
-								and exit translations applied.
+								between states, while the label simply translates on the x axis and fades in and out.
 							
 						</p>
 					</div>
@@ -88,7 +87,7 @@ const TextLink = ({
 	return (
 		<Link
 			href={href}
-			className="text-blue-500 font-[450] underline hover:no-underline"
+			className="text-blue-500 font-[500] underline hover:no-underline"
 			target={target}
 		>
 			{children}

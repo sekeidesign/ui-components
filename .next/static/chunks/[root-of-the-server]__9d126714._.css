@@ -629,6 +629,21 @@
     line-height: var(--leading-relaxed);
   }
 
+  .font-\[400\] {
+    --tw-font-weight: 400;
+    font-weight: 400;
+  }
+
+  .font-\[410\] {
+    --tw-font-weight: 410;
+    font-weight: 410;
+  }
+
+  .font-\[420\] {
+    --tw-font-weight: 420;
+    font-weight: 420;
+  }
+
   .font-\[450\] {
     --tw-font-weight: 450;
     font-weight: 450;
