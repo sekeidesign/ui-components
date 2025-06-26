@@ -40,7 +40,10 @@ export default function Home() {
       <Tooltip.Content className='bg-gray-900 text-gray-50 font-[450] p-2 py-1 text-xs rounded-md'>View source code</Tooltip.Content>
     </Tooltip.Positioner>
             </Tooltip.Root>
+            <div className="scale-90 md:scale-100">
+
 						<FamilyStatusButton />
+            </div>
 					</div>
 					<div className="space-y-2">
 						<h3 className="text-sm text-gray-600 font-[500] leading-none">
