@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ark-ui/react": "^5.15.1",
+    "@heroicons/react": "^2.2.0",
     "motion": "^12.19.1",
     "next": "15.3.4",
     "react": "^19.0.0",

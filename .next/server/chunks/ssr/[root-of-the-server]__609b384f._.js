@@ -17,9 +17,9 @@ __turbopack_context__.s({
     "default": (()=>__TURBOPACK__default__export__)
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/framer-motion/dist/es/components/AnimatePresence/index.mjs [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/framer-motion/dist/es/render/components/motion/proxy.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
 "use client";
 ;
 ;
@@ -40,30 +40,30 @@ const statuses = {
 };
 const FamilyStatusButton = ()=>{
     const [status, setStatus] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("analyzing");
-    const cycleStatus = ()=>{
-        setTimeout(()=>{
-            setStatus("success");
-        }, 1800);
-        setTimeout(()=>{
-            setStatus("analyzing");
-        }, 3200);
-        setTimeout(()=>{
-            setStatus("warning");
-        }, 4800);
-        setTimeout(()=>{
-            setStatus("analyzing");
-            setTimeout(cycleStatus, 0);
-        }, 6400);
-    };
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        cycleStatus();
+        const cycle = ()=>{
+            setTimeout(()=>{
+                setStatus("success");
+            }, 1800);
+            setTimeout(()=>{
+                setStatus("analyzing");
+            }, 3200);
+            setTimeout(()=>{
+                setStatus("warning");
+            }, 4800);
+            setTimeout(()=>{
+                setStatus("analyzing");
+                setTimeout(cycle, 0);
+            }, 6400);
+        };
+        cycle();
     }, []);
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
         layout: true,
         transition: {
             duration: 0.2
         },
-        className: `rounded-full font-[550] text-lg flex items-center justify-center pr-6 pl-4 gap-2 py-3 overflow-hidden relative ${statuses[status].color}`,
+        className: `rounded-full font-[550] cursor-pointer text-lg flex items-center justify-center pr-6 pl-4 gap-2 py-3 overflow-hidden relative ${statuses[status].color}`,
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AnimatePresence"], {
             mode: "popLayout",
             initial: false,
@@ -73,7 +73,7 @@ const FamilyStatusButton = ()=>{
                 }, void 0, false, {
                     fileName: "[project]/app/ui-experiments/family-status-button.tsx",
                     lineNumber: 51,
-                    columnNumber: 9
+                    columnNumber: 5
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].span, {
                     layoutId: status,
@@ -104,18 +104,18 @@ const FamilyStatusButton = ()=>{
                 }, `${status}-label`, false, {
                     fileName: "[project]/app/ui-experiments/family-status-button.tsx",
                     lineNumber: 52,
-                    columnNumber: 9
+                    columnNumber: 5
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/ui-experiments/family-status-button.tsx",
             lineNumber: 50,
-            columnNumber: 7
+            columnNumber: 4
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/ui-experiments/family-status-button.tsx",
         lineNumber: 45,
-        columnNumber: 5
+        columnNumber: 3
     }, this);
 };
 const iconVariants = {
@@ -152,19 +152,21 @@ const Icon = ({ status })=>{
                         viewBox: "0 0 24 24",
                         fill: "currentColor",
                         className: "size-6",
+                        role: "img",
+                        "aria-label": "Success icon",
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
                             fillRule: "evenodd",
                             d: "M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z",
                             clipRule: "evenodd"
                         }, void 0, false, {
                             fileName: "[project]/app/ui-experiments/family-status-button.tsx",
-                            lineNumber: 100,
-                            columnNumber: 15
+                            lineNumber: 102,
+                            columnNumber: 8
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/ui-experiments/family-status-button.tsx",
                         lineNumber: 94,
-                        columnNumber: 13
+                        columnNumber: 7
                     }, this),
                     status === "analyzing" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].svg, {
                         width: "20",
@@ -184,6 +186,8 @@ const Icon = ({ status })=>{
                             ease: "easeInOut",
                             repeatDelay: 0.5
                         },
+                        role: "img",
+                        "aria-label": "Analyzing icon",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].path, {
                                 initial: {
@@ -206,8 +210,8 @@ const Icon = ({ status })=>{
                                 pathLength: 0.75
                             }, void 0, false, {
                                 fileName: "[project]/app/ui-experiments/family-status-button.tsx",
-                                lineNumber: 124,
-                                columnNumber: 15
+                                lineNumber: 128,
+                                columnNumber: 8
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
                                 d: "M10 1.5C14.6944 1.5 18.5 5.30558 18.5 10C18.5 14.6944 14.6944 18.5 10 18.5C5.30558 18.5 1.5 14.6944 1.5 10C1.5 5.30558 5.30558 1.5 10 1.5Z",
@@ -216,14 +220,14 @@ const Icon = ({ status })=>{
                                 strokeWidth: "3"
                             }, void 0, false, {
                                 fileName: "[project]/app/ui-experiments/family-status-button.tsx",
-                                lineNumber: 136,
-                                columnNumber: 15
+                                lineNumber: 140,
+                                columnNumber: 8
                             }, this)
                         ]
                     }, "analyzing-icon", true, {
                         fileName: "[project]/app/ui-experiments/family-status-button.tsx",
-                        lineNumber: 108,
-                        columnNumber: 13
+                        lineNumber: 110,
+                        columnNumber: 7
                     }, this),
                     status === "warning" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].svg, {
                         xmlns: "http://www.w3.org/2000/svg",
@@ -237,42 +241,46 @@ const Icon = ({ status })=>{
                                 4,
                                 -2,
                                 2,
+                                -1,
+                                1,
                                 0
                             ],
                             transition: {
                                 duration: 0.25,
-                                delay: 0.5
+                                delay: 0.75
                             }
                         },
+                        role: "img",
+                        "aria-label": "Warning icon",
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
                             fillRule: "evenodd",
                             d: "M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z",
                             clipRule: "evenodd"
                         }, void 0, false, {
                             fileName: "[project]/app/ui-experiments/family-status-button.tsx",
-                            lineNumber: 158,
-                            columnNumber: 15
+                            lineNumber: 164,
+                            columnNumber: 8
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/ui-experiments/family-status-button.tsx",
-                        lineNumber: 145,
-                        columnNumber: 13
+                        lineNumber: 149,
+                        columnNumber: 7
                     }, this)
                 ]
             }, status, true, {
                 fileName: "[project]/app/ui-experiments/family-status-button.tsx",
                 lineNumber: 85,
-                columnNumber: 9
+                columnNumber: 5
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/ui-experiments/family-status-button.tsx",
             lineNumber: 84,
-            columnNumber: 7
+            columnNumber: 4
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/ui-experiments/family-status-button.tsx",
         lineNumber: 83,
-        columnNumber: 5
+        columnNumber: 3
     }, this);
 };
 const __TURBOPACK__default__export__ = FamilyStatusButton;
