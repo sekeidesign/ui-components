@@ -51,16 +51,16 @@ export default function Home() {
 						</h3>
 						<p className="text-sm text-gray-500 font-[420] leading-relaxed space-y-1">
 							
-								In my first attempt at animating the text, it had a "jelly"
-								effect, particularly when switching between the "Analyzing" and
-								"Success" states. <br />
+								In my first attempt the text had a &quot;jelly&quot;
+								effect, particularly when animating between the &quot;Analyzing&quot; and
+								&quot;Success&quot; states. <br />
 							
 								Thankfully I had recently read about{" "}
 								<TextLink
 									href="https://www.nan.fyi/magic-motion"
 									target="_blank"
 								>
-									how Motion's "magic" layout property works under the hood
+									how Motion&apos;s &quot;magic&quot; layout property works under the hood
 								</TextLink>
 								, which made it clear that this was caused by the text trying to
 								transform from one string to the next. <br />
