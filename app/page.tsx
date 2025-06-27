@@ -8,13 +8,13 @@ export default function Home() {
 	return (
 		<div className="font-[family-name:var(--font-geist-sans)]">
 			<main className="flex flex-col gap-8 p-4 md:p-8 mt-8 items-center justify-center container mx-auto max-w-screen-md">
-				<div className="w-full pt-20">
+				<div className="w-full pt-8 md:pt-20">
 					<h1 className="font-[500] text-gray-800">PG Gonni</h1>
 					<h2 className="font-[500] text-gray-500">
 						Design Engineer based in Montréal, QC
 					</h2>
 
-					<div className="text-sm text-gray-500 font-[450] pt-10 leading-relaxed space-y-2">
+					<div className="text-sm text-gray-500 font-[450] pt-4 md:pt-10 leading-relaxed space-y-2">
 						<p>
 							At the moment, I&apos;m Head of Design at{" "}
 							<TextLink
@@ -36,13 +36,13 @@ export default function Home() {
 							.
 						</p>
 					</div>
-					<p className="text-sm text-gray-500 font-[450] pt-10 leading-relaxed">
+					<p className="text-sm text-gray-500 font-[450] pt-4 md:pt-10 leading-relaxed">
 						Below are some UI experiments I&apos;ve been cooking up to practice
 						micro-interactions and animations.
 					</p>
 				</div>
 
-				<hr className="w-full border-gray-200 my-20" />
+				<hr className="w-full border-gray-200 my-8 md:my-20" />
 
 				<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/family-status-button.tsx">
 					<Experiment.Title>Transaction status button</Experiment.Title>
@@ -67,7 +67,7 @@ export default function Home() {
 						>
 							Benji Taylor
 						</TextLink>
-						<p className="py-1" />
+						<span className="py-1 block" />
 						In my first attempt the text had a &quot;jelly&quot; effect,
 						particularly when animating between the &quot;Analyzing&quot; and
 						&quot;Success&quot; states. <br />
@@ -87,9 +87,9 @@ export default function Home() {
 						out.
 					</Experiment.Description>
 				</Experiment>
-				<hr className="w-full border-gray-200 my-20" />
+				<hr className="w-full border-gray-200 my-8 md:my-20" />
 			</main>
-			<footer className="flex gap-8 items-center justify-between container mx-auto max-w-screen-md text-sm px-4 md:px-8 pb-20">
+			<footer className="flex gap-8 items-center justify-between container mx-auto max-w-screen-md text-sm px-4 md:px-8 pb-12 md:pb-20">
 				<div className="flex gap-4">
 					<TextLink
 						href="https://github.com/sekeidesign/"
