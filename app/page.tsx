@@ -1,21 +1,54 @@
 "use client";
 
+import { motion, stagger } from "motion/react";
 import FamilyStatusButton from "./ui-experiments/family-status-button";
 import { Experiment } from "./ui-kit/Experiment";
 import { TextLink } from "./ui-kit/TextLink";
+
+const textVariants = {
+	initial: { opacity: 0, y: 16 },
+	animate: { opacity: 1, y: 0 },
+};
+
+const textTransition = {
+	type: "spring",
+	duration: 0.5,
+	bounce: 0.3,
+};
 
 export default function Home() {
 	return (
 		<div className="font-[family-name:var(--font-geist-sans)]">
 			<main className="flex flex-col gap-8 p-4 md:p-8 mt-8 items-center justify-center container mx-auto max-w-screen-md">
-				<div className="w-full pt-8 md:pt-20">
-					<h1 className="font-[500] text-gray-800">PG Gonni</h1>
-					<h2 className="font-[500] text-gray-500">
+				<motion.div
+					variants={textVariants}
+					initial="initial"
+					animate="animate"
+					className="w-full pt-8 md:pt-20"
+					transition={{
+						staggerChildren: 0.1,
+						type: "spring",
+						duration: 1,
+						bounce: 0.2,
+					}}
+				>
+					<motion.h1
+						variants={textVariants}
+						transition={textTransition}
+						className="font-[500] text-gray-800"
+					>
+						PG Gonni
+					</motion.h1>
+					<motion.h2
+						variants={textVariants}
+						transition={textTransition}
+						className="font-[500] text-gray-500"
+					>
 						Design Engineer based in Montréal, QC
-					</h2>
+					</motion.h2>
 
 					<div className="text-sm text-gray-500 font-[450] pt-4 md:pt-10 leading-relaxed space-y-2">
-						<p>
+						<motion.p variants={textVariants} transition={textTransition}>
 							At the moment, I&apos;m Head of Design at{" "}
 							<TextLink
 								href="https://www.planned.com"
@@ -34,15 +67,22 @@ export default function Home() {
 								Metalab
 							</TextLink>
 							.
-						</p>
+						</motion.p>
 					</div>
-					<p className="text-sm text-gray-500 font-[450] pt-4 md:pt-10 leading-relaxed">
+					<motion.p
+						variants={textVariants}
+						transition={textTransition}
+						className="text-sm text-gray-500 font-[450] pt-4 md:pt-10 leading-relaxed"
+					>
 						Below are some UI experiments I&apos;ve been cooking up to practice
 						micro-interactions and animations.
-					</p>
-				</div>
-
-				<hr className="w-full border-gray-200 my-8 md:my-20" />
+					</motion.p>
+					<motion.hr
+						variants={textVariants}
+						transition={textTransition}
+						className="w-full border-gray-200 my-8 md:my-20"
+					/>
+				</motion.div>
 
 				<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/family-status-button.tsx">
 					<Experiment.Title>Transaction status button</Experiment.Title>
