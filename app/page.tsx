@@ -9,8 +9,8 @@ export default function Home() {
 		<div className="font-[family-name:var(--font-geist-sans)]">
 			<main className="flex flex-col gap-8 p-4 md:p-8 mt-8 items-center justify-center container mx-auto max-w-screen-md">
 				<div className="w-full pt-20">
-					<h1 className="text-sm font-[500] text-gray-800">PG Gonni</h1>
-					<h2 className="text-sm font-[500] text-gray-500">
+					<h1 className="font-[500] text-gray-800">PG Gonni</h1>
+					<h2 className="font-[500] text-gray-500">
 						Design Engineer based in Montréal, QC
 					</h2>
 
@@ -55,6 +55,19 @@ export default function Home() {
 						<FamilyStatusButton />
 					</Experiment.Example>
 					<Experiment.Description>
+						Based on{" "}
+						<TextLink href="https://family.co/" target="_blank" hasFavicon>
+							Family
+						</TextLink>{" "}
+						by{" "}
+						<TextLink
+							href="https://benji.org/family-values"
+							target="_blank"
+							hasFavicon
+						>
+							Benji Taylor
+						</TextLink>
+						<p className="py-1" />
 						In my first attempt the text had a &quot;jelly&quot; effect,
 						particularly when animating between the &quot;Analyzing&quot; and
 						&quot;Success&quot; states. <br />
