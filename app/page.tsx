@@ -16,7 +16,7 @@ export default function Home() {
 
 					<div className="text-sm text-gray-500 font-[450] pt-10 leading-relaxed space-y-2">
 						<p>
-							At the moment, I'm Head of Design at{" "}
+							At the moment, I&apos;m Head of Design at{" "}
 							<TextLink
 								href="https://www.planned.com"
 								target="_blank"
@@ -37,7 +37,7 @@ export default function Home() {
 						</p>
 					</div>
 					<p className="text-sm text-gray-500 font-[450] pt-10 leading-relaxed">
-						Below are some UI experiments I've been cooking up to practice
+						Below are some UI experiments I&apos;ve been cooking up to practice
 						micro-interactions and animations.
 					</p>
 				</div>
