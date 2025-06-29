@@ -623,7 +623,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$ui$2d$kit$2f$TextLink
 const textVariants = {
     initial: {
         opacity: 0,
-        y: 16
+        y: 12
     },
     animate: {
         opacity: 1,

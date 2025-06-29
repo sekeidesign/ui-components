@@ -6,7 +6,7 @@ import { Experiment } from "./ui-kit/Experiment";
 import { TextLink } from "./ui-kit/TextLink";
 
 const textVariants = {
-	initial: { opacity: 0, y: 16 },
+	initial: { opacity: 0, y: 12 },
 	animate: { opacity: 1, y: 0 },
 };
 
