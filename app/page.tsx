@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, stagger } from "motion/react";
+import { motion } from "motion/react";
 import FamilyStatusButton from "./ui-experiments/family-status-button";
 import { Experiment } from "./ui-kit/Experiment";
 import { TextLink } from "./ui-kit/TextLink";
