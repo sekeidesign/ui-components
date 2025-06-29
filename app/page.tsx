@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, type Transition } from "motion/react";
 import FamilyStatusButton from "./ui-experiments/family-status-button";
 import { Experiment } from "./ui-kit/Experiment";
 import { TextLink } from "./ui-kit/TextLink";
@@ -10,7 +10,7 @@ const textVariants = {
 	animate: { opacity: 1, y: 0 },
 };
 
-const textTransition = {
+const textTransition: Transition = {
 	type: "spring",
 	duration: 0.5,
 	bounce: 0.3,
