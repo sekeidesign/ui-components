@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "PG Gonni",
+	title: "PG's UI Kitchen",
 	description: "Design Engineer based in Montréal, QC",
 };
 
