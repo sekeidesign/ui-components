@@ -19,12 +19,12 @@ const textTransition: Transition = {
 export default function Home() {
 	return (
 		<div className="font-[family-name:var(--font-geist-sans)]">
-			<main className="flex flex-col gap-8 p-4 md:p-8 mt-8 items-center justify-center container mx-auto max-w-screen-md">
+			<main className="flex flex-col gap-8 md:gap-20 p-4 md:p-8 py-8 md:py-20 items-center justify-center container mx-auto max-w-screen-md">
 				<motion.div
 					variants={textVariants}
 					initial="initial"
 					animate="animate"
-					className="w-full pt-8 md:pt-20"
+					className="w-full"
 					transition={{
 						staggerChildren: 0.1,
 						type: "spring",
@@ -77,12 +77,12 @@ export default function Home() {
 						Below are some UI experiments I&apos;ve been cooking up to practice
 						micro-interactions and animations.
 					</motion.p>
-					<motion.hr
-						variants={textVariants}
-						transition={textTransition}
-						className="w-full border-gray-200 my-8 md:my-20"
-					/>
 				</motion.div>
+				<motion.hr
+					variants={textVariants}
+					transition={textTransition}
+					className="w-full border-gray-200"
+				/>
 
 				<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/family-status-button.tsx">
 					<Experiment.Title>Transaction status button</Experiment.Title>
@@ -127,9 +127,9 @@ export default function Home() {
 						out.
 					</Experiment.Description>
 				</Experiment>
-				<hr className="w-full border-gray-200 my-8 md:my-20" />
+				<hr className="w-full border-gray-200" />
 			</main>
-			<footer className="flex gap-8 items-center justify-between container mx-auto max-w-screen-md text-sm px-4 md:px-8 pb-12 md:pb-20">
+			<footer className="flex gap-8 items-center justify-between container mx-auto max-w-screen-md text-sm px-4 md:px-8 pb-8 md:pb-20">
 				<div className="flex gap-4">
 					<TextLink
 						href="https://github.com/sekeidesign/"

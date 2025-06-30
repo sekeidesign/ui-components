@@ -20,7 +20,7 @@ interface ExperimentRootProps {
 
 const ExperimentRoot = ({ children, sourceUrl }: ExperimentRootProps) => {
 	const ref = useRef<HTMLDivElement>(null);
-	const isInView = useInView(ref, { once: true, amount: 0.3 });
+	const isInView = useInView(ref, { once: true, amount: 0.2 });
 
 	return (
 		<ExperimentContext.Provider value={{ sourceUrl }}>
