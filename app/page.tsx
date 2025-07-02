@@ -72,9 +72,9 @@ export default function Home() {
 						Finally, I decided to animate the icons when the state switches,
 						which added complexity to the code but also a nice little flair.
 						<span className="py-1 block" />
-						While I like the final effect, I'm not super happy with all the
-						magic numbers I'm using to make the clip-path move smoothly between
-						the two states.
+						While I like the final effect, I&apos;m not super happy with all the
+						magic numbers I&apos;m using to make the clip-path move smoothly
+						between the two states.
 					</Experiment.Description>
 				</Experiment>
 				<hr className="w-full border-gray-200" />
