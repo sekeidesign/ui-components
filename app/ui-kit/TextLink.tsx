@@ -1,7 +1,5 @@
 "use client";
 
-import { HoverCard } from "@ark-ui/react/hover-card";
-import { Portal } from "@ark-ui/react/portal";
 import Image from "next/image";
 import Link from "next/link";
 import { type ReactNode, useEffect, useState } from "react";
