@@ -20,7 +20,7 @@ interface ExperimentRootProps {
 
 const ExperimentRoot = ({ children, sourceUrl }: ExperimentRootProps) => {
 	const ref = useRef<HTMLDivElement>(null);
-	const isInView = useInView(ref, { once: true, amount: 0.3 });
+	const isInView = useInView(ref, { once: true, amount: 0.2 });
 
 	return (
 		<ExperimentContext.Provider value={{ sourceUrl }}>
@@ -75,13 +75,9 @@ const ExperimentTag = ({ children }: ExperimentTagProps) => {
 // Example container component
 interface ExperimentExampleProps {
 	children: ReactNode;
-	scale?: boolean;
 }
 
-const ExperimentExample = ({
-	children,
-	scale = true,
-}: ExperimentExampleProps) => {
+const ExperimentExample = ({ children }: ExperimentExampleProps) => {
 	const { sourceUrl } = useContext(ExperimentContext);
 
 	return (
@@ -108,7 +104,7 @@ const ExperimentExample = ({
 					</Tooltip.Positioner>
 				</Tooltip.Root>
 			)}
-			<div className={scale ? "scale-90 md:scale-100" : ""}>{children}</div>
+			{children}
 		</div>
 	);
 };

@@ -174,4 +174,4 @@ const Icon = ({ status }: { status: keyof typeof statuses }) => {
 	);
 };
 
-export default FamilyStatusButton;
+export { FamilyStatusButton };

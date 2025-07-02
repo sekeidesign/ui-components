@@ -1,88 +1,83 @@
 "use client";
 
-import { motion, type Transition } from "motion/react";
-import FamilyStatusButton from "./ui-experiments/family-status-button";
+import { IntroHeader } from "./IntroHeader";
+import { FamilyStatusButton } from "./ui-experiments/FamilyStatusButton";
+import { VerticalIconSwitch } from "./ui-experiments/VerticalIconSwitch";
 import { Experiment } from "./ui-kit/Experiment";
 import { TextLink } from "./ui-kit/TextLink";
-
-const textVariants = {
-	initial: { opacity: 0, y: 12 },
-	animate: { opacity: 1, y: 0 },
-};
-
-const textTransition: Transition = {
-	type: "spring",
-	duration: 0.5,
-	bounce: 0.3,
-};
 
 export default function Home() {
 	return (
 		<div className="font-[family-name:var(--font-geist-sans)]">
-			<main className="flex flex-col gap-8 p-4 md:p-8 mt-8 items-center justify-center container mx-auto max-w-screen-md">
-				<motion.div
-					variants={textVariants}
-					initial="initial"
-					animate="animate"
-					className="w-full pt-8 md:pt-20"
-					transition={{
-						staggerChildren: 0.1,
-						type: "spring",
-						duration: 1,
-						bounce: 0.2,
-					}}
-				>
-					<motion.h1
-						variants={textVariants}
-						transition={textTransition}
-						className="font-[500] text-gray-800"
-					>
-						PG Gonni
-					</motion.h1>
-					<motion.h2
-						variants={textVariants}
-						transition={textTransition}
-						className="font-[500] text-gray-500"
-					>
-						Design Engineer based in Montréal, QC
-					</motion.h2>
+			<main className="flex flex-col gap-8 md:gap-20 p-4 md:p-8 py-8 md:py-20 items-center justify-center container mx-auto max-w-screen-md">
+				<IntroHeader />
 
-					<div className="text-sm text-gray-500 font-[450] pt-4 md:pt-10 leading-relaxed space-y-2">
-						<motion.p variants={textVariants} transition={textTransition}>
-							At the moment, I&apos;m Head of Design at{" "}
-							<TextLink
-								href="https://www.planned.com"
-								target="_blank"
-								hasFavicon
-							>
-								Planned
-							</TextLink>
-							. <br />
-							Before that, I was a Design Engineer at{" "}
-							<TextLink href="https://www.metafy.gg" target="_blank" hasFavicon>
-								Metafy
-							</TextLink>{" "}
-							and a Product Designer at{" "}
-							<TextLink href="https://metalab.co" target="_blank" hasFavicon>
-								Metalab
-							</TextLink>
-							.
-						</motion.p>
-					</div>
-					<motion.p
-						variants={textVariants}
-						transition={textTransition}
-						className="text-sm text-gray-500 font-[450] pt-4 md:pt-10 leading-relaxed"
-					>
-						Below are some UI experiments I&apos;ve been cooking up to practice
-						micro-interactions and animations.
-					</motion.p>
-					<motion.hr
-						variants={textVariants}
-						transition={textTransition}
-						className="w-full border-gray-200 my-8 md:my-20"
-					/>
-				</motion.div>
+				<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/family-status-button.tsx">
+					<Experiment.Title>Vertical icon switch</Experiment.Title>
+					<Experiment.Tags>
+						<Experiment.Tag>motion</Experiment.Tag>
+						<Experiment.Tag>tailwind</Experiment.Tag>
+						<Experiment.Tag>react</Experiment.Tag>
+					</Experiment.Tags>
+					<Experiment.Example>
+						<VerticalIconSwitch />
+					</Experiment.Example>
+					<Experiment.Description>
+						Based on{" "}
+						<TextLink
+							href="https://www.threads.com/@ozanoz/post/DDUEYvaCf4M"
+							target="_blank"
+							hasFavicon
+						>
+							this Threads post
+						</TextLink>
+						by{" "}
+						<TextLink
+							href="https://www.threads.com/@ozanoz"
+							target="_blank"
+							hasFavicon
+						>
+							Ozan Öztaskiran.
+						</TextLink>
+						<span className="py-1 block" />
+						The original example was a more typical switch, with a checkmark
+						icon that moves up and down based on the selection.
+						<br />I left{" "}
+						<TextLink
+							href="https://www.threads.com/@sekeidesign/post/DDUnuo4xL7v"
+							target="_blank"
+							hasFavicon
+						>
+							a comment
+						</TextLink>{" "}
+						suggesting that the switch use a specific icon for each direction
+						for added clarity.
+						<br />I also wanted to use this as an opportunity to make use of
+						clip-path, which I learned about in one of the earlier modules of
+						Emil Kowalski&apos;s{" "}
+						<TextLink href="https://animations.dev/" target="_blank" hasFavicon>
+							Animations for the Web,
+						</TextLink>
+						{""} while also trying to learn to use Motion&apos;s{" "}
+						<TextLink
+							href="https://motion.dev/docs/react-use-transform"
+							target="_blank"
+							hasFavicon
+						>
+							useTransform
+						</TextLink>{" "}
+						function.
+						<br />
+						<span className="py-1 block" />
+						Finally, I decided to animate the icons when the state switches,
+						which added complexity to the code but also a nice little flair.
+						<span className="py-1 block" />
+						While I like the final effect, I&apos;m not super happy with all the
+						magic numbers I&apos;m using to make the clip-path move smoothly
+						between the two states.
+					</Experiment.Description>
+				</Experiment>
+				<hr className="w-full border-gray-200" />
 
 				<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/family-status-button.tsx">
 					<Experiment.Title>Transaction status button</Experiment.Title>
@@ -127,9 +122,9 @@ export default function Home() {
 						out.
 					</Experiment.Description>
 				</Experiment>
-				<hr className="w-full border-gray-200 my-8 md:my-20" />
+				<hr className="w-full border-gray-200" />
 			</main>
-			<footer className="flex gap-8 items-center justify-between container mx-auto max-w-screen-md text-sm px-4 md:px-8 pb-12 md:pb-20">
+			<footer className="flex gap-8 items-center justify-between container mx-auto max-w-screen-md text-sm px-4 md:px-8 pb-8 md:pb-20">
 				<div className="flex gap-4">
 					<TextLink
 						href="https://github.com/sekeidesign/"
