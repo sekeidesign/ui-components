@@ -4,6 +4,7 @@ import { IntroHeader } from "./IntroHeader";
 import { FamilyStatusButton } from "./ui-experiments/FamilyStatusButton";
 import { VerticalIconSwitch } from "./ui-experiments/VerticalIconSwitch";
 import { Experiment } from "./ui-kit/Experiment";
+import { LastUpdated } from "./ui-kit/LastUpdated";
 import { TextLink } from "./ui-kit/TextLink";
 
 export default function Home() {
@@ -12,7 +13,7 @@ export default function Home() {
 			<main className="flex flex-col gap-8 md:gap-20 p-4 md:p-8 py-8 md:py-20 items-center justify-center container mx-auto max-w-screen-md">
 				<IntroHeader />
 
-				<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/family-status-button.tsx">
+				<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/VerticalIconSwitch.tsx">
 					<Experiment.Title>Vertical icon switch</Experiment.Title>
 					<Experiment.Tags>
 						<Experiment.Tag>motion</Experiment.Tag>
@@ -141,9 +142,7 @@ export default function Home() {
 						Threads
 					</TextLink>
 				</div>
-				<p className="text-gray-400 leading-relaxed">
-					Updated on June 27, 2025
-				</p>
+				<LastUpdated />
 			</footer>
 		</div>
 	);
