@@ -45,23 +45,28 @@ const OpenGraphPreview = ({
 	}, [url]);
 
 	if (error) return <p>Error: {error}</p>;
-	if (!og) return children;
+	if (!og?.title && !og?.description && !og?.image) return children;
 
 	return (
-		<HoverCard.Root lazyMount openDelay={250} closeDelay={0}>
+		<HoverCard.Root
+			lazyMount
+			openDelay={250}
+			closeDelay={0}
+			positioning={{ placement: "top" }}
+		>
 			<HoverCard.Trigger asChild>{children}</HoverCard.Trigger>
 			<Portal>
 				<HoverCard.Positioner>
 					<HoverCard.Content>
 						<div
-							className="border p-4 bg-white border-gray-200 shadow-xl rounded-2xl max-w-xs space-y-1"
+							className="border p-3 bg-white border-gray-200 shadow-xl rounded-xl max-w-xs space-y-1"
 							style={{ fontFamily: "var(--font-geist-sans)" }}
 						>
 							{og.image && (
 								<Image
 									src={og.image}
 									alt={`${og.title} og image`}
-									className="w-full h-auto mb-2 rounded"
+									className="w-full h-auto mb-2 rounded-sm"
 									width={600}
 									height={400}
 								/>
