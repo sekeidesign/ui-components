@@ -18,7 +18,7 @@ const Tab = ({
 		<div
 			className={cn(
 				"flex items-center gap-2 px-3 py-1 rounded-full",
-				active ? "bg-gray-200" : "",
+				active ? "bg-gray-200/50" : "",
 				disabled
 					? "cursor-not-allowed text-gray-300"
 					: "cursor-pointer text-gray-500",
@@ -28,7 +28,7 @@ const Tab = ({
 			<span
 				className={cn(
 					"text-sm font-[500]",
-					disabled ? "text-gray-300" : "text-gray-500",
+					disabled ? "text-gray-300 pointer-events-none" : "text-gray-500",
 				)}
 			>
 				{label}

@@ -11,12 +11,12 @@ import { TextLink } from "./ui-kit/TextLink";
 export default function Home() {
 	return (
 		<div className="font-[family-name:var(--font-geist-sans)]">
-			<main className="flex md:flex-row flex-col gap-8 md:gap-20 p-4 md:p-8 py-8 md:py-20 justify-center container mx-auto">
+			<div className="flex md:flex-row flex-col gap-8 md:gap-20 p-4 md:p-8 py-8 md:py-20 justify-center container mx-auto">
 				<IntroHeader />
 				<div className="flex flex-col gap-8 items-center justify-center max-w-screen-md">
 					<Tabs />
 					<hr className="w-full border-gray-200" />
-					<div className="flex flex-col gap-8 md:gap-20 items-center justify-center max-w-screen-md">
+					<main className="flex flex-col gap-8 md:gap-20 items-center justify-center max-w-screen-md">
 						<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/VerticalIconSwitch.tsx">
 							<Experiment.Title>Vertical icon switch</Experiment.Title>
 							<Experiment.Tags>
@@ -132,28 +132,28 @@ export default function Home() {
 							</Experiment.Description>
 						</Experiment>
 						<hr className="w-full border-gray-200" />
-					</div>
+					</main>
+					<footer className="flex gap-8 items-center justify-between container mx-auto max-w-screen-md text-sm pb-8 md:pb-20">
+						<div className="flex gap-4">
+							<TextLink
+								href="https://github.com/sekeidesign/"
+								target="_blank"
+								hasFavicon
+							>
+								GitHub
+							</TextLink>
+							<TextLink
+								href="https://www.threads.com/@sekeidesign"
+								target="_blank"
+								hasFavicon
+							>
+								Threads
+							</TextLink>
+						</div>
+						<LastUpdated />
+					</footer>
 				</div>
-			</main>
-			<footer className="flex gap-8 items-center justify-between container mx-auto max-w-screen-md text-sm px-4 md:px-8 pb-8 md:pb-20">
-				<div className="flex gap-4">
-					<TextLink
-						href="https://github.com/sekeidesign/"
-						target="_blank"
-						hasFavicon
-					>
-						GitHub
-					</TextLink>
-					<TextLink
-						href="https://www.threads.com/@sekeidesign"
-						target="_blank"
-						hasFavicon
-					>
-						Threads
-					</TextLink>
-				</div>
-				<LastUpdated />
-			</footer>
+			</div>
 		</div>
 	);
 }
