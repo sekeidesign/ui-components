@@ -16,63 +16,62 @@ const textTransition: Transition = {
 
 const IntroHeader = () => {
 	return (
-		<>
-			<motion.div
+		<motion.div
+			variants={textVariants}
+			initial="initial"
+			animate="animate"
+			className="w-full md:max-w-2xs md:sticky top-20 h-fit"
+			transition={{
+				staggerChildren: 0.1,
+				type: "spring",
+				duration: 1,
+				bounce: 0.2,
+			}}
+		>
+			<motion.h1
 				variants={textVariants}
-				initial="initial"
-				animate="animate"
-				className="w-full"
-				transition={{
-					staggerChildren: 0.1,
-					type: "spring",
-					duration: 1,
-					bounce: 0.2,
-				}}
+				transition={textTransition}
+				className="font-[500] text-gray-800"
 			>
-				<motion.h1
-					variants={textVariants}
-					transition={textTransition}
-					className="font-[500] text-gray-800"
-				>
-					PG Gonni
-				</motion.h1>
-				<motion.h2
-					variants={textVariants}
-					transition={textTransition}
-					className="font-[500] text-gray-500"
-				>
-					Design Engineer based in Montréal, QC
-				</motion.h2>
+				PG Gonni
+			</motion.h1>
+			<motion.h2
+				variants={textVariants}
+				transition={textTransition}
+				className="font-[500] text-gray-500"
+			>
+				Design Engineer based in Montréal, QC
+			</motion.h2>
 
-				<div className="text-sm text-gray-500 font-[450] pt-4 md:pt-10 leading-relaxed space-y-2">
-					<motion.p variants={textVariants} transition={textTransition}>
-						At the moment, I&apos;m Head of Design at{" "}
-						<TextLink href="https://www.planned.com" target="_blank" hasFavicon>
-							Planned
-						</TextLink>
-						. <br />
-						Before that, I was a Design Engineer at{" "}
-						<TextLink href="https://www.metafy.gg" target="_blank" hasFavicon>
-							Metafy
-						</TextLink>{" "}
-						and a Product Designer at{" "}
-						<TextLink href="https://metalab.co" target="_blank" hasFavicon>
-							Metalab
-						</TextLink>
-						.
-					</motion.p>
-				</div>
-				<motion.p
-					variants={textVariants}
-					transition={textTransition}
-					className="text-sm text-gray-500 font-[450] pt-4 md:pt-10 leading-relaxed"
-				>
-					Below are some UI experiments I&apos;ve been cooking up to practice
-					micro-interactions and animations.
+			<div className="text-sm text-gray-500 font-[450] pt-4 md:pt-10 leading-relaxed space-y-2">
+				<motion.p variants={textVariants} transition={textTransition}>
+					<span className="font-[550] block text-gray-600">Currently</span>
+					Head of Design at{" "}
+					<TextLink href="https://www.tato.co" target="_blank" hasFavicon>
+						Tato
+					</TextLink>
+					<br />
+					<span className="font-[550] block pt-2 text-gray-600">
+						Previously
+					</span>
+					Head of Design at{" "}
+					<TextLink href="https://www.planned.com" target="_blank" hasFavicon>
+						Planned
+					</TextLink>
+					<br />
+					Design Engineer at{" "}
+					<TextLink href="https://www.metafy.gg" target="_blank" hasFavicon>
+						Metafy
+					</TextLink>{" "}
+					<br />
+					Product Designer at{" "}
+					<TextLink href="https://metalab.co" target="_blank" hasFavicon>
+						Metalab
+					</TextLink>
+					.
 				</motion.p>
-			</motion.div>
-			<hr className="w-full border-gray-200" />
-		</>
+			</div>
+		</motion.div>
 	);
 };
 
