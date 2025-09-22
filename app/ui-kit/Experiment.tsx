@@ -5,6 +5,7 @@ import { CommandLineIcon } from "@heroicons/react/16/solid";
 import { motion, useInView } from "motion/react";
 import Link from "next/link";
 import { createContext, type ReactNode, useContext, useRef } from "react";
+import { cn } from "./cn";
 
 interface ExperimentContextValue {
 	sourceUrl?: string;
@@ -76,13 +77,19 @@ const ExperimentTag = ({ children }: ExperimentTagProps) => {
 // Example container component
 interface ExperimentExampleProps {
 	children: ReactNode;
+	className?: string;
 }
 
-const ExperimentExample = ({ children }: ExperimentExampleProps) => {
+const ExperimentExample = ({ children, className }: ExperimentExampleProps) => {
 	const { sourceUrl, isRootInView } = useContext(ExperimentContext);
 
 	return (
-		<div className="relative shadow-skew size-24 flex items-center justify-center rounded-xl border border-gray-200 w-full p-10 min-h-[320px] h-fit bg-white">
+		<div
+			className={cn(
+				"relative shadow-skew size-24 flex items-center justify-center rounded-xl border border-gray-200 w-full p-10 min-h-[320px] h-fit bg-white overflow-hidden",
+				className,
+			)}
+		>
 			{sourceUrl && (
 				<Tooltip.Root
 					positioning={{ placement: "top" }}

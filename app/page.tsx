@@ -1,6 +1,9 @@
 "use client";
 
 import { IntroHeader } from "./IntroHeader";
+import CollapsableMenu, {
+	CollapsableMenuProvider,
+} from "./ui-experiments/CollapsableMenu";
 import { FamilyStatusButton } from "./ui-experiments/FamilyStatusButton";
 import { VerticalIconSwitch } from "./ui-experiments/VerticalIconSwitch";
 import { Experiment } from "./ui-kit/Experiment";
@@ -17,6 +20,38 @@ export default function Home() {
 					<Tabs />
 					<hr className="w-full border-gray-200" />
 					<main className="flex flex-col gap-8 md:gap-20 items-center justify-center max-w-screen-md">
+						<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/VerticalIconSwitch.tsx">
+							<Experiment.Title>Collapsable menu</Experiment.Title>
+							<Experiment.Tags>
+								<Experiment.Tag>motion</Experiment.Tag>
+								<Experiment.Tag>tailwind</Experiment.Tag>
+								<Experiment.Tag>react</Experiment.Tag>
+							</Experiment.Tags>
+							<Experiment.Example className="p-0">
+								<CollapsableMenuProvider>
+									<CollapsableMenu />
+								</CollapsableMenuProvider>
+							</Experiment.Example>
+							<Experiment.Description>
+								Based on some of the ideas and interactions in{" "}
+								<TextLink
+									href="https://x.com/raunofreiberg?lang=en"
+									target="_blank"
+									hasFavicon
+								>
+									Rauno's
+								</TextLink>{" "}
+								course{" "}
+								<TextLink
+									href="https://devouringdetails.com/introduction"
+									target="_blank"
+									hasFavicon
+								>
+									Devouring Details
+								</TextLink>
+							</Experiment.Description>
+						</Experiment>
+						<hr className="w-full border-gray-200" />
 						<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/VerticalIconSwitch.tsx">
 							<Experiment.Title>Vertical icon switch</Experiment.Title>
 							<Experiment.Tags>
