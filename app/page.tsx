@@ -21,9 +21,11 @@ export default function Home() {
 					<hr className="w-full border-gray-200" />
 					<main className="flex flex-col gap-8 md:gap-20 items-center justify-center max-w-screen-md">
 						<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/VerticalIconSwitch.tsx">
-							<Experiment.Title>Collapsable menu</Experiment.Title>
+							<Experiment.Title>Detachable island</Experiment.Title>
 							<Experiment.Tags>
 								<Experiment.Tag>motion</Experiment.Tag>
+								<Experiment.Tag>useDragControls</Experiment.Tag>
+								<Experiment.Tag>useMeasure</Experiment.Tag>
 								<Experiment.Tag>tailwind</Experiment.Tag>
 								<Experiment.Tag>react</Experiment.Tag>
 							</Experiment.Tags>
@@ -33,7 +35,25 @@ export default function Home() {
 								</CollapsableMenuProvider>
 							</Experiment.Example>
 							<Experiment.Description>
-								Based on some of the ideas and interactions in{" "}
+								<span className="font-[500] text-gray-600">
+									Drag the island outside of the container to detach it. Let go
+									before detaching to snap back.
+									<br />
+									Turn on debug to view the drag constraints and drag handle
+									affordance.
+								</span>
+								<br />
+								<br />
+								I've been infatuated with islands, as they provide a great,
+								malleable surface. <br />
+								They allow AI to live in a layer above the rest of the
+								application, making them ideal for ever present, omnipotent
+								agents. <br />
+								In this case, I wanted to experiment with a draggable island,
+								snapping, and morphing.
+								<br />
+								<br />
+								In{" "}
 								<TextLink
 									href="https://x.com/raunofreiberg?lang=en"
 									target="_blank"
@@ -48,7 +68,13 @@ export default function Home() {
 									hasFavicon
 								>
 									Devouring Details
-								</TextLink>
+								</TextLink>{" "}
+								I also learned the importance of ergonomic affordances, so the
+								drag handle uses{" "}
+								<code className="bg-gray-100 text-gray-600 p-1 rounded-md font-[550] text-xs">
+									after:content-['']
+								</code>{" "}
+								to increase its draggable area.
 							</Experiment.Description>
 						</Experiment>
 						<hr className="w-full border-gray-200" />
@@ -56,6 +82,8 @@ export default function Home() {
 							<Experiment.Title>Vertical icon switch</Experiment.Title>
 							<Experiment.Tags>
 								<Experiment.Tag>motion</Experiment.Tag>
+								<Experiment.Tag>clip-path</Experiment.Tag>
+								<Experiment.Tag>useTransform</Experiment.Tag>
 								<Experiment.Tag>tailwind</Experiment.Tag>
 								<Experiment.Tag>react</Experiment.Tag>
 							</Experiment.Tags>
@@ -127,6 +155,7 @@ export default function Home() {
 							<Experiment.Title>Transaction status button</Experiment.Title>
 							<Experiment.Tags>
 								<Experiment.Tag>motion</Experiment.Tag>
+								<Experiment.Tag>layout</Experiment.Tag>
 								<Experiment.Tag>tailwind</Experiment.Tag>
 								<Experiment.Tag>react</Experiment.Tag>
 							</Experiment.Tags>
