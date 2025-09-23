@@ -75,13 +75,47 @@ const useCollapsableMenu = () => {
 };
 
 const CollapsableMenu = () => {
-	const DRAG_THRESHOLD = 100;
+	const DRAG_THRESHOLD = 88;
 	const dragWrapperRef = useRef<HTMLDivElement>(null);
 	const { isDetached, setIsDetached } = useCollapsableMenu();
 	const dragControls = useDragControls();
 	const [debug, setDebug] = useState(false);
+	const [isOverHome, setIsOverHome] = useState(false);
+	const islandHome = useRef<HTMLDivElement>(null);
 	const startDrag = (event: React.PointerEvent<Element>) => {
 		dragControls.start(event, { snapToCursor: false });
+	};
+
+	const isWithinIslandHome = (
+		event: PointerEvent | MouseEvent | TouchEvent,
+	) => {
+		if (!islandHome.current) return false;
+
+		const islandHomeRect = islandHome.current.getBoundingClientRect();
+		const pointerX = "clientX" in event ? event.clientX : 0;
+		const pointerY = "clientY" in event ? event.clientY : 0;
+		return (
+			pointerX >= islandHomeRect.left &&
+			pointerX <= islandHomeRect.right &&
+			pointerY >= islandHomeRect.top &&
+			pointerY <= islandHomeRect.bottom
+		);
+	};
+
+	const endDrag = (event: PointerEvent | MouseEvent | TouchEvent) => {
+		if (!islandHome.current) return;
+
+		if (isWithinIslandHome(event) && isDetached) {
+			if (debug) console.log("Snapping back to home");
+			setIsDetached(false);
+		}
+
+		// Reset the over home state when drag ends
+		setIsOverHome(false);
+	};
+
+	const endDragButton = (event: React.PointerEvent<HTMLButtonElement>) => {
+		endDrag(event.nativeEvent);
 	};
 
 	return (
@@ -90,12 +124,18 @@ const CollapsableMenu = () => {
 			className="w-full h-full flex items-end justify-center p-4 relative"
 		>
 			<div
+				ref={islandHome}
 				className={cn(
-					`absolute bottom-0 left-0 w-full h-[100px] bg-gray-100/50 z-0 border-t border-gray-200 border-dashed flex items-start justify-center text-xs text-gray-300 font-[450]`,
+					`absolute bottom-0 left-0 w-full h-[100px] bg-gray-100/50 z-0 border-t border-gray-200 border-dashed flex items-start justify-center text-xs text-gray-300 font-[450] transition-all duration-200`,
 					debug ? "opacity-100" : "opacity-0",
+					isOverHome && isDetached && "opacity-100",
 				)}
 			>
-				<span className="-mt-6">Drag outside this area to detach</span>
+				<span className="-mt-6">
+					{isOverHome && isDetached
+						? "Release to snap back"
+						: "Drag outside this area to detach"}
+				</span>
 			</div>
 			<motion.div
 				drag
@@ -106,29 +146,40 @@ const CollapsableMenu = () => {
 				dragTransition={{ bounceStiffness: 400, bounceDamping: 15 }}
 				dragElastic={0.7}
 				whileDrag={{ cursor: "grabbing" }}
-				onDrag={(_, info) => {
+				onDrag={(event, info) => {
 					const dragDistance = Math.sqrt(info.offset.y ** 2);
 					if (!isDetached && dragDistance > DRAG_THRESHOLD) {
 						if (debug) console.log("Detached");
 						setIsDetached(true);
 					}
+
+					// Check if we're dragging over the island home area
+					if (isDetached && islandHome.current) {
+						const isWithinBounds = isWithinIslandHome(event);
+
+						setIsOverHome(isWithinBounds);
+
+						if (isWithinBounds && debug) {
+							console.log("Over home area");
+						}
+					}
 				}}
-				className={cn(
-					"flex relative items-center justify-center p-1 rounded-full gap-1 bg-white transition-shadow duration-300 border border-gray-100 z-10",
-					isDetached ? "shadow-xl" : "shadow-skew",
-				)}
+				onDragEnd={(event) => {
+					endDrag(event);
+				}}
+				className="flex relative items-center justify-center p-1 rounded-full gap-1 bg-white shadow-xl border border-gray-100 z-10"
 			>
-				{/* This should be the drag handle, not the parent container */}
-				<div
+				<button
+					type="button"
 					className={cn(
 						"w-7 h-1 bg-gray-300 rounded-full absolute -top-3 left-1/2 transition-transform duration-200 hover:scale-110 cursor-grab active:cursor-grabbing active:scale-100 -translate-x-1/2",
-						"after:content-[''] after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:w-[150%] after:rounded-full after:border after:border-red-500  after:aspect-video",
+						"after:content-[''] after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:w-[150%] after:rounded-full after:border after:border-red-500 after:border-dashed after:aspect-video",
 						debug ? "after:opacity-100" : "after:opacity-0",
 					)}
 					onPointerDown={startDrag}
+					onPointerUp={endDragButton}
 				/>
 
-				{/* Instead of a menu, this should be a nice media player with controls */}
 				<CollapsableMenuItem
 					icon={<HomeIcon className="w-4 h-4" />}
 					label="Home"

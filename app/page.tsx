@@ -14,7 +14,7 @@ import { TextLink } from "./ui-kit/TextLink";
 export default function Home() {
 	return (
 		<div className="font-[family-name:var(--font-geist-sans)]">
-			<div className="flex md:flex-row flex-col gap-8 md:gap-20 p-4 md:p-8 py-8 md:py-20 justify-center container mx-auto">
+			<div className="flex md:flex-row flex-col gap-8 md:gap-20 p-4 md:p-8 py-8 md:py-20 justify-center mx-auto">
 				<IntroHeader />
 				<div className="flex flex-col gap-8 items-center justify-center max-w-screen-md">
 					<Tabs />
@@ -197,7 +197,7 @@ export default function Home() {
 						</Experiment>
 						<hr className="w-full border-gray-200" />
 					</main>
-					<footer className="flex gap-8 items-center justify-between container mx-auto max-w-screen-md text-sm pb-8 md:pb-20">
+					<footer className="flex gap-8 items-center justify-between mx-auto max-w-screen-md w-full text-sm pb-8 md:pb-20">
 						<div className="flex gap-4">
 							<TextLink
 								href="https://github.com/sekeidesign/"
