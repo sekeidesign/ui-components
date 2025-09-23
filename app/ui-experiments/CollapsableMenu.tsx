@@ -90,7 +90,7 @@ const CollapsableMenu = () => {
 	const isWithinIslandHome = (
 		event: PointerEvent | MouseEvent | TouchEvent,
 	) => {
-		const islandHomeRect = islandHome.current.getBoundingClientRect();
+		const islandHomeRect = islandHome?.current.getBoundingClientRect();
 		const pointerX = "clientX" in event ? event.clientX : 0;
 		const pointerY = "clientY" in event ? event.clientY : 0;
 		return (
