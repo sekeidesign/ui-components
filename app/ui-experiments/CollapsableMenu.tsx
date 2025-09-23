@@ -131,10 +131,16 @@ const CollapsableMenu = () => {
 					isOverHome && isDetached && "opacity-100",
 				)}
 			>
-				<span className="-mt-6">
-					{isOverHome && isDetached
-						? "Release to snap back"
-						: "Drag outside this area to detach"}
+				<span className={cn("-mt-6", isDetached && "opacity-0")}>
+					Drag outside this area to detach
+				</span>
+				<span
+					className={cn(
+						"-mt-6 absolute left-1/2 -translate-x-1/2 opacity-0",
+						isOverHome && isDetached && "opacity-100",
+					)}
+				>
+					Release to snap back
 				</span>
 			</div>
 			<motion.div
