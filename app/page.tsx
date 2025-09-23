@@ -44,7 +44,7 @@ export default function Home() {
 								</span>
 								<br />
 								<br />
-								I've been infatuated with islands, as they provide a great,
+								I&apos;ve been infatuated with islands, as they provide a great,
 								malleable surface. <br />
 								They allow AI to live in a layer above the rest of the
 								application, making them ideal for ever present, omnipotent
@@ -59,7 +59,7 @@ export default function Home() {
 									target="_blank"
 									hasFavicon
 								>
-									Rauno's
+									Rauno&apos;s
 								</TextLink>{" "}
 								course{" "}
 								<TextLink
@@ -72,7 +72,7 @@ export default function Home() {
 								I also learned the importance of ergonomic affordances, so the
 								drag handle uses{" "}
 								<code className="bg-gray-100 text-gray-600 p-1 rounded-md font-[550] text-xs">
-									after:content-['']
+									after:content-[&apos;&apos;]
 								</code>{" "}
 								to increase its draggable area.
 							</Experiment.Description>

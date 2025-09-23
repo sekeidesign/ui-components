@@ -10,6 +10,8 @@ import {
 import useMeasure from "react-use-measure";
 import { cn } from "../ui-kit/cn";
 
+const DRAG_THRESHOLD = 88;
+
 // Context for collapsible menu state
 interface CollapsableMenuContextValue {
 	isDetached: boolean;
@@ -75,7 +77,6 @@ const useCollapsableMenu = () => {
 };
 
 const CollapsableMenu = () => {
-	const DRAG_THRESHOLD = 88;
 	const dragWrapperRef = useRef<HTMLDivElement>(null);
 	const { isDetached, setIsDetached } = useCollapsableMenu();
 	const dragControls = useDragControls();
@@ -89,8 +90,6 @@ const CollapsableMenu = () => {
 	const isWithinIslandHome = (
 		event: PointerEvent | MouseEvent | TouchEvent,
 	) => {
-		if (!islandHome.current) return false;
-
 		const islandHomeRect = islandHome.current.getBoundingClientRect();
 		const pointerX = "clientX" in event ? event.clientX : 0;
 		const pointerY = "clientY" in event ? event.clientY : 0;
@@ -112,10 +111,6 @@ const CollapsableMenu = () => {
 
 		// Reset the over home state when drag ends
 		setIsOverHome(false);
-	};
-
-	const endDragButton = (event: React.PointerEvent<HTMLButtonElement>) => {
-		endDrag(event.nativeEvent);
 	};
 
 	return (
@@ -183,7 +178,7 @@ const CollapsableMenu = () => {
 						debug ? "after:opacity-100" : "after:opacity-0",
 					)}
 					onPointerDown={startDrag}
-					onPointerUp={endDragButton}
+					onPointerUp={(event) => endDrag(event.nativeEvent)}
 				/>
 
 				<CollapsableMenuItem
