@@ -7,6 +7,7 @@ import {
 	useRef,
 	useState,
 } from "react";
+import useMeasure from "react-use-measure";
 import { cn } from "../ui-kit/cn";
 
 // Context for collapsible menu state
@@ -43,18 +44,20 @@ const CollapsableMenuItem = ({
 	label: string;
 }) => {
 	const { isDetached } = useCollapsableMenu();
+	const [ref, { width }] = useMeasure();
 	return (
-		<motion.div className="py-1 px-2 bg-gray-100 h-7 min-w-7 overflow-hidden hover:bg-gray-200 rounded-full text-sm text-gray-500 flex items-center justify-center">
+		<motion.div className="py-1 px-2 bg-gray-100 h-8 min-w-8 overflow-hidden hover:bg-gray-200 rounded-full text-sm text-gray-500 flex items-center justify-center">
 			{icon}
-			<motion.span
+			<motion.div
 				animate={{
 					opacity: isDetached ? 0 : 1,
-					width: isDetached ? 0 : "auto",
+					width: isDetached ? 0 : width,
 				}}
-				className="font-[500] px-1"
 			>
-				{label}
-			</motion.span>
+				<span className="font-[500] pl-1" ref={ref}>
+					{label}
+				</span>
+			</motion.div>
 		</motion.div>
 	);
 };
@@ -81,9 +84,9 @@ const CollapsableMenu = () => {
 			className="w-full h-full flex items-end justify-center p-4 relative"
 		>
 			<div
-				className={`absolute bottom-0 left-0 w-full h-[100px] bg-gray-100/50 z-0 border-t border-gray-200 border-dashed flex items-start p-2 justify-center text-xs text-gray-300 font-[450]`}
+				className={`absolute bottom-0 left-0 w-full h-[100px] bg-gray-100/50 z-0 border-t border-gray-200 border-dashed flex items-start justify-center text-xs text-gray-300 font-[450]`}
 			>
-				Drag outside this area to detach
+				<span className="-mt-6">Drag outside this area to detach</span>
 			</div>
 			<motion.div
 				drag
@@ -106,7 +109,7 @@ const CollapsableMenu = () => {
 				)}
 			>
 				{/* This should be the drag handle, not the parent container */}
-				<div className="w-7 h-1 bg-gray-300 rounded-full absolute -top-2 left-1/2 -translate-x-1/2" />
+				<div className="w-7 h-1 bg-gray-300 rounded-full absolute -top-3 left-1/2 -translate-x-1/2" />
 
 				{/* Instead of a menu, this should be a nice media player with controls */}
 				<CollapsableMenuItem
