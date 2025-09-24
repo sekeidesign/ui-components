@@ -34,7 +34,7 @@ const VerticalIconSwitch = () => {
 			<MotionConfig transition={spring}>
 				<button
 					type="button"
-					className="flex items-center justify-center gap-1.5"
+					className="flex items-center justify-center gap-1.5 cursor-pointer"
 					onClick={() => {
 						setTrip(trip === "oneWay" ? "return" : "oneWay");
 						animate(tripValue, trip === "oneWay" ? 1 : 0, {
