@@ -1,5 +1,13 @@
 import { BellIcon, EnvelopeIcon, HomeIcon } from "@heroicons/react/20/solid";
-import { motion, useDragControls } from "motion/react";
+import {
+	animate,
+	motion,
+	type PanInfo,
+	type Transition,
+	useDragControls,
+	useMotionValue,
+	useMotionValueEvent,
+} from "motion/react";
 import {
 	createContext,
 	type ReactNode,
@@ -11,11 +19,17 @@ import useMeasure from "react-use-measure";
 import { cn } from "../ui-kit/cn";
 
 const DRAG_THRESHOLD = 88;
+const SPRING_CONFIG: Transition = {
+	type: "spring",
+	duration: 0.3,
+	bounce: 0.2,
+};
 
 // Context for collapsible menu state
 interface CollapsableMenuContextValue {
 	isDetached: boolean;
 	setIsDetached: (detached: boolean) => void;
+	dragOffset: ReturnType<typeof useMotionValue<number>>;
 }
 
 const CollapsableMenuContext =
@@ -30,9 +44,12 @@ const CollapsableMenuProvider = ({
 	children,
 }: CollapsableMenuProviderProps) => {
 	const [isDetached, setIsDetached] = useState(false);
+	const dragOffset = useRef(useMotionValue(0));
 
 	return (
-		<CollapsableMenuContext.Provider value={{ isDetached, setIsDetached }}>
+		<CollapsableMenuContext.Provider
+			value={{ isDetached, setIsDetached, dragOffset: dragOffset.current }}
+		>
 			{children}
 		</CollapsableMenuContext.Provider>
 	);
@@ -45,17 +62,31 @@ const CollapsableMenuItem = ({
 	icon: ReactNode;
 	label: string;
 }) => {
-	const { isDetached } = useCollapsableMenu();
+	const { isDetached, dragOffset } = useCollapsableMenu();
 	const [ref, { width }] = useMeasure();
+
+	// Create a derived motion value for the width calculation
+	const widthValue = useMotionValue(width);
+
+	// Update the width value when dragOffset changes
+	useMotionValueEvent(dragOffset, "change", (value) => {
+		if (!isDetached && width > 0) {
+			widthValue.set(width - width * (Math.abs(value) / 300));
+		}
+		if (isDetached) {
+			animate(widthValue, 0, { ...SPRING_CONFIG });
+		}
+	});
+
 	return (
 		<motion.div className="py-1 px-2 bg-gray-100 h-8 min-w-8 overflow-hidden hover:bg-gray-200 rounded-full text-sm text-gray-500 flex items-center justify-center">
 			{icon}
 			<motion.div
-				animate={{
+				style={{
 					x: isDetached ? 8 : 0,
-					width: isDetached ? 0 : width,
-					transition: { type: "spring", duration: 0.4, bounce: 0.1 },
+					width: widthValue,
 				}}
+				transition={SPRING_CONFIG}
 			>
 				<span className="font-[500] pl-1" ref={ref}>
 					{label}
@@ -78,13 +109,37 @@ const useCollapsableMenu = () => {
 
 const CollapsableMenu = () => {
 	const dragWrapperRef = useRef<HTMLDivElement>(null);
-	const { isDetached, setIsDetached } = useCollapsableMenu();
+	const { isDetached, setIsDetached, dragOffset } = useCollapsableMenu();
 	const dragControls = useDragControls();
 	const [debug, setDebug] = useState(false);
 	const [isOverHome, setIsOverHome] = useState(false);
 	const islandHome = useRef<HTMLDivElement>(null);
+
 	const startDrag = (event: React.PointerEvent<Element>) => {
 		dragControls.start(event, { snapToCursor: false });
+	};
+
+	const onDrag = (
+		event: PointerEvent | MouseEvent | TouchEvent,
+		info: PanInfo,
+	) => {
+		const dragDistance = Math.sqrt(info.offset.y ** 2);
+		if (!isDetached && dragDistance > DRAG_THRESHOLD) {
+			if (debug) console.log("Detached");
+			setIsDetached(true);
+		}
+
+		if (isDetached && islandHome.current) {
+			// Check if we're dragging over the island home area
+			const isWithinBounds = isWithinIslandHome(event);
+
+			setIsOverHome(isWithinBounds);
+
+			if (isWithinBounds && debug) {
+				console.log("Over home area");
+			}
+		}
+		dragOffset.set(info.offset.y);
 	};
 
 	const isWithinIslandHome = (
@@ -104,6 +159,8 @@ const CollapsableMenu = () => {
 	};
 
 	const endDrag = (event: PointerEvent | MouseEvent | TouchEvent) => {
+		// Smoothly animate dragOffset back to 0
+		animate(dragOffset, 0, { ...SPRING_CONFIG });
 		if (!islandHome.current) return;
 
 		if (isWithinIslandHome(event) && isDetached) {
@@ -149,24 +206,7 @@ const CollapsableMenu = () => {
 				dragTransition={{ bounceStiffness: 400, bounceDamping: 15 }}
 				dragElastic={0.7}
 				whileDrag={{ cursor: "grabbing" }}
-				onDrag={(event, info) => {
-					const dragDistance = Math.sqrt(info.offset.y ** 2);
-					if (!isDetached && dragDistance > DRAG_THRESHOLD) {
-						if (debug) console.log("Detached");
-						setIsDetached(true);
-					}
-
-					// Check if we're dragging over the island home area
-					if (isDetached && islandHome.current) {
-						const isWithinBounds = isWithinIslandHome(event);
-
-						setIsOverHome(isWithinBounds);
-
-						if (isWithinBounds && debug) {
-							console.log("Over home area");
-						}
-					}
-				}}
+				onDrag={onDrag}
 				onDragEnd={(event) => {
 					endDrag(event);
 				}}
