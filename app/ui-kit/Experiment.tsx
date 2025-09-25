@@ -22,15 +22,15 @@ interface ExperimentRootProps {
 
 const ExperimentRoot = ({ children, sourceUrl }: ExperimentRootProps) => {
 	const ref = useRef<HTMLDivElement>(null);
-	const isRootInView = useInView(ref, { once: true, amount: 0.2 });
+	const isRootInView = useInView(ref, { once: false, amount: "some" });
 
 	return (
 		<ExperimentContext.Provider value={{ sourceUrl, isRootInView }}>
 			<motion.div
 				ref={ref}
 				className="flex flex-col gap-4 w-full"
-				initial={{ opacity: 0, y: 80 }}
-				animate={isRootInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 80 }}
+				initial={{ opacity: 0 }}
+				animate={isRootInView ? { opacity: 1 } : { opacity: 0 }}
 				transition={{ type: "spring", duration: 0.9, bounce: 0.2 }}
 			>
 				{children}
