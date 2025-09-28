@@ -1,9 +1,7 @@
 "use client";
 
 import { IntroHeader } from "./IntroHeader";
-import CollapsableMenu, {
-	CollapsableMenuProvider,
-} from "./ui-experiments/CollapsableMenu";
+import { DetachableIsland } from "./ui-experiments/DetachableIsland";
 import { FamilyStatusButton } from "./ui-experiments/FamilyStatusButton";
 import { VerticalIconSwitch } from "./ui-experiments/VerticalIconSwitch";
 import { Experiment } from "./ui-kit/Experiment";
@@ -30,9 +28,7 @@ export default function Home() {
 								<Experiment.Tag>react</Experiment.Tag>
 							</Experiment.Tags>
 							<Experiment.Example className="p-0">
-								<CollapsableMenuProvider>
-									<CollapsableMenu />
-								</CollapsableMenuProvider>
+								<DetachableIsland />
 							</Experiment.Example>
 							<Experiment.Description>
 								<span className="font-[500] text-gray-600">
