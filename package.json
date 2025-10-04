@@ -14,6 +14,7 @@
     "@vercel/analytics": "^1.5.0",
     "clsx": "^2.1.1",
     "motion": "^12.19.1",
+    "motion-plus": "https://api.motion.dev/registry?package=motion-plus&version=1.5.4&token=227e71e4be314f5a9e5ba600faa60c97e9323cf108da08d6962dcfe62c549fcd",
     "next": "15.3.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
