@@ -100,20 +100,12 @@ function MediaContent({
 						alt="Podcast thumbnail"
 						width={48}
 						height={27}
-						className="object-cover rounded-md"
+						className="object-cover w-full h-full"
 					/>
 				</div>
 
 				{/* Text content */}
-				<div
-					className="flex flex-col gap-px grow overflow-hidden items-start px-3 min-w-0"
-					style={{
-						maskImage:
-							"linear-gradient(to right, transparent 0px, black 12px, black calc(100% - 12px), transparent 100%)",
-						WebkitMaskImage:
-							"linear-gradient(to right, transparent 0px, black 12px, black calc(100% - 12px), transparent 100%)",
-					}}
-				>
+				<div className="flex flex-col gap-px grow overflow-hidden items-start px-3 min-w-0">
 					<div className="relative overflow-hidden w-full">
 						<Ticker
 							items={[
@@ -215,13 +207,13 @@ function ClosedState({ isPlaying }: { isPlaying: boolean }) {
 		<div className="p-3 w-full">
 			<div className="flex items-center justify-between relative w-full">
 				{/* Small thumbnail */}
-				<div className="h-3 relative rounded-sm w-5 flex-shrink-0 bg-zinc-800 flex items-center justify-center">
+				<div className="h-3 relative rounded-xs aspect-video overflow-hidden w-5 flex-shrink-0 bg-zinc-800 flex items-center justify-center">
 					<Image
 						src="https://i.ytimg.com/vi/LEdYbuwn7DE/maxresdefault.jpg"
 						alt="Podcast thumbnail"
 						width={20}
 						height={11}
-						className="object-cover rounded-sm"
+						className="object-cover w-full h-full"
 					/>
 				</div>
 
