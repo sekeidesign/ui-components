@@ -315,7 +315,7 @@ export default function DynamicIsland({
 				</svg>
 			</div>
 			<motion.div
-				className="bg-zinc-950 flex flex-col gap-2 items-center overflow-hidden justify-center relative border-0"
+				className="bg-zinc-950 flex flex-col gap-2 items-center overflow-hidden justify-center shadow-2xl relative border-0"
 				animate={{
 					width: isExpanded ? expandedBounds.width : closedBounds.width,
 					height: isExpanded ? expandedBounds.height : closedBounds.height,
