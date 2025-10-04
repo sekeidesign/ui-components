@@ -57,7 +57,7 @@ export default function Home() {
 							</Experiment.Description>
 						</Experiment>
 						<hr className="w-full border-gray-200" />
-						<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/VerticalIconSwitch.tsx">
+						<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/CollapsableMenu.tsx">
 							<Experiment.Title>Detachable island</Experiment.Title>
 							<Experiment.Tags>
 								<Experiment.Tag>motion</Experiment.Tag>
