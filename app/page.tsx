@@ -4,6 +4,7 @@ import { IntroHeader } from "./IntroHeader";
 import CollapsableMenu, {
 	CollapsableMenuProvider,
 } from "./ui-experiments/CollapsableMenu";
+import DynamicIsland from "./ui-experiments/DynamicIsland";
 import { FamilyStatusButton } from "./ui-experiments/FamilyStatusButton";
 import { VerticalIconSwitch } from "./ui-experiments/VerticalIconSwitch";
 import { Experiment } from "./ui-kit/Experiment";
@@ -20,6 +21,42 @@ export default function Home() {
 					<Tabs />
 					<hr className="w-full border-gray-200" />
 					<main className="flex flex-col gap-8 md:gap-20 items-center justify-center max-w-screen-md">
+						<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/DynamicIsland.tsx">
+							<Experiment.Title>Dynamic Island</Experiment.Title>
+							<Experiment.Tags>
+								<Experiment.Tag>motion</Experiment.Tag>
+								<Experiment.Tag>Motion+ Ticker</Experiment.Tag>
+								<Experiment.Tag>useMeasure</Experiment.Tag>
+								<Experiment.Tag>tailwind</Experiment.Tag>
+								<Experiment.Tag>react</Experiment.Tag>
+							</Experiment.Tags>
+							<Experiment.Example className="p-0 items-start">
+								<DynamicIsland
+									title="Can the iPhone 17 Pro Beat a Leica Camera - Episode 24"
+									subtitle="WVFRM Podcast"
+								/>
+							</Experiment.Example>
+							<Experiment.Description>
+								<span className="font-[500] text-gray-600">
+									Click the island to smoothly expand it. You can interact with
+									the media controls within there. Leave the island to smoothly
+									collapse it.
+								</span>
+								<br />
+								<br />A media player interface inspired by{" "}
+								<TextLink
+									href="https://tryalcove.com/"
+									target="_blank"
+									hasFavicon
+								>
+									Alcove
+								</TextLink>
+								, a clean and beautiful little app to add Dynamic Island like
+								funcitonality to your Mac's notch. It also uses Motion+ Ticker
+								to animate the podcast title with a smoothly masked marquee.
+							</Experiment.Description>
+						</Experiment>
+						<hr className="w-full border-gray-200" />
 						<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/VerticalIconSwitch.tsx">
 							<Experiment.Title>Detachable island</Experiment.Title>
 							<Experiment.Tags>

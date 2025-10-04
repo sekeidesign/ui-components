@@ -23,6 +23,9 @@ importers:
       motion:
         specifier: ^12.19.1
         version: 12.23.14(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      motion-plus:
+        specifier: https://api.motion.dev/registry?package=motion-plus&version=1.5.4&token=227e71e4be314f5a9e5ba600faa60c97e9323cf108da08d6962dcfe62c549fcd
+        version: https://api.motion.dev/registry?package=motion-plus&version=1.5.4&token=227e71e4be314f5a9e5ba600faa60c97e9323cf108da08d6962dcfe62c549fcd(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       next:
         specifier: 15.3.4
         version: 15.3.4(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -1695,6 +1698,32 @@ packages:
 
   motion-dom@12.23.12:
     resolution: {integrity: sha512-RcR4fvMCTESQBD/uKQe49D5RUeDOokkGRmz4ceaJKDBgHYtZtntC/s2vLvY38gqGaytinij/yi3hMcWVcEF5Kw==}
+
+  motion-plus-dom@1.5.4:
+    resolution: {integrity: sha512-m+AJLC//f8Fl6gbDdZOLN8pwuSBqYGo/gbXW7PssfFqU3DRiBiRxZbf0Rgz5ijHte+7paO3uCwU259Zxs2nk/w==}
+
+  motion-plus-react@1.5.4:
+    resolution: {integrity: sha512-uOqiUhZH00N+Y81f6zY+v5CMCeH4J4FGiz2fOY/F7/gkL8yAXE/G6tB66NVuvoOXKtLoPF4Er1PnzHOAZkAxBw==}
+    peerDependencies:
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
+
+  motion-plus@https://api.motion.dev/registry?package=motion-plus&version=1.5.4&token=227e71e4be314f5a9e5ba600faa60c97e9323cf108da08d6962dcfe62c549fcd:
+    resolution: {tarball: https://api.motion.dev/registry?package=motion-plus&version=1.5.4&token=227e71e4be314f5a9e5ba600faa60c97e9323cf108da08d6962dcfe62c549fcd}
+    version: 1.5.4
+    peerDependencies:
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
 
   motion-utils@12.23.6:
     resolution: {integrity: sha512-eAWoPgr4eFEOFfg2WjIsMoqJTW6Z8MTUCgn/GZ3VRpClWBdnbjryiA3ZSNLyxCTmCQx4RmYX6jX1iWHbenUPNQ==}
@@ -4193,6 +4222,38 @@ snapshots:
   motion-dom@12.23.12:
     dependencies:
       motion-utils: 12.23.6
+
+  motion-plus-dom@1.5.4(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
+    dependencies:
+      motion: 12.23.14(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      motion-dom: 12.23.12
+      motion-utils: 12.23.6
+    transitivePeerDependencies:
+      - '@emotion/is-prop-valid'
+      - react
+      - react-dom
+
+  motion-plus-react@1.5.4(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
+    dependencies:
+      motion: 12.23.14(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      motion-dom: 12.23.12
+      motion-plus-dom: 1.5.4(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      motion-utils: 12.23.6
+    optionalDependencies:
+      react: 19.1.1
+      react-dom: 19.1.1(react@19.1.1)
+    transitivePeerDependencies:
+      - '@emotion/is-prop-valid'
+
+  motion-plus@https://api.motion.dev/registry?package=motion-plus&version=1.5.4&token=227e71e4be314f5a9e5ba600faa60c97e9323cf108da08d6962dcfe62c549fcd(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
+    dependencies:
+      motion-plus-dom: 1.5.4(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      motion-plus-react: 1.5.4(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+    optionalDependencies:
+      react: 19.1.1
+      react-dom: 19.1.1(react@19.1.1)
+    transitivePeerDependencies:
+      - '@emotion/is-prop-valid'
 
   motion-utils@12.23.6: {}
 
