@@ -73,18 +73,25 @@ const DetachableIsland = () => {
 
 	return (
 		<div className="h-full w-full flex items-end relative justify-center p-4">
-			{randomNumber}
-			<motion.div
-				style={{ x: xDelta, y: yDelta }}
-				className="w-20 h-10 rounded-full bg-green-500"
-				ref={containerRef}
+			{randomNumber.toFixed(2)}
+			<div
+				className="bg-gray-100"
+				style={{
+					padding: `${DRAG_THRESHOLD - height / 2}px ${DRAG_THRESHOLD - width / 2}px`,
+				}}
 			>
-				<div
-					onPointerDown={startDrag}
-					ref={startingPointRef}
-					className="w-full h-full bg-blue-500/20 cursor-grab active:cursor-grabbing"
-				/>
-			</motion.div>
+				<motion.div
+					style={{ x: xDelta, y: yDelta }}
+					className="w-20 h-10 rounded-full bg-green-500"
+					ref={containerRef}
+				>
+					<div
+						onPointerDown={startDrag}
+						ref={startingPointRef}
+						className="w-full h-full bg-blue-500/20 cursor-grab active:cursor-grabbing"
+					/>
+				</motion.div>
+			</div>
 			<motion.div
 				drag
 				onDrag={onDrag}
