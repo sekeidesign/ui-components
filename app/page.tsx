@@ -14,13 +14,13 @@ import { TextLink } from "./ui-kit/TextLink";
 
 export default function Home() {
 	return (
-		<div className="font-[family-name:var(--font-geist-sans)]">
+		<div className="font-[family-name:var(--font-geist-sans)] w-screen box-border">
 			<div className="flex md:flex-row flex-col gap-8 md:gap-20 p-4 md:p-8 py-8 md:py-20 justify-center mx-auto">
 				<IntroHeader />
 				<div className="flex flex-col gap-8 items-center justify-center max-w-screen-md">
 					<Tabs />
 					<hr className="w-full border-gray-200" />
-					<main className="flex flex-col gap-8 md:gap-20 items-center justify-center max-w-screen-md">
+					<main className="flex flex-col gap-8 md:gap-20 items-center justify-center w-full max-w-screen-md">
 						<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/DynamicIsland.tsx">
 							<Experiment.Title>Dynamic Island</Experiment.Title>
 							<Experiment.Tags>
@@ -38,9 +38,14 @@ export default function Home() {
 							</Experiment.Example>
 							<Experiment.Description>
 								<span className="font-[500] text-gray-600">
-									Click the island to smoothly expand it. You can interact with
-									the media controls within there. Leave the island to smoothly
-									collapse it.
+									Click the island or swipe down with two fingers to smoothly
+									expand it. You can interact with the media controls within
+									there. Leave the island to smoothly collapse it.
+									<br />
+									<i className="font-[450] text-gray-500">
+										Note: This behaves awkwardly on the home page because the
+										two finger gesture is also a scroll.
+									</i>
 								</span>
 								<br />
 								<br />A media player interface inspired by{" "}
@@ -52,12 +57,13 @@ export default function Home() {
 									Alcove
 								</TextLink>
 								, a clean and beautiful little app to add Dynamic Island like
-								funcitonality to your Mac's notch. It also uses Motion+ Ticker
-								to animate the podcast title with a smoothly masked marquee.
+								funcitonality to your Mac&apos;s notch. It also uses Motion+
+								Ticker to animate the podcast title with a smoothly masked
+								marquee.
 							</Experiment.Description>
 						</Experiment>
 						<hr className="w-full border-gray-200" />
-						<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/VerticalIconSwitch.tsx">
+						<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/CollapsableMenu.tsx">
 							<Experiment.Title>Detachable island</Experiment.Title>
 							<Experiment.Tags>
 								<Experiment.Tag>motion</Experiment.Tag>

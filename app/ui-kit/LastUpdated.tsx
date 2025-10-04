@@ -21,7 +21,7 @@ const LastUpdated = () => {
 				url: data.html_url,
 				sha: data.sha.slice(0, 7),
 				date: new Date(data.commit.author.date).toLocaleDateString("en-US", {
-					month: "long",
+					month: "short",
 					day: "numeric",
 					year: "numeric",
 				}),
@@ -42,7 +42,7 @@ const LastUpdated = () => {
 		<a
 			href={commit.url}
 			target="_blank"
-			className="text-xs font-[500] text-gray-600 py-2"
+			className="text-xs font-[500] text-right text-gray-600 py-2"
 			rel="noopener noreferrer"
 			style={{ fontFamily: "var(--font-geist-mono)" }}
 		>

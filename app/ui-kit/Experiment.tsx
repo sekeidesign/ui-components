@@ -58,7 +58,17 @@ interface ExperimentTagsProps {
 }
 
 const ExperimentTags = ({ children }: ExperimentTagsProps) => {
-	return <div className="flex items-center gap-2">{children}</div>;
+	return (
+		<div
+			className="flex items-center gap-2 w-full overflow-x-auto -ml-3 pl-3"
+			style={{
+				maskImage:
+					"linear-gradient(to right, transparent 0px, black 12px, black calc(100% - 12px), transparent 100%)",
+			}}
+		>
+			{children}
+		</div>
+	);
 };
 
 // Individual tag component
@@ -68,7 +78,7 @@ interface ExperimentTagProps {
 
 const ExperimentTag = ({ children }: ExperimentTagProps) => {
 	return (
-		<div className="text-xs font-[450] font-mono text-gray-500 bg-gray-200/60 p-1 px-2 w-fit rounded-lg">
+		<div className="text-xs font-[450] font-mono whitespace-nowrap text-gray-500 bg-gray-200/60 p-1 px-2 w-fit rounded-lg">
 			{children}
 		</div>
 	);

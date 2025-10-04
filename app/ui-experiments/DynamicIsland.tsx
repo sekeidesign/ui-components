@@ -247,48 +247,17 @@ export default function DynamicIsland({
 	const [expandedRef, expandedBounds] = useMeasure();
 	const [closedRef, closedBounds] = useMeasure();
 
-	// Two-finger gesture state
-	const [touchStart, setTouchStart] = useState<{
-		y: number;
-		touches: number;
-	} | null>(null);
-	const DRAG_MINIMUM = 12; // Minimum distance in pixels
-
 	const togglePlay = () => {
 		setIsPlaying(!isPlaying);
 	};
 
-	const toggleExpanded = () => {
-		setIsExpanded(!isExpanded);
-	};
-
-	// Two-finger gesture handlers
-	const handleTouchStart = (e: React.TouchEvent) => {
-		if (e.touches.length === 2) {
-			const touch1 = e.touches[0];
-			const touch2 = e.touches[1];
-			const avgY = (touch1.clientY + touch2.clientY) / 2;
-			setTouchStart({ y: avgY, touches: 2 });
+	// Two-finger wheel gesture handler
+	const handleWheel = (e: React.WheelEvent) => {
+		// Check if it's a two-finger scroll (deltaY is typically larger for trackpad gestures)
+		if (e.deltaY < -4) {
+			// Scrolling down with two fingers
+			setIsExpanded(true);
 		}
-	};
-
-	const handleTouchMove = (e: React.TouchEvent) => {
-		if (touchStart && e.touches.length === 2 && !isExpanded) {
-			console.log("Touch move");
-			const touch1 = e.touches[0];
-			const touch2 = e.touches[1];
-			const avgY = (touch1.clientY + touch2.clientY) / 2;
-			const deltaY = avgY - touchStart.y;
-
-			if (deltaY > DRAG_MINIMUM) {
-				setIsExpanded(true);
-				setTouchStart(null);
-			}
-		}
-	};
-
-	const handleTouchEnd = () => {
-		setTouchStart(null);
 	};
 
 	useEffect(() => {
@@ -365,9 +334,7 @@ export default function DynamicIsland({
 				<button
 					type="button"
 					onClick={() => setIsExpanded(true)}
-					onTouchStart={handleTouchStart}
-					onTouchMove={handleTouchMove}
-					onTouchEnd={handleTouchEnd}
+					onWheel={handleWheel}
 					className="w-full h-full absolute inset-0 cursor-pointer z-10"
 				/>
 				<AnimatePresence mode="popLayout">
@@ -378,7 +345,7 @@ export default function DynamicIsland({
 							animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
 							exit={{ opacity: 0, filter: "blur(16px)", y: 16 }}
 							transition={bigSpringConfig}
-							className="w-full min-w-[384px] flex items-center justify-center z-20 relative"
+							className="w-full min-w-[min(384px,75vw)] flex items-center justify-center z-20 relative"
 						>
 							<div
 								ref={expandedRef}
@@ -403,7 +370,7 @@ export default function DynamicIsland({
 							animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
 							exit={{ opacity: 0, filter: "blur(16px)", y: -16 }}
 							transition={bigSpringConfig}
-							className="w-72"
+							className="w-56"
 						>
 							<div ref={closedRef} className="w-full">
 								<ClosedState isPlaying={isPlaying} />

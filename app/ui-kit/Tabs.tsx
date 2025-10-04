@@ -27,7 +27,7 @@ const Tab = ({
 			{icon}
 			<span
 				className={cn(
-					"text-sm font-[500]",
+					"text-sm font-[500] whitespace-nowrap",
 					disabled ? "text-gray-300 pointer-events-none" : "text-gray-500",
 				)}
 			>
