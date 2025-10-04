@@ -378,7 +378,7 @@ export default function DynamicIsland({
 							animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
 							exit={{ opacity: 0, filter: "blur(16px)", y: 16 }}
 							transition={bigSpringConfig}
-							className="w-full min-w-[384px] flex items-center justify-center z-20 relative"
+							className="w-full min-w-[min(384px,75vw)] flex items-center justify-center z-20 relative"
 						>
 							<div
 								ref={expandedRef}
@@ -403,7 +403,7 @@ export default function DynamicIsland({
 							animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
 							exit={{ opacity: 0, filter: "blur(16px)", y: -16 }}
 							transition={bigSpringConfig}
-							className="w-72"
+							className="w-56"
 						>
 							<div ref={closedRef} className="w-full">
 								<ClosedState isPlaying={isPlaying} />

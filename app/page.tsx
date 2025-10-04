@@ -14,13 +14,13 @@ import { TextLink } from "./ui-kit/TextLink";
 
 export default function Home() {
 	return (
-		<div className="font-[family-name:var(--font-geist-sans)]">
+		<div className="font-[family-name:var(--font-geist-sans)] w-screen box-border">
 			<div className="flex md:flex-row flex-col gap-8 md:gap-20 p-4 md:p-8 py-8 md:py-20 justify-center mx-auto">
 				<IntroHeader />
 				<div className="flex flex-col gap-8 items-center justify-center max-w-screen-md">
 					<Tabs />
 					<hr className="w-full border-gray-200" />
-					<main className="flex flex-col gap-8 md:gap-20 items-center justify-center max-w-screen-md">
+					<main className="flex flex-col gap-8 md:gap-20 items-center justify-center w-full max-w-screen-md">
 						<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/DynamicIsland.tsx">
 							<Experiment.Title>Dynamic Island</Experiment.Title>
 							<Experiment.Tags>
