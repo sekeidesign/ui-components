@@ -57,8 +57,9 @@ export default function Home() {
 									Alcove
 								</TextLink>
 								, a clean and beautiful little app to add Dynamic Island like
-								funcitonality to your Mac's notch. It also uses Motion+ Ticker
-								to animate the podcast title with a smoothly masked marquee.
+								funcitonality to your Mac&apos;s notch. It also uses Motion+
+								Ticker to animate the podcast title with a smoothly masked
+								marquee.
 							</Experiment.Description>
 						</Experiment>
 						<hr className="w-full border-gray-200" />
