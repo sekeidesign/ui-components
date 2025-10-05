@@ -12,6 +12,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import useMeasure from "react-use-measure";
 import { cn } from "../ui-kit/cn";
+import { IconButton } from "../ui-kit/IconButton";
 
 const springConfig: Transition = {
 	type: "spring",
@@ -154,18 +155,11 @@ function MediaContent({
 
 			{/* Control buttons */}
 			<div className="flex gap-2 items-center w-full justify-center">
-				<button
-					type="button"
-					className="flex items-center justify-center rounded-2xl w-12 h-12 hover:bg-zinc-800 transition-colors"
-				>
-					<BackwardIcon className="w-8 h-8 text-white opacity-50" />
-				</button>
+				<IconButton variant="secondary" size="lg" disabled>
+					<BackwardIcon />
+				</IconButton>
 
-				<button
-					type="button"
-					onClick={onTogglePlay}
-					className="flex items-center justify-center rounded-2xl relative z-20 w-12 h-12 active:scale-90 hover:bg-zinc-800 transition-all"
-				>
+				<IconButton variant="secondary" size="lg" onClick={onTogglePlay}>
 					<AnimatePresence mode="popLayout" initial={false}>
 						{isPlaying ? (
 							<motion.div
@@ -175,7 +169,7 @@ function MediaContent({
 								exit={{ scale: 0.5, opacity: 0 }}
 								transition={springConfig}
 							>
-								<PauseIcon className="w-9 h-9 text-white" />
+								<PauseIcon />
 							</motion.div>
 						) : (
 							<motion.div
@@ -185,18 +179,15 @@ function MediaContent({
 								exit={{ scale: 0.5, opacity: 0 }}
 								transition={springConfig}
 							>
-								<PlayIcon className="w-9 h-9 text-white" />
+								<PlayIcon />
 							</motion.div>
 						)}
 					</AnimatePresence>
-				</button>
+				</IconButton>
 
-				<button
-					type="button"
-					className="flex items-center justify-center rounded-2xl w-12 h-12 hover:bg-zinc-800 transition-colors"
-				>
-					<ForwardIcon className="w-8 h-8 text-white opacity-50" />
-				</button>
+				<IconButton variant="secondary" size="lg" disabled>
+					<ForwardIcon />
+				</IconButton>
 			</div>
 		</div>
 	);
@@ -231,7 +222,7 @@ export default function DynamicIsland({
 	title: string;
 	subtitle: string;
 }) {
-	const VIDEO_DURATION = 15 * 60; // 25 minutes
+	const VIDEO_DURATION = 12.5 * 60; // 25 minutes
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [duration, setDuration] = useState(0);
 	const [isExpanded, setIsExpanded] = useState(false);
