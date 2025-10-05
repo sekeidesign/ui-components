@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
 	title: "PG's UI Kitchen",
 	description: "Design Engineer based in Montréal, QC",
+	metadataBase: new URL("https://uikitchen.dev"),
 	openGraph: {
 		title: "PG's UI Kitchen",
 		description: "Design Engineer cooking up some UI experiments",
