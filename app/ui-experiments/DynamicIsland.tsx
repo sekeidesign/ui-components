@@ -11,8 +11,8 @@ import { Ticker } from "motion-plus/react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import useMeasure from "react-use-measure";
-import { cn } from "../ui-kit/cn";
-import { IconButton } from "../ui-kit/IconButton";
+import { cn } from "@/ui-kit/cn";
+import { IconButton } from "@/ui-kit/IconButton";
 
 const springConfig: Transition = {
 	type: "spring",
