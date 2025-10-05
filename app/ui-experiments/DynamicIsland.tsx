@@ -333,9 +333,9 @@ export default function DynamicIsland({
 					{isExpanded ? (
 						<motion.div
 							key="expanded"
-							initial={{ opacity: 0, filter: "blur(16px)", y: 16 }}
+							initial={{ opacity: 0, filter: "blur(16px)", y: -24 }}
 							animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-							exit={{ opacity: 0, filter: "blur(16px)", y: 16 }}
+							exit={{ opacity: 0, filter: "blur(16px)", y: -24 }}
 							transition={bigSpringConfig}
 							className="w-full min-w-[min(384px,75vw)] flex items-center justify-center z-20 relative"
 						>
@@ -358,9 +358,9 @@ export default function DynamicIsland({
 					) : (
 						<motion.div
 							key="closed"
-							initial={{ opacity: 0, filter: "blur(16px)", y: -16 }}
+							initial={{ opacity: 0, filter: "blur(16px)", y: 24 }}
 							animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-							exit={{ opacity: 0, filter: "blur(16px)", y: -16 }}
+							exit={{ opacity: 0, filter: "blur(16px)", y: 24 }}
 							transition={bigSpringConfig}
 							className="w-56"
 						>
