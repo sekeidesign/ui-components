@@ -19,6 +19,16 @@ export const metadata: Metadata = {
 	openGraph: {
 		title: "PG's UI Kitchen",
 		description: "Design Engineer cooking up some UI experiments",
+		images: "/og-image.jpg",
+	},
+	icons: {
+		icon: [
+			{
+				url: "/icons/favicon-light.svg",
+				media: "(prefers-color-scheme: light)",
+			},
+			{ url: "/icons/favicon-dark.svg", media: "(prefers-color-scheme: dark)" },
+		],
 	},
 };
 
