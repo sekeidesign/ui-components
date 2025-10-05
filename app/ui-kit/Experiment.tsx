@@ -1,6 +1,6 @@
 "use client";
 
-import { Tooltip } from "@ark-ui/react/tooltip";
+import { Tooltip } from "@ark-ui/react";
 import { CommandLineIcon } from "@heroicons/react/16/solid";
 import { motion, useInView } from "motion/react";
 import Link from "next/link";
