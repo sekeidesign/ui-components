@@ -26,3 +26,65 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+[data-scope='hover-card'][data-part='content'][data-state='open'][data-placement='top'] {
+  animation: hoverCardInTop 0.15s ease-out;
+}
+
+[data-scope='hover-card'][data-part='content'][data-state='closed'][data-placement='top'] {
+  animation: hoverCardOutTop 0.15s ease-out;
+}
+
+[data-scope='hover-card'][data-part='content'][data-state='open'][data-placement='bottom'] {
+  animation: hoverCardInBottom 0.15s ease-out;
+}
+
+[data-scope='hover-card'][data-part='content'][data-state='closed'][data-placement='bottom'] {
+  animation: hoverCardOutBottom 0.15s ease-out;
+}
+
+
+@keyframes hoverCardInTop {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes hoverCardOutTop {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+@keyframes hoverCardInBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes hoverCardOutBottom {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+}
