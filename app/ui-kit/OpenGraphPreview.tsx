@@ -57,9 +57,9 @@ const OpenGraphPreview = ({
 			<HoverCard.Trigger asChild>{children}</HoverCard.Trigger>
 			<Portal>
 				<HoverCard.Positioner>
-					<HoverCard.Content>
+					<HoverCard.Content className="z-[1000] relative">
 						<div
-							className="border p-3 bg-white border-gray-200 shadow-xl rounded-xl max-w-xs space-y-1"
+							className="border p-3 bg-white border-gray-200 shadow-xl rounded-xl max-w-xs space-y-1 hover-card-animate"
 							style={{ fontFamily: "var(--font-geist-sans)" }}
 						>
 							{og.image && (
