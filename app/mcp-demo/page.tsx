@@ -1,3 +1,20 @@
+"use client";
+import {
+	BackwardIcon,
+	ForwardIcon,
+	PauseIcon,
+	PlayIcon,
+} from "@heroicons/react/24/solid";
+import { AnimatePresence, motion } from "motion/react";
+import { useState } from "react";
+import { IconButton } from "../ui-kit/IconButton";
+
+const iconSpringConfig = {
+	type: "spring",
+	duration: 0.4,
+	bounce: 0.2,
+} as const;
+
 export default function MCPDemo() {
 	return (
 		<div className="font-[family-name:var(--font-geist-sans)] w-full h-screen items-start justify-center flex flex-col gap-8 p-16 pt-8">
@@ -9,9 +26,205 @@ export default function MCPDemo() {
 	);
 }
 
-const DynamicIsland = () => {
+const DynamicIslandControlsExpanded = ({
+	isPlaying,
+	onPlayPause,
+}: {
+	isPlaying: boolean;
+	onPlayPause: () => void;
+}) => {
 	return (
-		<div className="h-10 w-64 rounded-b-xl bg-violet-500/15 border border-violet-500/25 border-dashed border-t-0" />
+		<>
+			{/* Progress Bar */}
+			<div className="flex gap-2 items-center justify-center relative w-full">
+				<p className="font-semibold leading-4 opacity-50 relative text-xs text-white whitespace-nowrap">
+					36:38
+				</p>
+				<div className="grow bg-zinc-800 h-1.5 relative rounded-full">
+					<div className="absolute bg-zinc-400 h-1.5 left-0 top-1/2 -translate-y-1/2 w-28 rounded-full" />
+				</div>
+				<p className="font-semibold leading-4 opacity-50 relative text-xs text-white whitespace-nowrap">
+					-48:46
+				</p>
+			</div>
+
+			{/* Controls */}
+			<div className="flex gap-2 items-center relative">
+				{/* Backward Button */}
+				<IconButton
+					variant="secondary"
+					size="lg"
+					aria-label="Skip backward"
+					disabled
+				>
+					<BackwardIcon />
+				</IconButton>
+
+				{/* Play/Pause Button */}
+				<IconButton
+					variant="secondary"
+					size="lg"
+					aria-label={isPlaying ? "Pause" : "Play"}
+					onClick={onPlayPause}
+				>
+					<AnimatePresence mode="popLayout">
+						{isPlaying ? (
+							<motion.div
+								key="pause"
+								initial={{ scale: 0.5, opacity: 0 }}
+								animate={{ scale: 1, opacity: 1 }}
+								exit={{ scale: 0.5, opacity: 0 }}
+								transition={iconSpringConfig}
+							>
+								<PauseIcon />
+							</motion.div>
+						) : (
+							<motion.div
+								key="play"
+								initial={{ scale: 0.5, opacity: 0 }}
+								animate={{ scale: 1, opacity: 1 }}
+								exit={{ scale: 0.5, opacity: 0 }}
+								transition={iconSpringConfig}
+							>
+								<PlayIcon />
+							</motion.div>
+						)}
+					</AnimatePresence>
+				</IconButton>
+
+				{/* Forward Button */}
+				<IconButton
+					variant="secondary"
+					size="lg"
+					aria-label="Skip forward"
+					disabled
+				>
+					<ForwardIcon />
+				</IconButton>
+			</div>
+		</>
+	);
+};
+
+const DynamicIslandControlsCollapsed = () => {
+	return null;
+};
+
+const DynamicIsland = () => {
+	const [isPlaying, setIsPlaying] = useState(false);
+	const [isExpanded, setIsExpanded] = useState(false);
+
+	const handlePlayPause = () => {
+		setIsPlaying(!isPlaying);
+	};
+
+	const handleToggleExpanded = () => {
+		setIsExpanded(!isExpanded);
+	};
+
+	return (
+		<button
+			type="button"
+			onClick={handleToggleExpanded}
+			className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg"
+			aria-label="Toggle Dynamic Island"
+		>
+			<div className="flex items-start justify-center w-full max-w-sm">
+				{/* Left corner decoration */}
+				<svg
+					width="16"
+					height="16"
+					viewBox="0 0 16 16"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+					className="flex-shrink-0"
+				>
+					<title>Left corner decoration</title>
+					<path
+						d="M16.6 16V0H0.599976C5.93331 0 16.6 3.2 16.6 16Z"
+						fill="black"
+						style={{ fill: "black", fillOpacity: 1 }}
+					/>
+				</svg>
+
+				{/* Main content */}
+				<div className="bg-zinc-950 flex flex-col gap-2 items-center justify-center pb-4 pt-7 px-4 rounded-bl-3xl rounded-br-3xl shadow-2xl flex-1">
+					{/* Media Info Section */}
+					<div className="flex gap-1 items-center justify-center relative w-full">
+						{/* Thumbnail */}
+						<div className="h-7 relative rounded-md shrink-0 w-12">
+							<div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 rounded-md" />
+						</div>
+
+						{/* Title and Subtitle */}
+						<div className="flex flex-col gap-px grow items-start min-w-0 px-3 py-0 relative">
+							<p className="font-semibold leading-5 relative text-sm text-white whitespace-nowrap">
+								Can the iPhone 17 Pro Beat a Leica Camera
+							</p>
+							<p className="font-normal leading-4 opacity-50 relative text-xs text-white whitespace-nowrap">
+								WVFRM Podcast
+							</p>
+						</div>
+
+						{/* Waveform */}
+						<div className="flex gap-0.5 items-center justify-center relative">
+							<div className="bg-slate-50 h-2 rounded-full w-0.5" />
+							<div className="bg-slate-50 h-3 rounded-full w-0.5" />
+							<div className="bg-slate-50 h-1 rounded-full w-0.5" />
+							<div className="bg-slate-50 h-2 rounded-full w-0.5" />
+							<div className="bg-slate-50 h-1 rounded-full w-0.5" />
+						</div>
+					</div>
+
+					{/* Animated Controls Section */}
+					<AnimatePresence mode="popLayout">
+						{isExpanded ? (
+							<motion.div
+								key="expanded"
+								initial={{ y: 20, opacity: 0, filter: "blur(4px)" }}
+								animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+								exit={{ y: -20, opacity: 0, filter: "blur(4px)" }}
+								transition={iconSpringConfig}
+								className="w-full"
+							>
+								<DynamicIslandControlsExpanded
+									isPlaying={isPlaying}
+									onPlayPause={handlePlayPause}
+								/>
+							</motion.div>
+						) : (
+							<motion.div
+								key="collapsed"
+								initial={{ y: -20, opacity: 0, filter: "blur(4px)" }}
+								animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+								exit={{ y: 20, opacity: 0, filter: "blur(4px)" }}
+								transition={iconSpringConfig}
+								className="w-full"
+							>
+								<DynamicIslandControlsCollapsed />
+							</motion.div>
+						)}
+					</AnimatePresence>
+				</div>
+
+				{/* Right corner decoration */}
+				<svg
+					width="16"
+					height="16"
+					viewBox="0 0 16 16"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+					className="flex-shrink-0 -ml-px"
+				>
+					<title>Right corner decoration</title>
+					<path
+						d="M0.599976 16V0H16.6C11.2666 0 0.599976 3.2 0.599976 16Z"
+						fill="black"
+						style={{ fill: "black", fillOpacity: 1 }}
+					/>
+				</svg>
+			</div>
+		</button>
 	);
 };
 
