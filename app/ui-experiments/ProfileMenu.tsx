@@ -2,6 +2,7 @@ import { Popover } from "@base-ui-components/react";
 import {
 	ArrowRightStartOnRectangleIcon,
 	BellIcon,
+	ChevronDownIcon,
 	ChevronUpIcon,
 	Cog6ToothIcon,
 	DocumentTextIcon,
@@ -33,10 +34,11 @@ interface ProfileButtonProps {
 const ProfileButton = ({
 	name = "Leonardo di Potato",
 	email = "leonardo@tato.co",
+	open = false,
 	imageSrc = "https://www.vidavetcare.com/wp-content/uploads/sites/234/2022/04/golden-retriever-dog-breed-info.jpeg",
 }: ProfileButtonProps) => {
 	return (
-		<div className="flex gap-2 items-center relative z-20 pointer-events-none justify-center p-2 w-full">
+		<div className="flex gap-2 items-center relative z-20 pointer-events-none justify-center p-2 pr-3 w-full peer-active:scale-96 transition-transform duration-300 ease-out">
 			<div className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0">
 				<Image
 					src={imageSrc}
@@ -55,10 +57,43 @@ const ProfileButton = ({
 					{email}
 				</span>
 			</div>
-			<ChevronUpIcon
-				className="w-4 h-4 text-gray-400 flex-shrink-0"
-				strokeWidth={2}
-			/>
+			<AnimatePresence mode="popLayout">
+				{open ? (
+					<motion.div
+						key="chevron-down"
+						initial={{ opacity: 0, scale: 0.4, filter: "blur(2px)" }}
+						animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+						exit={{ opacity: 0, scale: 0.4, filter: "blur(2px)" }}
+						transition={{
+							type: "spring",
+							duration: 0.3,
+							bounce: 0.1,
+						}}
+					>
+						<ChevronDownIcon
+							className={cn("w-4 h-4 text-gray-400 flex-shrink-0")}
+							strokeWidth={2}
+						/>
+					</motion.div>
+				) : (
+					<motion.div
+						key="chevron-up"
+						initial={{ opacity: 0, scale: 0.4, filter: "blur(2px)" }}
+						animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+						exit={{ opacity: 0, scale: 0.4, filter: "blur(2px)" }}
+						transition={{
+							type: "spring",
+							duration: 0.3,
+							bounce: 0.1,
+						}}
+					>
+						<ChevronUpIcon
+							className={cn("w-4 h-4 text-gray-400 flex-shrink-0")}
+							strokeWidth={2}
+						/>
+					</motion.div>
+				)}
+			</AnimatePresence>
 		</div>
 	);
 };
@@ -130,7 +165,7 @@ const Sidebar = () => {
 							<motion.div
 								whileTap={{ scale: 0.96 }}
 								className={cn(
-									"absolute left-0 right-0 bottom-0 z-10 w-full bg-gray-100 transition-shadow duration-400",
+									"absolute left-0 right-0 bottom-0 z-10 w-full bg-gray-100 transition-shadow duration-400 peer",
 									open && " shadow-xl",
 								)}
 								whileHover={{ opacity: 1 }}
