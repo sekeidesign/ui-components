@@ -38,7 +38,7 @@ const ProfileButton = ({
 	imageSrc = "https://www.vidavetcare.com/wp-content/uploads/sites/234/2022/04/golden-retriever-dog-breed-info.jpeg",
 }: ProfileButtonProps) => {
 	return (
-		<div className="flex gap-2 items-center relative z-20 pointer-events-none justify-center p-2 pr-3 w-full peer-active:scale-96 transition-transform duration-300 ease-out">
+		<div className="flex gap-2 items-center relative z-20 pointer-events-none justify-center p-2 pr-3 w-full">
 			<div className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0">
 				<Image
 					src={imageSrc}
@@ -163,24 +163,42 @@ const Sidebar = () => {
 					<Popover.Root open={open} onOpenChange={setOpen}>
 						<Popover.Trigger className="w-full relative z-10" ref={triggerRef}>
 							<motion.div
-								whileTap={{ scale: 0.96 }}
-								className={cn(
-									"absolute left-0 right-0 bottom-0 z-10 w-full bg-gray-100 transition-shadow duration-400 peer",
-									open && " shadow-xl",
-								)}
-								whileHover={{ opacity: 1 }}
-								animate={{
-									height: open ? contentHeight : triggerHeight,
-									borderRadius: open ? "var(--radius-xl)" : "var(--radius-lg)",
-									opacity: open ? 1 : 0,
+								whileTap={{
+									scale: 0.95,
+									y: 1,
+									transition: {
+										type: "spring",
+										duration: 0.4,
+										bounce: 0.4,
+									},
 								}}
 								transition={{
 									type: "spring",
-									duration: 0.3,
-									bounce: 0.1,
+									duration: 0.7,
+									bounce: 0.4,
 								}}
-							/>
-							<ProfileButton open={open} />
+							>
+								<motion.div
+									className={cn(
+										"absolute left-0 right-0 bottom-0 z-10 w-full bg-gray-100 transition-shadow duration-400",
+										open && " shadow-xl",
+									)}
+									whileHover={{ opacity: 1 }}
+									animate={{
+										height: open ? contentHeight : triggerHeight,
+										borderRadius: open
+											? "var(--radius-xl)"
+											: "var(--radius-lg)",
+										opacity: open ? 1 : 0,
+									}}
+									transition={{
+										type: "spring",
+										duration: 0.3,
+										bounce: 0.1,
+									}}
+								/>
+								<ProfileButton open={open} />
+							</motion.div>
 						</Popover.Trigger>
 						<Popover.Portal keepMounted>
 							<AnimatePresence>
@@ -235,8 +253,8 @@ const MainContent = () => {
 	return (
 		<div className="h-full w-full bg-white rounded-bl-md shadow-skew ring-1 p-6 ring-gray-400/5">
 			<div className="mask-r-from-0% mask-b-from-0% w-full space-y-3 text-gray-400 leading-loose h-full">
-				<h2 className="text-xl font-[550]">Some mock content</h2>
-				<h1 className="text-4xl font-[550]">The Montrèal café scene</h1>
+				<h2 className="text-lg font-[550]">Some mock content</h2>
+				<h1 className="text-2xl font-[550]">The Montrèal café scene</h1>
 				<p>
 					Montreal is a haven for coffee lovers, boasting a vibrant café
 					culture. Each neighborhood has its own unique spots, from cozy corners

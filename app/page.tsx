@@ -31,7 +31,7 @@ export default function Home() {
 								<Experiment.Tag>tailwind</Experiment.Tag>
 								<Experiment.Tag>react</Experiment.Tag>
 							</Experiment.Tags>
-							<Experiment.Example className="p-0 h-[640px] items-start">
+							<Experiment.Example className="p-0 h-[440px] items-start">
 								<ProfileMenu />
 							</Experiment.Example>
 							<Experiment.Description>
