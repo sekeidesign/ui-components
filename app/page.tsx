@@ -26,6 +26,8 @@ export default function Home() {
 							<Experiment.Title>Profile menu</Experiment.Title>
 							<Experiment.Tags>
 								<Experiment.Tag>motion</Experiment.Tag>
+								<Experiment.Tag>useMeasure</Experiment.Tag>
+								<Experiment.Tag>Base UI</Experiment.Tag>
 								<Experiment.Tag>tailwind</Experiment.Tag>
 								<Experiment.Tag>react</Experiment.Tag>
 							</Experiment.Tags>
@@ -33,7 +35,18 @@ export default function Home() {
 								<ProfileMenu />
 							</Experiment.Example>
 							<Experiment.Description>
-								Playing around wiht a sidebar menu.
+								I wanted to improve upon our profile menu at Tato. When I
+								joined, it was a standard shadcn/ui dropdown, the one that ships
+								with the sidebar component. While the original dropdown did its
+								job, I wanted to build something with a bit more flair. Inspired
+								by liquid glass's shifting forms, I wanted to create something
+								that felt fluid and part of a single morphin surface.
+								<br />
+								<br />
+								I've also been using Base UI more frequently over Radix, and
+								I've been loving the interface and the DX improvements the
+								creators have made. In particular the render function which
+								provides easy access to properties and state of the component.
 							</Experiment.Description>
 						</Experiment>
 						<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/DynamicIsland.tsx">
