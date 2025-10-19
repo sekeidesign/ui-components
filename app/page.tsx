@@ -6,6 +6,7 @@ import CollapsableMenu, {
 } from "./ui-experiments/CollapsableMenu";
 import DynamicIsland from "./ui-experiments/DynamicIsland";
 import { FamilyStatusButton } from "./ui-experiments/FamilyStatusButton";
+import { ProfileMenu } from "./ui-experiments/ProfileMenu";
 import { VerticalIconSwitch } from "./ui-experiments/VerticalIconSwitch";
 import { Experiment } from "./ui-kit/Experiment";
 import { LastUpdated } from "./ui-kit/LastUpdated";
@@ -21,8 +22,22 @@ export default function Home() {
 					<Tabs />
 					<hr className="w-full border-gray-200" />
 					<main className="flex flex-col gap-8 md:gap-20 items-center justify-center w-full max-w-screen-md">
+						<Experiment sourceUrl="https://github.com/sekeidesign/">
+							<Experiment.Title>Profile menu</Experiment.Title>
+							<Experiment.Tags>
+								<Experiment.Tag>motion</Experiment.Tag>
+								<Experiment.Tag>tailwind</Experiment.Tag>
+								<Experiment.Tag>react</Experiment.Tag>
+							</Experiment.Tags>
+							<Experiment.Example className="p-0 min-h-[640px] items-start">
+								<ProfileMenu />
+							</Experiment.Example>
+							<Experiment.Description>
+								Playing around wiht a sidebar menu.
+							</Experiment.Description>
+						</Experiment>
 						<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/DynamicIsland.tsx">
-							<Experiment.Title>Dynamic Island</Experiment.Title>
+							<Experiment.Title>Dynamic island</Experiment.Title>
 							<Experiment.Tags>
 								<Experiment.Tag>motion</Experiment.Tag>
 								<Experiment.Tag>Motion+ Ticker</Experiment.Tag>
