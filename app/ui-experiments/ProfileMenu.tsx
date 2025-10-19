@@ -71,8 +71,8 @@ const ProfileButton = ({
 						}}
 					>
 						<ChevronDownIcon
-							className={cn("w-4 h-4 text-gray-400 flex-shrink-0")}
-							strokeWidth={2}
+							className={cn("w-3 h-3 text-gray-400 flex-shrink-0")}
+							strokeWidth={3}
 						/>
 					</motion.div>
 				) : (
@@ -88,8 +88,8 @@ const ProfileButton = ({
 						}}
 					>
 						<ChevronUpIcon
-							className={cn("w-4 h-4 text-gray-400 flex-shrink-0")}
-							strokeWidth={2}
+							className={cn("w-3 h-3 text-gray-400 flex-shrink-0")}
+							strokeWidth={3}
 						/>
 					</motion.div>
 				)}
