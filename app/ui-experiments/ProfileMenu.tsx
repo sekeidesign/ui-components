@@ -234,11 +234,9 @@ const Sidebar = () => {
 const MainContent = () => {
 	return (
 		<div className="h-full w-full bg-white rounded-bl-md shadow-skew ring-1 p-6 ring-gray-400/5">
-			<div className="mask-r-from-0% w-full space-y-3 text-gray-300">
-				<h2 className="text-xl font-[550] text-gray-500">Some mock content</h2>
-				<h1 className="text-4xl font-[550] text-gray-500">
-					The Montrèal café scene
-				</h1>
+			<div className="mask-r-from-0% mask-b-from-0% w-full space-y-3 text-gray-400 leading-loose h-full">
+				<h2 className="text-xl font-[550]">Some mock content</h2>
+				<h1 className="text-4xl font-[550]">The Montrèal café scene</h1>
 				<p>
 					Montreal is a haven for coffee lovers, boasting a vibrant café
 					culture. Each neighborhood has its own unique spots, from cozy corners
@@ -257,10 +255,12 @@ const MainContent = () => {
 					Patrons can sip their drinks while soaking up the sun and
 					people-watching. The lively streets of Montreal provide the perfect
 					backdrop for a leisurely café experience. For those seeking a quiet
-					spot to work or read, there are plenty of options. Many cafes have
-					free Wi-Fi and comfortable seating, making them ideal for remote work
-					or study sessions. The blend of good coffee and a relaxed vibe keeps
-					people coming back for more.
+					spot to work or read, there are plenty of options.
+				</p>
+				<p>
+					Many cafes have free Wi-Fi and comfortable seating, making them ideal
+					for remote work or study sessions. The blend of good coffee and a
+					relaxed vibe keeps people coming back for more.
 				</p>
 			</div>
 		</div>
