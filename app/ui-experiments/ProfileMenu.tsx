@@ -246,7 +246,7 @@ const MainContent = () => {
 				</p>
 				<p>
 					Many cafes offer more than just coffee; they serve delicious pastries
-					and light bites. It's common to find artisanal treats that pair
+					and light bites. It&apos;s common to find artisanal treats that pair
 					perfectly with a cup of joe. Some places even feature local art,
 					creating a warm and inviting environment. Outdoor seating is a big
 					draw, especially during the warmer months.

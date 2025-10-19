@@ -39,13 +39,13 @@ export default function Home() {
 								joined, it was a standard shadcn/ui dropdown, the one that ships
 								with the sidebar component. While the original dropdown did its
 								job, I wanted to build something with a bit more flair. Inspired
-								by liquid glass's shifting forms, I wanted to create something
-								that felt fluid and part of a single morphin surface.
+								by liquid glass&apos;s shifting forms, I wanted to create
+								something that felt fluid and part of a single morphin surface.
 								<br />
 								<br />
-								I've also been using Base UI more frequently over Radix, and
-								I've been loving the interface and the DX improvements the
-								creators have made. In particular the render function which
+								I&apos;ve also been using Base UI more frequently over Radix,
+								and I&apos;ve been loving the interface and the DX improvements
+								the creators have made. In particular the render function which
 								provides easy access to properties and state of the component.
 							</Experiment.Description>
 						</Experiment>
