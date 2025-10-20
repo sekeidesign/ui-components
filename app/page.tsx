@@ -43,10 +43,26 @@ export default function Home() {
 								something that felt fluid and part of a single morphin surface.
 								<br />
 								<br />
-								I&apos;ve also been using Base UI more frequently over Radix,
-								and I&apos;ve been loving the interface and the DX improvements
-								the creators have made. In particular the render function which
-								provides easy access to properties and state of the component.
+								I&apos;ve also been using{" "}
+								<TextLink
+									href="https://base-ui.com/react/components/popover"
+									target="_blank"
+									hasFavicon
+								>
+									Base UI
+								</TextLink>{" "}
+								more frequently over Radix, and I&apos;ve been loving the
+								interface and the DX improvements the creators have made. In
+								particular, I really love the{" "}
+								<TextLink
+									href="https://base-ui.com/react/handbook/composition#render-function"
+									target="_blank"
+									hasFavicon
+								>
+									render function
+								</TextLink>{" "}
+								which provides easy access to properties and state of the
+								component.
 							</Experiment.Description>
 						</Experiment>
 						<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/DynamicIsland.tsx">
