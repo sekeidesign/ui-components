@@ -88,3 +88,32 @@ body {
     transform: translateY(-8px) scale(0.98);
   }
 }
+
+.ProfileMenu[data-state='open'] {
+  animation: profileMenuIn 0.15s ease-out;
+}
+.ProfileMenu[data-state='closed'] {
+  animation: profileMenuOut 0.15s ease-out;
+}
+
+@keyframes profileMenuIn {
+  0% {
+    opacity: 1;
+    
+  }
+  100% {
+    opacity: 1;
+    
+  }
+}
+
+@keyframes profileMenuOut {
+  0% {
+    opacity: 1;
+    
+  }
+  100% {
+    opacity: 1;
+    
+  }
+}
