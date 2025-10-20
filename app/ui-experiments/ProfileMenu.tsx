@@ -157,7 +157,7 @@ const Sidebar = () => {
 	const [contentRef, { height: contentHeight }] = useMeasure();
 	const [triggerRef, { height: triggerHeight }] = useMeasure();
 	return (
-		<div className="h-full w-2/3 md:w-96 flex-shrink-0 flex flex-col justify-end items-end p-1 pb-0 ">
+		<div className="h-full w-2/3 max-w-64 flex-shrink-0 flex flex-col justify-end items-end p-1 pb-0 ">
 			<div className="w-full relative">
 				<LayoutGroup>
 					<Popover.Root open={open} onOpenChange={setOpen}>
