@@ -16,7 +16,7 @@ import { cn } from "../ui-kit/cn";
 
 const ProfileMenu = () => {
 	return (
-		<div className="h-full w-full flex items-start justify-center bg-gray-200 pb-1">
+		<div className="h-full w-full flex items-start justify-start bg-gray-200 pb-1">
 			<Sidebar />
 			<MainContent />
 		</div>
@@ -157,7 +157,7 @@ const Sidebar = () => {
 	const [contentRef, { height: contentHeight }] = useMeasure();
 	const [triggerRef, { height: triggerHeight }] = useMeasure();
 	return (
-		<div className="h-full w-96 flex flex-col justify-end items-end p-1 pb-0 ">
+		<div className="h-full w-2/3 md:w-96 flex-shrink-0 flex flex-col justify-end items-end p-1 pb-0 ">
 			<div className="w-full relative">
 				<LayoutGroup>
 					<Popover.Root open={open} onOpenChange={setOpen}>
@@ -252,34 +252,36 @@ const Sidebar = () => {
 const MainContent = () => {
 	return (
 		<div className="h-full w-full bg-white rounded-bl-md shadow-skew ring-1 p-6 ring-gray-400/5">
-			<div className="mask-r-from-0% mask-b-from-0% w-full space-y-3 text-gray-400 leading-loose h-full">
-				<h2 className="text-lg font-[550]">Some mock content</h2>
-				<h1 className="text-2xl font-[550]">The Montrèal café scene</h1>
-				<p>
-					Montreal is a haven for coffee lovers, boasting a vibrant café
-					culture. Each neighborhood has its own unique spots, from cozy corners
-					to bustling hubs. The aroma of freshly brewed coffee fills the air,
-					inviting locals and tourists alike to take a break and enjoy the
-					atmosphere.
-				</p>
-				<p>
-					Many cafes offer more than just coffee; they serve delicious pastries
-					and light bites. It&apos;s common to find artisanal treats that pair
-					perfectly with a cup of joe. Some places even feature local art,
-					creating a warm and inviting environment. Outdoor seating is a big
-					draw, especially during the warmer months.
-				</p>
-				<p>
-					Patrons can sip their drinks while soaking up the sun and
-					people-watching. The lively streets of Montreal provide the perfect
-					backdrop for a leisurely café experience. For those seeking a quiet
-					spot to work or read, there are plenty of options.
-				</p>
-				<p>
-					Many cafes have free Wi-Fi and comfortable seating, making them ideal
-					for remote work or study sessions. The blend of good coffee and a
-					relaxed vibe keeps people coming back for more.
-				</p>
+			<div className="mask-r-from-0% mask-b-from-0% w-full h-full">
+				<div className="min-w-[440px] w-full space-y-3 text-gray-400 leading-loose h-full">
+					<h2 className="text-lg font-[550]">Some mock content</h2>
+					<h1 className="text-2xl font-[550]">The Montrèal café scene</h1>
+					<p>
+						Montreal is a haven for coffee lovers, boasting a vibrant café
+						culture. Each neighborhood has its own unique spots, from cozy
+						corners to bustling hubs. The aroma of freshly brewed coffee fills
+						the air, inviting locals and tourists alike to take a break and
+						enjoy the atmosphere.
+					</p>
+					<p>
+						Many cafes offer more than just coffee; they serve delicious
+						pastries and light bites. It&apos;s common to find artisanal treats
+						that pair perfectly with a cup of joe. Some places even feature
+						local art, creating a warm and inviting environment. Outdoor seating
+						is a big draw, especially during the warmer months.
+					</p>
+					<p>
+						Patrons can sip their drinks while soaking up the sun and
+						people-watching. The lively streets of Montreal provide the perfect
+						backdrop for a leisurely café experience. For those seeking a quiet
+						spot to work or read, there are plenty of options.
+					</p>
+					<p>
+						Many cafes have free Wi-Fi and comfortable seating, making them
+						ideal for remote work or study sessions. The blend of good coffee
+						and a relaxed vibe keeps people coming back for more.
+					</p>
+				</div>
 			</div>
 		</div>
 	);
