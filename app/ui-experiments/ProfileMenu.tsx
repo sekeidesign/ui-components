@@ -211,6 +211,7 @@ const Sidebar = () => {
 										className="fixed z-20"
 									>
 										<Popover.Popup
+											finalFocus={false}
 											render={
 												<motion.div
 													ref={contentRef}
