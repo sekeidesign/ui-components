@@ -174,8 +174,8 @@ const Sidebar = () => {
 								}}
 								transition={{
 									type: "spring",
-									duration: 0.7,
-									bounce: 0.25,
+									duration: 0.6,
+									bounce: 0.2,
 								}}
 							>
 								<motion.div
