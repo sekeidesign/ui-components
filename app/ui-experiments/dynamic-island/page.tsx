@@ -7,7 +7,9 @@ import DynamicIsland from "./DynamicIsland";
 export function DynamicIslandExperiment() {
 	return (
 		<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/DynamicIsland.tsx">
-			<Experiment.Title>Dynamic island</Experiment.Title>
+			<Experiment.Title pageUrl="/ui-experiments/dynamic-island">
+				Dynamic island
+			</Experiment.Title>
 			<Experiment.Tags>
 				<Experiment.Tag>motion</Experiment.Tag>
 				<Experiment.Tag>Motion+ Ticker</Experiment.Tag>

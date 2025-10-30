@@ -2,9 +2,15 @@
 
 import { Tooltip } from "@ark-ui/react/tooltip";
 import { CommandLineIcon } from "@heroicons/react/16/solid";
-import { motion, useInView } from "motion/react";
+import { AnimatePresence, motion, useInView } from "motion/react";
 import Link from "next/link";
-import { createContext, type ReactNode, useContext, useRef } from "react";
+import {
+	createContext,
+	type ReactNode,
+	useContext,
+	useRef,
+	useState,
+} from "react";
 import { cn } from "./cn";
 
 interface ExperimentContextValue {
@@ -42,13 +48,46 @@ const ExperimentRoot = ({ children, sourceUrl }: ExperimentRootProps) => {
 // Title component
 interface ExperimentTitleProps {
 	children: ReactNode;
+	pageUrl: string;
 }
 
-const ExperimentTitle = ({ children }: ExperimentTitleProps) => {
+const ExperimentTitle = ({ children, pageUrl }: ExperimentTitleProps) => {
+	const [hovering, setHovering] = useState(false);
+
 	return (
-		<h2 className="text-xl text-gray-800 font-[500] leading-none">
-			{children}
-		</h2>
+		<Link
+			href={pageUrl}
+			onMouseEnter={() => setHovering(true)}
+			onMouseLeave={() => setHovering(false)}
+			className="flex items-center gap-1"
+		>
+			<h2 className="text-xl text-gray-800 font-[500] leading-none">
+				{children}
+			</h2>
+			<AnimatePresence mode="popLayout" initial={false}>
+				{hovering && (
+					<motion.svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						strokeWidth={2}
+						stroke="currentColor"
+						className="size-4 text-gray-500"
+						initial={{ x: -6, y: 6, opacity: 0 }}
+						animate={{ x: 0, y: 0, opacity: 1 }}
+						exit={{ x: 6, y: -6, opacity: 0 }}
+						transition={{ duration: 0.2, type: "spring", bounce: 0 }}
+					>
+						<title>Link icon</title>
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"
+						/>
+					</motion.svg>
+				)}
+			</AnimatePresence>
+		</Link>
 	);
 };
 

@@ -7,7 +7,9 @@ import { VerticalIconSwitch } from "./VerticalIconSwitch";
 export function VerticalIconSwitchExperiment() {
 	return (
 		<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/VerticalIconSwitch.tsx">
-			<Experiment.Title>Vertical icon switch</Experiment.Title>
+			<Experiment.Title pageUrl="/ui-experiments/vertical-icon-switch">
+				Vertical icon switch
+			</Experiment.Title>
 			<Experiment.Tags>
 				<Experiment.Tag>motion</Experiment.Tag>
 				<Experiment.Tag>clip-path</Experiment.Tag>

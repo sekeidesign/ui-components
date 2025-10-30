@@ -1,6 +1,6 @@
 "use client";
 
-import { TextLink } from ".@ui-kit/TextLink";
+import { TextLink } from "@ui-kit/TextLink";
 import { motion, type Transition } from "motion/react";
 
 const textVariants = {

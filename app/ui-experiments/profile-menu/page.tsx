@@ -7,7 +7,9 @@ import { ProfileMenu } from "./ProfileMenu";
 export function ProfileMenuExperiment() {
 	return (
 		<Experiment sourceUrl="https://github.com/sekeidesign/">
-			<Experiment.Title>Profile menu</Experiment.Title>
+			<Experiment.Title pageUrl="/ui-experiments/profile-menu">
+				Profile menu
+			</Experiment.Title>
 			<Experiment.Tags>
 				<Experiment.Tag>motion</Experiment.Tag>
 				<Experiment.Tag>useMeasure</Experiment.Tag>

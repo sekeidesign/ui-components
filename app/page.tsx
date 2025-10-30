@@ -1,9 +1,8 @@
 "use client";
 
-import { LastUpdated } from ".@ui-kit/LastUpdated";
-import { Tabs } from ".@ui-kit/Tabs";
-import { TextLink } from ".@ui-kit/TextLink";
-import Link from "next/link";
+import { LastUpdated } from "@ui-kit/LastUpdated";
+import { Tabs } from "@ui-kit/Tabs";
+import { TextLink } from "@ui-kit/TextLink";
 import { IntroHeader } from "./IntroHeader";
 import { CollapsableMenuExperiment } from "./ui-experiments/collapsable-menu/page";
 import { DynamicIslandExperiment } from "./ui-experiments/dynamic-island/page";
@@ -12,26 +11,11 @@ import { TransactionStatusButtonExperiment } from "./ui-experiments/transaction-
 import { VerticalIconSwitchExperiment } from "./ui-experiments/vertical-icon-switch/page";
 
 const experiments = [
-	{
-		href: "/ui-experiments/profile-menu",
-		component: ProfileMenuExperiment,
-	},
-	{
-		href: "/ui-experiments/dynamic-island",
-		component: DynamicIslandExperiment,
-	},
-	{
-		href: "/ui-experiments/collapsable-menu",
-		component: CollapsableMenuExperiment,
-	},
-	{
-		href: "/ui-experiments/vertical-icon-switch",
-		component: VerticalIconSwitchExperiment,
-	},
-	{
-		href: "/ui-experiments/transaction-status-button",
-		component: TransactionStatusButtonExperiment,
-	},
+	ProfileMenuExperiment,
+	TransactionStatusButtonExperiment,
+	VerticalIconSwitchExperiment,
+	DynamicIslandExperiment,
+	CollapsableMenuExperiment,
 ];
 
 export default function Home() {
@@ -44,16 +28,8 @@ export default function Home() {
 					<hr className="w-full border-gray-200" />
 					<main className="flex flex-col gap-8 md:gap-20 items-center justify-center w-full max-w-screen-md">
 						{experiments.map((experiment) => {
-							const ExperimentComponent = experiment.component;
-							return (
-								<Link
-									key={experiment.href}
-									href={experiment.href}
-									className="block"
-								>
-									<ExperimentComponent />
-								</Link>
-							);
+							const ExperimentComponent = experiment;
+							return <ExperimentComponent key={experiment.name} />;
 						})}
 						<hr className="w-full border-gray-200" />
 					</main>
