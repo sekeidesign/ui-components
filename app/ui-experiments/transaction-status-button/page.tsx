@@ -1,7 +1,7 @@
 "use client";
 
-import { Experiment } from "../@ui-kit/Experiment";
-import { TextLink } from "../@ui-kit/TextLink";
+import { Experiment } from "@ui-kit/Experiment";
+import { TextLink } from "@ui-kit/TextLink";
 import { FamilyStatusButton } from "./FamilyStatusButton";
 
 export function TransactionStatusButtonExperiment() {

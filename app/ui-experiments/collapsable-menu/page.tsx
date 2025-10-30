@@ -1,7 +1,7 @@
 "use client";
 
-import { Experiment } from "../@ui-kit/Experiment";
-import { TextLink } from "../@ui-kit/TextLink";
+import { Experiment } from "@ui-kit/Experiment";
+import { TextLink } from "@ui-kit/TextLink";
 import CollapsableMenu, { CollapsableMenuProvider } from "./CollapsableMenu";
 
 export function CollapsableMenuExperiment() {
