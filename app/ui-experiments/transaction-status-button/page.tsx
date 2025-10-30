@@ -1,10 +1,10 @@
 "use client";
 
-import { Experiment } from "../../ui-kit/Experiment";
-import { TextLink } from "../../ui-kit/TextLink";
+import { Experiment } from "../@ui-kit/Experiment";
+import { TextLink } from "../@ui-kit/TextLink";
 import { FamilyStatusButton } from "./FamilyStatusButton";
 
-export default function TransactionStatusButtonPage() {
+export function TransactionStatusButtonExperiment() {
 	return (
 		<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/family-status-button.tsx">
 			<Experiment.Title>Transaction status button</Experiment.Title>
@@ -50,4 +50,8 @@ export default function TransactionStatusButtonPage() {
 			</Experiment.Description>
 		</Experiment>
 	);
+}
+
+export default function TransactionStatusButtonPage() {
+	return <TransactionStatusButtonExperiment />;
 }

@@ -1,4 +1,5 @@
 import { BellIcon, EnvelopeIcon, HomeIcon } from "@heroicons/react/20/solid";
+import { cn } from "@ui-kit/cn";
 import { motion, useDragControls } from "motion/react";
 import {
 	createContext,
@@ -8,7 +9,6 @@ import {
 	useState,
 } from "react";
 import useMeasure from "react-use-measure";
-import { cn } from "../ui-kit/cn";
 
 const DRAG_THRESHOLD = 88;
 

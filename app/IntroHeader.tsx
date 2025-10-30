@@ -1,7 +1,7 @@
 "use client";
 
+import { TextLink } from ".@ui-kit/TextLink";
 import { motion, type Transition } from "motion/react";
-import { TextLink } from "./ui-kit/TextLink";
 
 const textVariants = {
 	initial: { opacity: 0, y: 12 },

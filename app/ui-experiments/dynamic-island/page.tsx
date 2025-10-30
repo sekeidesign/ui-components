@@ -1,10 +1,10 @@
 "use client";
 
-import { Experiment } from "../../ui-kit/Experiment";
-import { TextLink } from "../../ui-kit/TextLink";
+import { Experiment } from "../@ui-kit/Experiment";
+import { TextLink } from "../@ui-kit/TextLink";
 import DynamicIsland from "./DynamicIsland";
 
-export default function DynamicIslandPage() {
+export function DynamicIslandExperiment() {
 	return (
 		<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/DynamicIsland.tsx">
 			<Experiment.Title>Dynamic island</Experiment.Title>
@@ -43,4 +43,8 @@ export default function DynamicIslandPage() {
 			</Experiment.Description>
 		</Experiment>
 	);
+}
+
+export default function DynamicIslandPage() {
+	return <DynamicIslandExperiment />;
 }

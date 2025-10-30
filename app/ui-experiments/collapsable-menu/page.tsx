@@ -1,10 +1,10 @@
 "use client";
 
-import { Experiment } from "../../ui-kit/Experiment";
-import { TextLink } from "../../ui-kit/TextLink";
+import { Experiment } from "../@ui-kit/Experiment";
+import { TextLink } from "../@ui-kit/TextLink";
 import CollapsableMenu, { CollapsableMenuProvider } from "./CollapsableMenu";
 
-export default function CollapsableMenuPage() {
+export function CollapsableMenuExperiment() {
 	return (
 		<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/CollapsableMenu.tsx">
 			<Experiment.Title>Detachable island</Experiment.Title>
@@ -62,4 +62,8 @@ export default function CollapsableMenuPage() {
 			</Experiment.Description>
 		</Experiment>
 	);
+}
+
+export default function CollapsableMenuPage() {
+	return <CollapsableMenuExperiment />;
 }

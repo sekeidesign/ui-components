@@ -1,10 +1,10 @@
 "use client";
 
-import { Experiment } from "../../ui-kit/Experiment";
-import { TextLink } from "../../ui-kit/TextLink";
+import { Experiment } from "../@ui-kit/Experiment";
+import { TextLink } from "../@ui-kit/TextLink";
 import { VerticalIconSwitch } from "./VerticalIconSwitch";
 
-export default function VerticalIconSwitchPage() {
+export function VerticalIconSwitchExperiment() {
 	return (
 		<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/VerticalIconSwitch.tsx">
 			<Experiment.Title>Vertical icon switch</Experiment.Title>
@@ -74,4 +74,8 @@ export default function VerticalIconSwitchPage() {
 			</Experiment.Description>
 		</Experiment>
 	);
+}
+
+export default function VerticalIconSwitchPage() {
+	return <VerticalIconSwitchExperiment />;
 }

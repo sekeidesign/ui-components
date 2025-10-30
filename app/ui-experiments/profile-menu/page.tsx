@@ -1,10 +1,10 @@
 "use client";
 
-import { Experiment } from "../../ui-kit/Experiment";
-import { TextLink } from "../../ui-kit/TextLink";
+import { Experiment } from "../@ui-kit/Experiment";
+import { TextLink } from "../@ui-kit/TextLink";
 import { ProfileMenu } from "./ProfileMenu";
 
-export default function ProfileMenuPage() {
+export function ProfileMenuExperiment() {
 	return (
 		<Experiment sourceUrl="https://github.com/sekeidesign/">
 			<Experiment.Title>Profile menu</Experiment.Title>
@@ -49,4 +49,8 @@ export default function ProfileMenuPage() {
 			</Experiment.Description>
 		</Experiment>
 	);
+}
+
+export default function ProfileMenuPage() {
+	return <ProfileMenuExperiment />;
 }

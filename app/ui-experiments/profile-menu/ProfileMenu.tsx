@@ -12,7 +12,7 @@ import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import Image from "next/image";
 import { useState } from "react";
 import useMeasure from "react-use-measure";
-import { cn } from "../../ui-kit/cn";
+import { cn } from "../@ui-kit/cn";
 
 const ProfileMenu = () => {
 	return (

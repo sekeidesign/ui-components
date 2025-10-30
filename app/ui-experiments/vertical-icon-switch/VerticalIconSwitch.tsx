@@ -1,3 +1,4 @@
+import { cn } from "@ui-kit/cn";
 import {
 	AnimatePresence,
 	animate,
@@ -9,7 +10,6 @@ import {
 	useTransform,
 } from "motion/react";
 import { useState } from "react";
-import { cn } from "../ui-kit/cn";
 
 const VerticalIconSwitch = () => {
 	const [trip, setTrip] = useState<"oneWay" | "return">("oneWay");
