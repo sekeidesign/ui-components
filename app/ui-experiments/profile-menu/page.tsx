@@ -1,0 +1,61 @@
+"use client";
+
+import { Experiment } from "../../ui-kit/Experiment";
+import { TextLink } from "../../ui-kit/TextLink";
+import { ProfileMenu } from "../ProfileMenu";
+
+export default function ProfileMenuPage() {
+	return (
+		<div className="font-[family-name:var(--font-geist-sans)] w-screen box-border">
+			<div className="p-4 md:p-8 py-8 md:py-20 justify-center mx-auto">
+				<div className="flex flex-col gap-8 items-center justify-center max-w-screen-md mx-auto">
+					<main className="flex flex-col gap-8 md:gap-20 items-center justify-center w-full max-w-screen-md">
+						<Experiment sourceUrl="https://github.com/sekeidesign/">
+							<Experiment.Title>Profile menu</Experiment.Title>
+							<Experiment.Tags>
+								<Experiment.Tag>motion</Experiment.Tag>
+								<Experiment.Tag>useMeasure</Experiment.Tag>
+								<Experiment.Tag>Base UI</Experiment.Tag>
+								<Experiment.Tag>tailwind</Experiment.Tag>
+								<Experiment.Tag>react</Experiment.Tag>
+							</Experiment.Tags>
+							<Experiment.Example className="p-0 h-[440px] items-start">
+								<ProfileMenu />
+							</Experiment.Example>
+							<Experiment.Description>
+								I wanted to improve upon our profile menu at Tato. When I
+								joined, it was a standard shadcn/ui dropdown, the one that ships
+								with the sidebar component. While the original dropdown did its
+								job, I wanted to build something with a bit more flair. Inspired
+								by liquid glass&apos;s shifting forms, I wanted to create
+								something that felt fluid and part of a single morphin surface.
+								<br />
+								<br />
+								I&apos;ve also been using{" "}
+								<TextLink
+									href="https://base-ui.com/react/components/popover"
+									target="_blank"
+									hasFavicon
+								>
+									Base UI
+								</TextLink>{" "}
+								more frequently over Radix, and I&apos;ve been loving the
+								interface and the DX improvements the creators have made. In
+								particular, I really love the{" "}
+								<TextLink
+									href="https://base-ui.com/react/handbook/composition#render-function"
+									target="_blank"
+									hasFavicon
+								>
+									render function
+								</TextLink>{" "}
+								which provides easy access to properties and state of the
+								component.
+							</Experiment.Description>
+						</Experiment>
+					</main>
+				</div>
+			</div>
+		</div>
+	);
+}
