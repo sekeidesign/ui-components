@@ -6,12 +6,12 @@ import {
 	PauseIcon,
 	PlayIcon,
 } from "@heroicons/react/24/solid";
+import { cn } from "@ui-kit/cn";
 import { AnimatePresence, motion, type Transition } from "motion/react";
 import { Ticker } from "motion-plus/react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import useMeasure from "react-use-measure";
-import { cn } from "../ui-kit/cn";
 
 const springConfig: Transition = {
 	type: "spring",

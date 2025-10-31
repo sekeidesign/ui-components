@@ -1,3 +1,4 @@
+import { cn } from "@ui-kit/cn";
 import {
 	AnimatePresence,
 	animate,
@@ -9,7 +10,6 @@ import {
 	useTransform,
 } from "motion/react";
 import { useState } from "react";
-import { cn } from "../ui-kit/cn";
 
 const VerticalIconSwitch = () => {
 	const [trip, setTrip] = useState<"oneWay" | "return">("oneWay");
@@ -45,7 +45,7 @@ const VerticalIconSwitch = () => {
 					<div className="relative">
 						<div
 							className={cn(
-								"w-7 h-12 bg-gray-100 rounded-md overflow-hidden p-0.5 flex flex-col inset-shadow-sm outline outline-1 outline-gray-200",
+								"w-7 h-12 bg-gray-100 rounded-md overflow-hidden p-0.5 flex flex-col inset-shadow-sm outline outline-gray-200",
 								trip === "oneWay" ? "justify-start" : "justify-end",
 							)}
 						>
