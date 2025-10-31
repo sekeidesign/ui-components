@@ -1,8 +1,5 @@
 "use client";
 
-import { LastUpdated } from "@ui-kit/LastUpdated";
-import { Tabs } from "@ui-kit/Tabs";
-import { TextLink } from "@ui-kit/TextLink";
 import { CollapsableMenuExperiment } from "./ui-experiments/collapsable-menu/page";
 import { DynamicIslandExperiment } from "./ui-experiments/dynamic-island/page";
 import { ProfileMenuExperiment } from "./ui-experiments/profile-menu/page";
@@ -11,10 +8,10 @@ import { VerticalIconSwitchExperiment } from "./ui-experiments/vertical-icon-swi
 
 const experiments = [
 	ProfileMenuExperiment,
-	TransactionStatusButtonExperiment,
-	VerticalIconSwitchExperiment,
 	DynamicIslandExperiment,
+	TransactionStatusButtonExperiment,
 	CollapsableMenuExperiment,
+	VerticalIconSwitchExperiment,
 ];
 
 export default function Home() {
