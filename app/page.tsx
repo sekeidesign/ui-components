@@ -1,10 +1,10 @@
 "use client";
 
-import { CollapsableMenuExperiment } from "./ui-experiments/collapsable-menu/page";
-import { DynamicIslandExperiment } from "./ui-experiments/dynamic-island/page";
-import { ProfileMenuExperiment } from "./ui-experiments/profile-menu/page";
-import { TransactionStatusButtonExperiment } from "./ui-experiments/transaction-status-button/page";
-import { VerticalIconSwitchExperiment } from "./ui-experiments/vertical-icon-switch/page";
+import { CollapsableMenuExperiment } from "./ui-experiments/collapsable-menu/Experiment";
+import { DynamicIslandExperiment } from "./ui-experiments/dynamic-island/Experiment";
+import { ProfileMenuExperiment } from "./ui-experiments/profile-menu/Experiment";
+import { TransactionStatusButtonExperiment } from "./ui-experiments/transaction-status-button/Experiment";
+import { VerticalIconSwitchExperiment } from "./ui-experiments/vertical-icon-switch/Experiment";
 
 const experiments = [
 	ProfileMenuExperiment,
