@@ -6,6 +6,7 @@ import { Tabs } from "@ui-kit/Tabs";
 import { TextLink } from "@ui-kit/TextLink";
 import { Analytics } from "@vercel/analytics/next";
 import { IntroHeader } from "./IntroHeader";
+import { ContributionGraph } from "./ui-kit/ContributionGraph";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -51,7 +52,10 @@ export default function RootLayout({
 			>
 				<div className="font-[family-name:var(--font-geist-sans)] w-screen box-border">
 					<div className="flex md:flex-row flex-col gap-8 md:gap-20 p-4 md:p-8 py-8 md:py-20 justify-center mx-auto">
-						<IntroHeader />
+						<div className="w-full md:max-w-2xs md:sticky top-20 h-fit">
+							<IntroHeader />
+							<ContributionGraph />
+						</div>
 						<div className="flex flex-col gap-8 items-center justify-center max-w-screen-md">
 							<Tabs />
 							<hr className="w-full border-gray-200" />
@@ -78,6 +82,7 @@ export default function RootLayout({
 								</div>
 								<LastUpdated />
 							</footer>
+							{/* <ContributionGraph /> */}
 						</div>
 					</div>
 				</div>

@@ -4,6 +4,7 @@ import { TextLink } from "@ui-kit/TextLink";
 import { motion, type Transition } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ContributionGraph } from "./ui-kit/ContributionGraph";
 
 const textVariants = {
 	initial: { opacity: 0, y: 12 },
@@ -19,17 +20,17 @@ const textTransition: Transition = {
 const IntroHeader = () => {
 	const pathname = usePathname();
 	return (
-		<motion.div
-			variants={textVariants}
-			initial="initial"
-			animate="animate"
-			className="w-full md:max-w-2xs md:sticky top-20 h-fit"
-			transition={{
-				staggerChildren: 0.1,
-				type: "spring",
-				duration: 1,
-				bounce: 0.2,
-			}}
+		<div
+			// variants={textVariants}
+			// initial="initial"
+			// animate="animate"
+			className="w-full"
+			// transition={{
+			// 	staggerChildren: 0.1,
+			// 	type: "spring",
+			// 	duration: 1,
+			// 	bounce: 0.2,
+			// }}
 		>
 			<Link href="/">
 				<motion.h1
@@ -47,6 +48,8 @@ const IntroHeader = () => {
 					Design Engineer based in Montréal, QC
 				</motion.h2>
 			</Link>
+
+			{/* <ContributionGraph /> */}
 
 			{pathname === "/" && (
 				<div className="text-sm text-gray-500 font-[450] pt-4 md:pt-10 leading-relaxed space-y-2">
@@ -78,7 +81,7 @@ const IntroHeader = () => {
 					</motion.p>
 				</div>
 			)}
-		</motion.div>
+		</div>
 	);
 };
 
