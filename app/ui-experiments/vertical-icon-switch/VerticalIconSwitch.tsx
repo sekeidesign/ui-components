@@ -45,7 +45,7 @@ const VerticalIconSwitch = () => {
 					<div className="relative">
 						<div
 							className={cn(
-								"w-7 h-12 bg-gray-100 rounded-md overflow-hidden p-0.5 flex flex-col inset-shadow-sm outline outline-1 outline-gray-200",
+								"w-7 h-12 bg-gray-100 rounded-md overflow-hidden p-0.5 flex flex-col inset-shadow-sm outline outline-gray-200",
 								trip === "oneWay" ? "justify-start" : "justify-end",
 							)}
 						>
