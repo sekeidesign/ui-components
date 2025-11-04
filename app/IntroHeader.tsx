@@ -4,7 +4,6 @@ import { TextLink } from "@ui-kit/TextLink";
 import { motion, type Transition } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ContributionGraph } from "./ui-kit/ContributionGraph";
 
 const textVariants = {
 	initial: { opacity: 0, y: 12 },
