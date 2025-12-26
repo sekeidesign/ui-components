@@ -1,12 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 import { Footer } from "./Footer";
 
 export const Sidebar = () => {
-  const pathname = usePathname();
   return (
     <div className="w-full md:max-w-2xs xl:max-w-xs md:sticky top-0 md:h-full flex-grow flex flex-col gap-px">
       <Link href="/">

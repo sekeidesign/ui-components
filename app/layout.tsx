@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { LastUpdated } from "@ui-kit/LastUpdated";
-import { Tabs } from "@ui-kit/Tabs";
-import { TextLink } from "@ui-kit/TextLink";
 import { Analytics } from "@vercel/analytics/next";
 import { Sidebar } from "./Sidebar";
 import { Footer } from "./Footer";
