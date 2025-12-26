@@ -40,11 +40,11 @@ const ExperimentRoot = ({ children, sourceUrl }: ExperimentRootProps) => {
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2, ease: "easeInOut" }}
       >
-        <div className="panel flex-1 shrink xl:block hidden" />
+        <div className="panel flex-1 shrink xl:block hidden stripes" />
         <div className="flex flex-col gap-4 w-full flex-4 grow-20 xl:max-w-screen-md shrink-0 panel md:p-6 p-4">
           {children}
         </div>
-        <div className="panel flex-1 shrink xl:block hidden" />
+        <div className="panel flex-1 shrink xl:block hidden stripes" />
       </motion.div>
     </ExperimentContext.Provider>
   );

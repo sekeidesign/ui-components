@@ -32,6 +32,16 @@ body {
   @apply bg-gray-100 rounded-sm;
 }
 
+.stripes {
+  background: repeating-linear-gradient(
+  -55deg,
+  var(--color-gray-200),
+  var(--color-gray-200) 1px,
+  var(--color-gray-100) 1px,
+  var(--color-gray-100) 8px
+);
+}
+
 [data-scope='hover-card'][data-part='content'][data-state='open'][data-placement='top'] {
   animation: hoverCardInTop 0.15s ease-out;
 }
