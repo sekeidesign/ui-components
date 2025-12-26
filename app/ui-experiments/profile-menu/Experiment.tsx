@@ -17,7 +17,7 @@ export function ProfileMenuExperiment() {
 				<Experiment.Tag>tailwind</Experiment.Tag>
 				<Experiment.Tag>react</Experiment.Tag>
 			</Experiment.Tags>
-			<Experiment.Example className="p-0 h-[440px] items-start">
+			<Experiment.Example className="p-0 h-[320px] items-start">
 				<ProfileMenu />
 			</Experiment.Example>
 			<Experiment.Description>

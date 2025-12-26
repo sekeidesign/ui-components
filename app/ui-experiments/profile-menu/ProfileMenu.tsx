@@ -16,7 +16,7 @@ import useMeasure from "react-use-measure";
 
 const ProfileMenu = () => {
 	return (
-		<div className="h-full w-full flex items-start justify-start bg-gray-100 pb-1">
+		<div className="h-full w-full flex items-start justify-start bg-gray-50 pb-1">
 			<Sidebar />
 			<MainContent />
 		</div>
@@ -256,22 +256,22 @@ const MainContent = () => {
 			<div className="mask-r-from-0% mask-b-from-0% w-full h-full">
 				<div className="min-w-[440px] w-full space-y-3 text-gray-400 leading-loose h-full">
 					<div className="py-1">
-						<div className="w-1/2 h-2 rounded-full bg-gray-200" />
+						<div className="w-1/2 h-2 rounded-full border border-gray-100 bg-gray-50" />
 					</div>
 					<div className="py-1.5">
-						<div className="w-2/3 h-4 rounded-full bg-gray-200" />
+						<div className="w-2/3 h-4 rounded-full border border-gray-100 bg-gray-50" />
 					</div>
 					{Array.from({ length: 5 }).map((_, index) => (
 						// biome-ignore lint/suspicious/noArrayIndexKey: Just a mock UI example
 						<div key={index} className="py-1">
-							<div className="w-full h-1.5 rounded-full bg-gray-200" />
+							<div className="w-full h-1.5 rounded-full border border-gray-100 bg-gray-50" />
 						</div>
 					))}
 					<div className="py-1"></div>
 					{Array.from({ length: 6 }).map((_, index) => (
 						// biome-ignore lint/suspicious/noArrayIndexKey: Just a mock UI example
 						<div key={index} className="py-1">
-							<div className="w-full h-1.5 rounded-full bg-gray-200" />
+							<div className="w-full h-1.5 rounded-full border border-gray-100 bg-gray-50" />
 						</div>
 					))}
 				</div>

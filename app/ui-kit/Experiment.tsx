@@ -40,11 +40,11 @@ const ExperimentRoot = ({ children, sourceUrl }: ExperimentRootProps) => {
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2, ease: "easeInOut" }}
       >
-        <div className="panel flex-1 shrink" />
-        <div className="flex flex-col gap-4 w-full flex-4 grow-20 max-w-screen-md shrink-0 panel p-6">
+        <div className="panel flex-1 shrink xl:block hidden" />
+        <div className="flex flex-col gap-4 w-full flex-4 grow-20 xl:max-w-screen-md shrink-0 panel md:p-6 p-4">
           {children}
         </div>
-        <div className="panel flex-1 shrink" />
+        <div className="panel flex-1 shrink xl:block hidden" />
       </motion.div>
     </ExperimentContext.Provider>
   );
@@ -140,7 +140,7 @@ const ExperimentExample = ({ children, className }: ExperimentExampleProps) => {
   return (
     <div
       className={cn(
-        "relative shadow-skew size-24 flex items-center justify-center rounded-xl border border-gray-200 w-full p-10 min-h-[320px] h-fit bg-white overflow-hidden",
+        "relative shadow-skew size-24 flex items-center justify-center rounded-md border border-gray-200 w-full p-10 min-h-[240px] h-fit bg-white overflow-hidden",
         className
       )}
     >
@@ -195,8 +195,8 @@ export function ExperimentDivider() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
     >
-      <div className="panel flex-1 shrink" />
-      <div className="flex gap-4 w-full h-10 flex-4 grow-20 max-w-screen-md shrink-0 panel items-center justify-center p-6">
+      <div className="panel flex-1 shrink xl:block hidden" />
+      <div className="flex gap-4 w-full h-10 flex-4 grow-20 xl:max-w-screen-md shrink-0 panel items-center justify-center md:p-6 p-4">
 		<hr className="w-full border-gray-200" />
         <svg
           viewBox="0 0 15 15"
@@ -211,7 +211,7 @@ export function ExperimentDivider() {
         </svg>
 		<hr className="w-full border-gray-200" />
       </div>
-      <div className="panel flex-1 shrink" />
+      <div className="panel flex-1 shrink xl:block hidden" />
     </motion.div>
   );
 }

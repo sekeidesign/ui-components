@@ -12,6 +12,7 @@
   --font-mono: var(--font-geist-mono);
   --font-rounded: "Nunito", ui-rounded, sans-serif;
   --shadow-skew: 0px 1px 3px 0px color-mix(in oklch, var(--color-gray-700) 7%, transparent);
+  --breakpoint-xl: 72rem;
 }
 
 @media (prefers-color-scheme: dark) {
