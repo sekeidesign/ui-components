@@ -12,6 +12,7 @@
   --font-mono: var(--font-geist-mono);
   --font-rounded: "Nunito", ui-rounded, sans-serif;
   --shadow-skew: 0px 1px 3px 0px color-mix(in oklch, var(--color-gray-700) 7%, transparent);
+  --breakpoint-xl: 72rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -29,6 +30,16 @@ body {
 
 .panel {
   @apply bg-gray-100 rounded-sm;
+}
+
+.stripes {
+  background: repeating-linear-gradient(
+  -55deg,
+  var(--color-gray-200),
+  var(--color-gray-200) 1px,
+  var(--color-gray-100) 1px,
+  var(--color-gray-100) 8px
+);
 }
 
 [data-scope='hover-card'][data-part='content'][data-state='open'][data-placement='top'] {

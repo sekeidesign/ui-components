@@ -19,12 +19,12 @@ const experiments = [
 export default function Home() {
   return (
     <>
-      {experiments.map((experiment, index) => {
+      {experiments.map((experiment) => {
         const ExperimentComponent = experiment;
         return (
           <Fragment key={experiment.name}>
             <ExperimentComponent />
-            {index < experiments.length - 1 && <ExperimentDivider />}
+            <ExperimentDivider />
           </Fragment>
         );
       })}

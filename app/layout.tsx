@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { LastUpdated } from "@ui-kit/LastUpdated";
-import { Tabs } from "@ui-kit/Tabs";
-import { TextLink } from "@ui-kit/TextLink";
 import { Analytics } from "@vercel/analytics/next";
 import { Sidebar } from "./Sidebar";
+import { Footer } from "./Footer";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -52,11 +50,11 @@ export default function RootLayout({
 				<div className="font-[family-name:var(--font-geist-sans)] w-screen box-border text-[15px]">
 					<div className="flex md:flex-row flex-col justify-center mx-auto h-screen p-px gap-px">
 						<Sidebar />
-						<div className="flex flex-col items-center justify-start w-full h-full rounded-sm overflow-y-auto">							
+						<div className="flex flex-col items-center justify-start w-full h-full gap-px rounded-sm overflow-y-auto">							
 							<main className="flex flex-col gap-px items-center justify-center w-full">
 								{children}
-								<hr className="w-full border-gray-200" />
 							</main>
+							<Footer className="md:hidden grid" />
 						</div>
 					</div>
 				</div>
