@@ -5,6 +5,7 @@ import { DynamicIslandExperiment } from "./ui-experiments/dynamic-island/Experim
 import { ProfileMenuExperiment } from "./ui-experiments/profile-menu/Experiment";
 import { TransactionStatusButtonExperiment } from "./ui-experiments/transaction-status-button/Experiment";
 import { VerticalIconSwitchExperiment } from "./ui-experiments/vertical-icon-switch/Experiment";
+import { ExperimentDivider } from "./ui-kit/Experiment";
 
 const experiments = [
 	ProfileMenuExperiment,
@@ -17,9 +18,14 @@ const experiments = [
 export default function Home() {
 	return (
 		<>
-			{experiments.map((experiment) => {
+			{experiments.map((experiment, index) => {
 				const ExperimentComponent = experiment;
-				return <ExperimentComponent key={experiment.name} />;
+				return (
+					<>
+						<ExperimentComponent key={experiment.name} />
+						{index < experiments.length - 1 && <ExperimentDivider />}
+					</>
+				);
 			})}
 		</>
 	);

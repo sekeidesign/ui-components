@@ -47,7 +47,8 @@ const LastUpdated = () => {
 			style={{ fontFamily: "var(--font-geist-mono)" }}
 		>
 			<span>{commit.sha}</span>
-			<span className="text-gray-400"> on </span>
+			<br/>
+			<span className="text-gray-400">on </span>
 			<span>{commit.date}</span>
 		</a>
 	);
