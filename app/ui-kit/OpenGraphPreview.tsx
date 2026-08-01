@@ -44,7 +44,7 @@ const OpenGraphPreview = ({
 		fetchOG();
 	}, [url]);
 
-	if (error) return <p>Error: {error}</p>;
+	if (error) return <span>Error: {error}</span>;
 	if (!og?.title && !og?.description && !og?.image) return children;
 
 	return (
