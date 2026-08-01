@@ -17,7 +17,7 @@ const MARKER_COLOR: [number, number, number] = [0.31, 0.616, 1];
 // Aim the camera southeast of the target instead of dead-on, so it sits
 // off-pole with real curvature/foreshortening around it (like an actual
 // globe) rather than flat at the front-facing point.
-const CAMERA_OFFSET = { lat: -22, long: 25 };
+const CAMERA_OFFSET = { lat: -8, long: 40 };
 
 function locationToAngles(lat: number, long: number): [number, number] {
 	return [
@@ -92,7 +92,7 @@ export const Globe = ({ location = MONTREAL, className }: GlobeProps) => {
 			theta,
 			dark: 0,
 			diffuse: 1.2,
-			mapSamples: 32000,
+			mapSamples: 48000,
 			mapBrightness: 6,
 			baseColor: [1, 1, 1],
 			markerColor: MARKER_COLOR,
@@ -100,7 +100,7 @@ export const Globe = ({ location = MONTREAL, className }: GlobeProps) => {
 			// Controls the sphere's apparent size independently of canvas
 			// size/position — tune this instead of the canvas dimensions.
 			scale,
-			markers: [{ location, size: 0.045 }],
+			markers: [{ location, size: 0.04 }],
 		});
 		globeRef.current = globe;
 

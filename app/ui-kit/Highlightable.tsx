@@ -17,7 +17,7 @@ export function Highlightable({
 	children,
 	className,
 	activeClassName = "text-gray-800",
-	siblingClassName = "opacity-40",
+	siblingClassName = "opacity-15",
 }: HighlightableProps) {
 	const { isActive, isSiblingActive, onMouseEnter, onMouseLeave } =
 		useHoverGroup(id);
