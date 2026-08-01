@@ -3,7 +3,9 @@
 import "slot-text/style.css";
 import { useEffect, useState } from "react";
 import { SlotText } from "slot-text/react";
+import { cn } from "./ui-kit/cn";
 import { Globe } from "./ui-kit/Globe";
+import { useHoverGroup } from "./ui-kit/HoverContext";
 
 interface Stop {
 	label: string;
@@ -26,10 +28,10 @@ const HOLD_MS = 1800;
 
 export function GlobePanel() {
 	const [index, setIndex] = useState(HOME_INDEX);
-	const [hovering, setHovering] = useState(false);
+	const intro = useHoverGroup("intro");
 
 	useEffect(() => {
-		if (!hovering) {
+		if (!intro.isActive) {
 			setIndex(HOME_INDEX);
 			return;
 		}
@@ -40,15 +42,17 @@ export function GlobePanel() {
 		}, HOLD_MS);
 
 		return () => clearInterval(id);
-	}, [hovering]);
+	}, [intro.isActive]);
 
 	const current = STOPS[index];
 
 	return (
 		<div
-			className="flex-1 panel relative p-4 md:p-6 overflow-hidden min-h-[210px]"
-			onMouseEnter={() => setHovering(true)}
-			onMouseLeave={() => setHovering(false)}
+			className={cn(
+				"flex-1 panel relative p-4 md:p-6 overflow-hidden min-h-[210px] transition-shadow duration-200",
+			)}
+			onMouseEnter={intro.onMouseEnter}
+			onMouseLeave={intro.onMouseLeave}
 		>
 			<div className="relative z-10 flex flex-col">
 				<SlotText
