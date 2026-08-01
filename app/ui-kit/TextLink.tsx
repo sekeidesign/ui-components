@@ -19,26 +19,38 @@ export const TextLink = ({
 	hasFavicon = false,
 }: TextLinkProps) => {
 	const [faviconUrl, setFaviconUrl] = useState<string | null>(null);
+	const [usedFallback, setUsedFallback] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		if (!hasFavicon) return;
 
-		const fetchFavicon = async () => {
-			setIsLoading(true);
-			try {
-				const url = new URL(href);
-				const faviconUrl = `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=32`;
-				setFaviconUrl(faviconUrl);
-			} catch (error) {
-				console.warn("Failed to parse URL for favicon:", error);
-			} finally {
-				setIsLoading(false);
-			}
-		};
-
-		fetchFavicon();
+		setIsLoading(true);
+		try {
+			const url = new URL(href);
+			setFaviconUrl(`${url.origin}/favicon.ico`);
+			setUsedFallback(false);
+		} catch (error) {
+			console.warn("Failed to parse URL for favicon:", error);
+		} finally {
+			setIsLoading(false);
+		}
 	}, [href, hasFavicon]);
+
+	const handleFaviconError = () => {
+		if (usedFallback) {
+			setFaviconUrl(null);
+			return;
+		}
+
+		try {
+			const url = new URL(href);
+			setFaviconUrl(`https://www.google.com/s2/favicons?domain=${url.hostname}&sz=32`);
+			setUsedFallback(true);
+		} catch {
+			setFaviconUrl(null);
+		}
+	};
 
 	return (
 		<OpenGraphPreview url={href}>
@@ -53,7 +65,7 @@ export const TextLink = ({
 						src={faviconUrl}
 						alt=""
 						className="w-3 h-3 rounded-sm absolute left-0.5"
-						onError={() => setFaviconUrl(null)}
+						onError={handleFaviconError}
 						width={12}
 						height={12}
 					/>

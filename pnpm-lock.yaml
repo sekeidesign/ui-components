@@ -23,6 +23,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      cobe:
+        specifier: ^2.0.1
+        version: 2.0.1
       motion:
         specifier: ^12.19.1
         version: 12.23.14(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -44,6 +47,9 @@ importers:
       react-use-measure:
         specifier: ^2.1.7
         version: 2.1.7(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      slot-text:
+        specifier: ^0.3.3
+        version: 0.3.3(react@19.1.1)
       tailwind-merge:
         specifier: ^3.3.1
         version: 3.3.1
@@ -1764,6 +1770,9 @@ packages:
     resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
     engines: {node: '>=6'}
 
+  cobe@2.0.1:
+    resolution: {integrity: sha512-aaa6vcIlaC8C1SF50LDH0Anybo/EAXnrxqe+bwvr4+YUtZydqjeBjTTD7ziCCkbRrRGSns3I3F6cZsf3W+L+ag==}
+
   color-convert@2.0.1:
     resolution: {integrity: sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==}
     engines: {node: '>=7.0.0'}
@@ -2787,6 +2796,23 @@ packages:
   side-channel@1.1.0:
     resolution: {integrity: sha512-ZX99e6tRweoUXqR+VBrslhda51Nh5MTQwou5tnUDgbtyM0dBgmhEDtWGP/xbKn6hqfPRHujUNwz5fy/wbbhnpw==}
     engines: {node: '>= 0.4'}
+
+  slot-text@0.3.3:
+    resolution: {integrity: sha512-9yJ0RJI9s5oFIo3NQV+fHJJoVXFpb7XpyYzRUt9mcUvSeuJ0fYt8WOQE5qljRqCyD6Elli12lO1/G9OqD2Kr/w==}
+    peerDependencies:
+      react: '>=18 <20'
+      solid-js: '>=1.8 <2'
+      svelte: '>=4 <6'
+      vue: '>=3.4 <4'
+    peerDependenciesMeta:
+      react:
+        optional: true
+      solid-js:
+        optional: true
+      svelte:
+        optional: true
+      vue:
+        optional: true
 
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
@@ -5024,6 +5050,8 @@ snapshots:
 
   clsx@2.1.1: {}
 
+  cobe@2.0.1: {}
+
   color-convert@2.0.1:
     dependencies:
       color-name: 1.1.4
@@ -6272,6 +6300,10 @@ snapshots:
       side-channel-list: 1.0.0
       side-channel-map: 1.0.1
       side-channel-weakmap: 1.0.2
+
+  slot-text@0.3.3(react@19.1.1):
+    optionalDependencies:
+      react: 19.1.1
 
   source-map-js@1.2.1: {}
 
