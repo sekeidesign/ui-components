@@ -7,6 +7,7 @@ export const HomeIcon = ({ size = 16 }) => {
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>
+			<title>Home</title>
 			<path
 				d="M9.07874 16.1354H14.8937"
 				strokeWidth="1.5"
@@ -36,6 +37,7 @@ export const HomeIconFilled = ({ size = 16 }) => {
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>
+			<title>Home</title>
 			<path
 				fillRule="evenodd"
 				clipRule="evenodd"
