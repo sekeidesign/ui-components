@@ -6,22 +6,6 @@ import { useHoverGroup } from "./ui-kit/HoverContext";
 
 const BIRTH_YEAR = 1994;
 
-// Placeholder photos (Lorem Picsum) so the floating-card feature has
-// something to show — swap for real photos later, one marker at a time.
-function placeholderPhotos(seed: string) {
-	return [
-		{
-			src: `https://picsum.photos/seed/${seed}-1/400/520`,
-			alt: "Placeholder photo 1",
-		},
-		{
-			src: `https://picsum.photos/seed/${seed}-2/400/520`,
-			alt: "Placeholder photo 2",
-			x: 0.6,
-		},
-	];
-}
-
 // `year` doubles as sort/spacing position on the axis — it doesn't have to
 // be a whole calendar year, so each role gets its own marker (fractional,
 // by start month) instead of multiple roles piling into one year's slot.
