@@ -16,12 +16,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "PG's UI Kitchen",
+	title: "PG Gonni",
 	description: "Design Engineer based in Montréal, QC",
 	metadataBase: new URL("https://uikitchen.dev"),
 	openGraph: {
-		title: "PG's UI Kitchen",
-		description: "Design Engineer cooking up some UI experiments",
+		title: "PG Gonni",
+		description: "Design Engineer based in Montréal, QC",
 		images: "/og-image.jpg",
 	},
 	icons: {
@@ -50,7 +50,7 @@ export default function RootLayout({
 				<div className="font-[family-name:var(--font-geist-sans)] w-screen box-border text-[15px]">
 					<div className="flex md:flex-row flex-col justify-center mx-auto h-screen p-px gap-px">
 						<Sidebar />
-						<div className="flex flex-col items-center justify-start w-full h-full gap-px rounded-sm overflow-y-auto">							
+						<div className="flex flex-col items-center justify-start w-full h-full gap-px rounded-sm overflow-y-auto">
 							<main className="flex flex-col gap-px items-center justify-center w-full">
 								{children}
 							</main>

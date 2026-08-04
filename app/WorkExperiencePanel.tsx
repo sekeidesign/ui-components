@@ -1,0 +1,186 @@
+"use client";
+
+import type { LifelineMarker } from "./ui-kit/lifeline";
+import { Lifeline } from "./ui-kit/lifeline";
+import { useHoverGroup } from "./ui-kit/HoverContext";
+
+const BIRTH_YEAR = 1994;
+
+// `year` doubles as sort/spacing position on the axis — it doesn't have to
+// be a whole calendar year, so each role gets its own marker (fractional,
+// by start month) instead of multiple roles piling into one year's slot.
+// `label` overrides the displayed value with the real month/year, and
+// `age` is set explicitly since the default (year - birthYear) would
+// otherwise inherit the fractional year and show e.g. "23.75". The "Years"
+// row already carries the date, so event text is the role description,
+// not a repeated date range.
+const MARKERS: LifelineMarker[] = [
+	{
+		id: "golden-hour-media",
+		year: 2017 + 9 / 12,
+		label: "Oct 2017",
+		age: 2017 - BIRTH_YEAR,
+		events: [
+			{
+				title: "Web Developer & UX Designer",
+				text: "Freelance — front-end development, custom CMS builds, and on-page SEO/content strategy for client marketing sites.",
+			},
+		],
+		companies: [{ id: "golden-hour-media", name: "Golden Hour Media" }],
+	},
+	{
+		id: "samuel-associates",
+		year: 2020,
+		label: "Jan 2020",
+		age: 2020 - BIRTH_YEAR,
+		events: [
+			{
+				title: "Digital Designer",
+				text: "Owned clients' digital touchpoints — UX/UI design, web development, and branding — while managing the Integrated Digital Marketing team.",
+			},
+		],
+		companies: [{ id: "samuel-associates", name: "Samuel Associates" }],
+	},
+	{
+		id: "field-effect",
+		year: 2021,
+		label: "Jan 2021",
+		age: 2021 - BIRTH_YEAR,
+		events: [
+			{
+				title: "Product Designer",
+				text: "Placeholder description — swap in real details later.",
+			},
+		],
+		companies: [{ id: "field-effect", name: "Field Effect" }],
+	},
+	{
+		id: "metalab",
+		year: 2021 + 9 / 12,
+		label: "Oct 2021",
+		age: 2021 - BIRTH_YEAR,
+		events: [
+			{
+				title: "Product Designer",
+				text: "Worked directly with clients across industries and company sizes — designing experiences, running workshops, and building scalable cross-functional design systems.",
+			},
+		],
+		companies: [{ id: "metalab", name: "Metalab" }],
+		photos: [
+			// Mobile-shaped screenshots are much taller (and narrower) than the
+			// landscape ones elsewhere, so they get a smaller width than the
+			// 140/160 default to avoid dominating the row.
+			{
+				src: "/casestudies/metalab-sorare-1.webp",
+				alt: "Sorare mobile app screen",
+				width: 88,
+			},
+			{
+				src: "/casestudies/metalab-sorare-2.webp",
+				alt: "Sorare mobile app screen",
+				width: 88,
+			},
+			{
+				src: "/casestudies/metalab-koble-1.webp",
+				alt: "Koble mobile app screen",
+				width: 88,
+			},
+			{
+				src: "/casestudies/metalab-koble-2.webp",
+				alt: "Koble mobile app screen",
+				width: 88,
+			},
+		],
+	},
+	{
+		id: "metafy",
+		year: 2023 + 1 / 12,
+		label: "Feb 2023",
+		age: 2023 - BIRTH_YEAR,
+		events: [
+			{
+				title: "Design Engineer",
+				text: "Bridged design and engineering — designing and shipping product experiences and delightful interactions myself, while also building and maintaining the design system across Figma and SvelteKit.",
+			},
+		],
+		companies: [{ id: "metafy", name: "Metafy" }],
+		photos: [
+			{
+				src: "/casestudies/metafy-windows-app.webp",
+				alt: "Metafy Windows app screen",
+			},
+			{
+				src: "/casestudies/metafy-crowns.webp",
+				alt: "Metafy crowns feature screen",
+				x: 0.45,
+			},
+			{
+				src: "/casestudies/metafy-navigation.webp",
+				alt: "Metafy navigation screen",
+				x: 0.9,
+			},
+		],
+	},
+	{
+		id: "planned",
+		year: 2024 + 2 / 12,
+		label: "Mar 2024",
+		age: 2024 - BIRTH_YEAR,
+		events: [
+			{
+				title: "Head of Product Design",
+				text: "Joined an AI native product and revamped its design language end to end — elevating UX and UI, and building and maintaining a design system in Figma and React. Managed a team of two designers, taking the company from Series A to B.",
+			},
+		],
+		companies: [{ id: "planned", name: "Planned" }],
+	},
+	{
+		id: "tato",
+		year: 2025 + 8 / 12,
+		label: "Sep 2025",
+		age: 2025 - BIRTH_YEAR,
+		events: [
+			{
+				title: "Head of Product",
+				text: "Joined as Head of Product Design, promoted to Head of Product in 2026. Own the product roadmap — defining priorities and strategy while staying hands-on in design and engineering, bringing product, design, and engineering together as one function.",
+			},
+		],
+		companies: [{ id: "tato", name: "Tato" }],
+		photos: [
+			{
+				src: "/casestudies/tato-automations-home.webp",
+				alt: "Tato automations home screen",
+			},
+			{
+				src: "/casestudies/tato-meeting-overview.webp",
+				alt: "Tato meeting overview screen",
+				x: 0.45,
+			},
+			{
+				src: "/casestudies/tato-raid-dashboard.webp",
+				alt: "Tato RAID dashboard screen",
+				x: 0.9,
+			},
+		],
+	},
+];
+
+export function WorkExperiencePanel() {
+	const experience = useHoverGroup("experience");
+
+	return (
+		<div
+			className="panel w-full h-[560px] p-0 md:p-2 pb-4 md:pb-6 overflow-hidden"
+			onMouseEnter={experience.onMouseEnter}
+			onMouseLeave={experience.onMouseLeave}
+		>
+			<Lifeline
+				markers={MARKERS}
+				birthYear={BIRTH_YEAR}
+				title="Work experience"
+				mode="embed"
+				className="h-full"
+			/>
+		</div>
+	);
+}

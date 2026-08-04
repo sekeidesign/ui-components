@@ -1,33 +1,25 @@
-"use client";
-
-import { CollapsableMenuExperiment } from "./ui-experiments/collapsable-menu/Experiment";
-import { DynamicIslandExperiment } from "./ui-experiments/dynamic-island/Experiment";
-import { ProfileMenuExperiment } from "./ui-experiments/profile-menu/Experiment";
-import { TransactionStatusButtonExperiment } from "./ui-experiments/transaction-status-button/Experiment";
-import { VerticalIconSwitchExperiment } from "./ui-experiments/vertical-icon-switch/Experiment";
-import { ExperimentDivider } from "./ui-kit/Experiment";
-import { Fragment } from "react";
-
-const experiments = [
-  ProfileMenuExperiment,
-  DynamicIslandExperiment,
-  TransactionStatusButtonExperiment,
-  CollapsableMenuExperiment,
-  VerticalIconSwitchExperiment,
-];
+import { AboutPanel } from "./AboutPanel";
+import { AppsPanel } from "./AppsPanel";
+import { GlobePanel } from "./GlobePanel";
+import { LibraryPanel } from "./LibraryPanel";
+import { Experiment } from "./ui-kit/Experiment";
+import { HoverProvider } from "./ui-kit/HoverContext";
+import { WorkExperiencePanel } from "./WorkExperiencePanel";
 
 export default function Home() {
-  return (
-    <>
-      {experiments.map((experiment) => {
-        const ExperimentComponent = experiment;
-        return (
-          <Fragment key={experiment.name}>
-            <ExperimentComponent />
-            <ExperimentDivider />
-          </Fragment>
-        );
-      })}
-    </>
-  );
+	return (
+		<HoverProvider>
+			<Experiment className="p-0 md:p-0 gap-px bg-gray-200! flex flex-col xl:max-w-5xl">
+				<div className="flex gap-px bg-gray-200">
+					<AboutPanel />
+					<GlobePanel />
+				</div>
+				<WorkExperiencePanel />
+				<div className="flex gap-px bg-gray-200">
+					<AppsPanel />
+					<LibraryPanel />
+				</div>
+			</Experiment>
+		</HoverProvider>
+	);
 }
