@@ -13,7 +13,13 @@
 
 # misc
 .DS_Store
+**/.DS_Store
+Thumbs.db
 *.pem
+
+# editor
+.vscode/
+.idea/
 
 # debug
 npm-debug.log*

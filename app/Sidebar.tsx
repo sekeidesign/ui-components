@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Footer } from "./Footer";
 import { cn } from "./ui-kit/cn";
 import { BookIcon, BookIconFilled } from "./ui-kit/icons/BookIcon";
+import { CameraIcon, CameraIconFilled } from "./ui-kit/icons/CameraIcon";
 import { HomeIcon, HomeIconFilled } from "./ui-kit/icons/HomeIcon";
 import { KitchenIcon, KitchenIconFilled } from "./ui-kit/icons/KitchenIcon";
 
@@ -20,6 +21,12 @@ const navItems = [
 		label: "Kitchen",
 		icon: <KitchenIcon />,
 		selectedIcon: <KitchenIconFilled />,
+	},
+	{
+		href: "/photography",
+		label: "Photography",
+		icon: <CameraIcon />,
+		selectedIcon: <CameraIconFilled />,
 	},
 	{
 		href: "https://learn.sekei.xyz",
