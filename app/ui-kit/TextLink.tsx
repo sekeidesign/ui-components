@@ -10,6 +10,10 @@ interface TextLinkProps {
 	children: ReactNode;
 	target?: string;
 	hasFavicon?: boolean;
+	/** Skip origin/favicon.ico auto-detection (and its Google-favicon
+	 * fallback) and use this local asset instead — for sites whose real
+	 * favicon doesn't resolve cleanly. */
+	favicon?: string;
 }
 
 export const TextLink = ({
@@ -17,13 +21,14 @@ export const TextLink = ({
 	children,
 	target = "_blank",
 	hasFavicon = false,
+	favicon,
 }: TextLinkProps) => {
-	const [faviconUrl, setFaviconUrl] = useState<string | null>(null);
+	const [faviconUrl, setFaviconUrl] = useState<string | null>(favicon ?? null);
 	const [usedFallback, setUsedFallback] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
-		if (!hasFavicon) return;
+		if (!hasFavicon || favicon) return;
 
 		setIsLoading(true);
 		try {
@@ -35,10 +40,10 @@ export const TextLink = ({
 		} finally {
 			setIsLoading(false);
 		}
-	}, [href, hasFavicon]);
+	}, [href, hasFavicon, favicon]);
 
 	const handleFaviconError = () => {
-		if (usedFallback) {
+		if (favicon || usedFallback) {
 			setFaviconUrl(null);
 			return;
 		}

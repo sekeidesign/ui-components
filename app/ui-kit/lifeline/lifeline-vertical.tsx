@@ -268,7 +268,7 @@ const LifelineVerticalEntry = forwardRef<
                       key={`${photo.src}-${index}`}
                       photo={photo}
                       rotate={photo.rotate ?? photoTilts[index] ?? 0}
-                      width={160}
+                      width={photo.width ?? 160}
                       className={cn(
                         "relative",
                         index > 0 && "-ml-8 mt-6",

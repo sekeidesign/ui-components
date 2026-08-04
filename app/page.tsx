@@ -1,7 +1,7 @@
 import { AboutPanel } from "./AboutPanel";
+import { AppsPanel } from "./AppsPanel";
 import { GlobePanel } from "./GlobePanel";
 import { LibraryPanel } from "./LibraryPanel";
-import { PlaceholderPanel } from "./PlaceholderPanel";
 import { Experiment } from "./ui-kit/Experiment";
 import { HoverProvider } from "./ui-kit/HoverContext";
 import { WorkExperiencePanel } from "./WorkExperiencePanel";
@@ -16,7 +16,7 @@ export default function Home() {
 				</div>
 				<WorkExperiencePanel />
 				<div className="flex gap-px bg-gray-200">
-					<PlaceholderPanel />
+					<AppsPanel />
 					<LibraryPanel />
 				</div>
 			</Experiment>

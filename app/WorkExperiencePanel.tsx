@@ -43,7 +43,6 @@ const MARKERS: LifelineMarker[] = [
 			},
 		],
 		companies: [{ id: "golden-hour-media", name: "Golden Hour Media" }],
-		photos: placeholderPhotos("golden-hour-media"),
 	},
 	{
 		id: "samuel-associates",
@@ -57,7 +56,6 @@ const MARKERS: LifelineMarker[] = [
 			},
 		],
 		companies: [{ id: "samuel-associates", name: "Samuel Associates" }],
-		photos: placeholderPhotos("samuel-associates"),
 	},
 	{
 		id: "field-effect",
@@ -71,7 +69,6 @@ const MARKERS: LifelineMarker[] = [
 			},
 		],
 		companies: [{ id: "field-effect", name: "Field Effect" }],
-		photos: placeholderPhotos("field-effect"),
 	},
 	{
 		id: "metalab",
@@ -85,7 +82,31 @@ const MARKERS: LifelineMarker[] = [
 			},
 		],
 		companies: [{ id: "metalab", name: "Metalab" }],
-		photos: placeholderPhotos("metalab"),
+		photos: [
+			// Mobile-shaped screenshots are much taller (and narrower) than the
+			// landscape ones elsewhere, so they get a smaller width than the
+			// 140/160 default to avoid dominating the row.
+			{
+				src: "/casestudies/metalab-sorare-1.webp",
+				alt: "Sorare mobile app screen",
+				width: 88,
+			},
+			{
+				src: "/casestudies/metalab-sorare-2.webp",
+				alt: "Sorare mobile app screen",
+				width: 88,
+			},
+			{
+				src: "/casestudies/metalab-koble-1.webp",
+				alt: "Koble mobile app screen",
+				width: 88,
+			},
+			{
+				src: "/casestudies/metalab-koble-2.webp",
+				alt: "Koble mobile app screen",
+				width: 88,
+			},
+		],
 	},
 	{
 		id: "metafy",
@@ -99,7 +120,22 @@ const MARKERS: LifelineMarker[] = [
 			},
 		],
 		companies: [{ id: "metafy", name: "Metafy" }],
-		photos: placeholderPhotos("metafy"),
+		photos: [
+			{
+				src: "/casestudies/metafy-windows-app.webp",
+				alt: "Metafy Windows app screen",
+			},
+			{
+				src: "/casestudies/metafy-crowns.webp",
+				alt: "Metafy crowns feature screen",
+				x: 0.45,
+			},
+			{
+				src: "/casestudies/metafy-navigation.webp",
+				alt: "Metafy navigation screen",
+				x: 0.9,
+			},
+		],
 	},
 	{
 		id: "planned",
@@ -127,7 +163,22 @@ const MARKERS: LifelineMarker[] = [
 			},
 		],
 		companies: [{ id: "tato", name: "Tato" }],
-		photos: placeholderPhotos("tato"),
+		photos: [
+			{
+				src: "/casestudies/tato-automations-home.webp",
+				alt: "Tato automations home screen",
+			},
+			{
+				src: "/casestudies/tato-meeting-overview.webp",
+				alt: "Tato meeting overview screen",
+				x: 0.45,
+			},
+			{
+				src: "/casestudies/tato-raid-dashboard.webp",
+				alt: "Tato RAID dashboard screen",
+				x: 0.9,
+			},
+		],
 	},
 ];
 

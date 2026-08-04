@@ -189,12 +189,7 @@ export function LibraryPanel() {
 						book={book}
 						open={index === activeIndex}
 						onClick={() => setActiveIndex(index)}
-						style={{
-							transform:
-								index > activeIndex
-									? `translateX(${BOOK_OPEN_SHIFT}px)`
-									: undefined,
-						}}
+						shiftX={index > activeIndex ? BOOK_OPEN_SHIFT : 0}
 					/>
 				))}
 			</div>

@@ -19,7 +19,7 @@ const COVER_ANGLE = -16;
 
 const SPRING = {
 	type: "spring",
-	duration: 0.75,
+	duration: 0.5,
 	bounce: 0.2,
 } as const;
 
@@ -28,6 +28,10 @@ interface Book3DProps {
 	/** Whether this is the single active book (cover-out). Only one book in
 	 * a shelf should be open at a time, selected by click, not hover. */
 	open: boolean;
+	/** How far to slide over (px) to clear room for another book's popped
+	 * cover — animated with the same spring as the cover/spine rotation so
+	 * both moves read as one motion. */
+	shiftX?: number;
 	onClick?: () => void;
 	className?: string;
 	style?: CSSProperties;
@@ -41,15 +45,22 @@ interface Book3DProps {
 // Every book only reserves its spine's thickness in layout — the parent
 // shifts the trailing siblings over (BOOK_OPEN_SHIFT) to clear room for the
 // active book's popped cover instead of letting it overlap them.
-export function Book3D({ book, open, onClick, className, style }: Book3DProps) {
+export function Book3D({
+	book,
+	open,
+	shiftX = 0,
+	onClick,
+	className,
+	style,
+}: Book3DProps) {
 	return (
-		<button
+		<motion.button
 			type="button"
 			aria-pressed={open}
 			aria-label={`${book.title} by ${book.author}`}
 			onClick={onClick}
 			className={cn(
-				"relative shrink-0 appearance-none border-0 bg-transparent p-0 text-left transition-transform duration-300 ease-out",
+				"relative shrink-0 appearance-none border-0 bg-transparent p-0 text-left",
 				className,
 			)}
 			style={{
@@ -59,6 +70,8 @@ export function Book3D({ book, open, onClick, className, style }: Book3DProps) {
 				zIndex: open ? 20 : 1,
 				...style,
 			}}
+			animate={{ x: shiftX }}
+			transition={SPRING}
 		>
 			<motion.div
 				className="absolute top-0 left-0 cursor-pointer"
@@ -130,7 +143,7 @@ export function Book3D({ book, open, onClick, className, style }: Book3DProps) {
 					}}
 				/>
 			</motion.div>
-		</button>
+		</motion.button>
 	);
 }
 

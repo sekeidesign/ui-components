@@ -5,28 +5,30 @@ import { TextLink } from "./ui-kit/TextLink";
 export function AboutPanel() {
 	return (
 		<div className="space-y-2 flex-1 panel p-4 md:p-6">
-			<p className="text-sm text-gray-500 font-[450] leading-normal cursor-default">
+			<p className="text-gray-500 text-lg font-[450] leading-normal cursor-default">
 				<Highlightable id="intro" className="pb-1 block">
-					Design engineer from Forli, Italy, based in Montréal, QC.
+					Design engineer from Forli, Italy, currently based in Montréal, QC.
 				</Highlightable>
 				<Highlightable id="experience" className="py-1 block">
-					Currently I'm the Head of Product at{" "}
+					Head of Product at{" "}
 					<TextLink href="https://www.tato.co" hasFavicon>
 						Tato
 					</TextLink>
-					, where I talk to customers, design experiences, and ship code to
-					build an AI native tool for the world's largest digital transformation
-					programs.
+					, shaping, designing, and shipping code for an AI native ERP tool.
 				</Highlightable>
 				<Highlightable id="projects" className="py-1 block">
-					In my spare time I'm building{" "}
-					<TextLink href="https://www.tomokanji.app" hasFavicon>
+					Building{" "}
+					<TextLink
+						href="https://www.tomokanji.app"
+						hasFavicon
+						favicon="/tomokanji-icon-light.jpg"
+					>
 						Tomokanji
 					</TextLink>
-					, a native iOS app to learn Japanese Kanji.
+					, in my free time.
 				</Highlightable>
 				<Highlightable id="reading" className="pt-1 block">
-					In the mornings I'm usually drinking an espresso and currently reading{" "}
+					Currently reading{" "}
 					<BookLink
 						href="https://www.amazon.ca/Apple-China-Capture-Greatest-Company/dp/1668053373"
 						cover="https://covers.openlibrary.org/b/id/15151586-L.jpg"

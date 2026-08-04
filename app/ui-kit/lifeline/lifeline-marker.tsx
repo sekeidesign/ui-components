@@ -180,7 +180,7 @@ export const LifelineMarkerColumn = forwardRef<
                       key={`${photo.src}-${index}`}
                       photo={photo}
                       rotate={photo.rotate ?? photoTilts[index] ?? 0}
-                      width={140}
+                      width={photo.width ?? 140}
                       className="relative"
                     />
                   ))}
