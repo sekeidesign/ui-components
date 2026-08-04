@@ -133,7 +133,6 @@ const MARKERS: LifelineMarker[] = [
 			},
 		],
 		companies: [{ id: "planned", name: "Planned" }],
-		photos: placeholderPhotos("planned"),
 	},
 	{
 		id: "tato",
