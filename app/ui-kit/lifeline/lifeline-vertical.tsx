@@ -115,7 +115,7 @@ function LifelineVerticalEvent({
 			<p
 				ref={textRef}
 				className={cn(
-					"max-w-full text-left text-xs leading-[1.55] tracking-[-0.01em]",
+					"max-w-full text-left text-sm leading-[1.55] tracking-[-0.01em]",
 					interactive && (image || effect) && "cursor-pointer",
 				)}
 				onClick={
@@ -219,6 +219,7 @@ const LifelineVerticalEntry = forwardRef<
 			className={cn(
 				animateIntro && "lifeline-marker-intro",
 				revealPending && "opacity-0",
+				"pb-8",
 			)}
 			style={{
 				animationDelay: animateIntro ? `${introDelay}ms` : undefined,

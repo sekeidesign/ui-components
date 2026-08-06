@@ -2,7 +2,7 @@
 
 import { LifelineVertical } from "../ui-kit/lifeline/lifeline-vertical";
 import { useHoverGroup } from "../ui-kit/HoverContext";
-import { MARKERS_NEWEST_FIRST } from "../WorkExperiencePanel";
+import { BIRTH_YEAR, MARKERS_NEWEST_FIRST } from "../WorkExperiencePanel";
 
 // Forces the always-vertical (LinkedIn-style) stacked layout regardless of
 // viewport width, instead of the responsive Lifeline that swaps to a
@@ -20,6 +20,7 @@ export function WorkExperiencePanelVertical() {
 		>
 			<LifelineVertical
 				markers={MARKERS_NEWEST_FIRST}
+				birthYear={BIRTH_YEAR}
 				title="Work experience"
 				mode="embed"
 				staticMedia

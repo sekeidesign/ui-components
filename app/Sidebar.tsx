@@ -54,7 +54,7 @@ export const Sidebar = () => {
 			{/* Hidden on mobile until there's a proper compact nav — the full
 			    stack of items ate half the screen. */}
 			<nav className="panel md:flex flex-col hidden p-0.5">
-				{navItems.map((item, index) => {
+				{navItems.map((item) => {
 					const isActive =
 						!item.external &&
 						(item.href === "/"
