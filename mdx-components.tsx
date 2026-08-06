@@ -1,5 +1,6 @@
 import type { MDXComponents } from "mdx/types";
 import Link from "next/link";
+import { TextLink } from "@ui-kit/TextLink";
 
 // Matches the site's existing type scale/palette (see AboutPanel,
 // WorkExperiencePanel) so case study prose reads as part of the same
@@ -30,13 +31,20 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 				{...props}
 			/>
 		),
-		a: ({ href, ...props }) => (
-			<Link
-				href={href ?? "#"}
-				className="text-gray-900 font-[500] underline decoration-gray-300 hover:decoration-gray-900 underline-offset-2 transition-colors"
-				{...props}
-			/>
-		),
+		a: ({ href, children, ...props }) =>
+			href?.startsWith("http") ? (
+				<TextLink href={href} hasFavicon>
+					{children}
+				</TextLink>
+			) : (
+				<Link
+					href={href ?? "#"}
+					className="text-gray-900 font-[500] underline decoration-gray-300 hover:decoration-gray-900 underline-offset-2 transition-colors"
+					{...props}
+				>
+					{children}
+				</Link>
+			),
 		ul: (props) => (
 			<ul
 				className="list-disc pl-5 text-gray-500 text-[15px] font-[420] leading-relaxed space-y-1 mb-4"

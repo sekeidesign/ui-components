@@ -1,0 +1,89 @@
+import { Problems } from "@ui-kit/Problems";
+
+export const metadata = {
+	title: "Q2 Reset — Tato Case Study | PG Gonni",
+	description:
+		"Shifting Tato's ICP and building a shared product foundation in Q2.",
+	openGraph: {
+		title: "Q2 Reset — Tato Case Study | PG Gonni",
+		description:
+			"Shifting Tato's ICP and building a shared product foundation in Q2.",
+		images: "/og-image.jpg",
+	},
+};
+
+# Q2 reset
+
+_Tato · Case study_
+
+_How we rebuilt a shared understanding of our users, and shipped three
+projects on top of it._
+
+<Problems
+	items={[
+		"We didn't know who our users were.",
+		"The team didn't understand the ERP space.",
+		"We didn't have a shared vision of what we were building.",
+	]}
+/>
+
+## Approach
+
+Q2 became a reset. We shifted our ICP from the Systems Integrator who sets
+up the ERP to the end customer who actually uses it, which meant closing a
+real understanding gap. ERPs are foreign territory for most people, and the
+team needed a shared sense of who we serve.
+
+I started by aligning with sales, then ran hour-long sessions with end
+customers. The sessions stayed open: no script, just understanding their
+world and their pains.
+
+### The journey map
+
+From those conversations I built a User Journey map, which became the
+foundation for the rest of our product work. Instead of scattered notes on
+what different customers said, it laid out their process step by step:
+what they're doing, where they get stuck, and what they need from an ERP
+integration at each point. That gave sales, design, and engineering one
+artifact to point to instead of separately held assumptions.
+
+_[Screenshot: journey map]_
+
+### Job stories
+
+I broke the journey down into Job Stories, then grouped those into themes
+and workflows. Job stories describe a situation and a motivation rather
+than a persona and a feature request, which kept us focused on what
+customers were trying to get done instead of designing around who we
+assumed they were.
+
+_[Screenshot: job stories]_
+
+### The knowledge base
+
+Alongside it, I built an internal knowledge base, loosely modeled on
+[Karpathy's LLM wiki pattern](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f):
+a living wiki the team keeps current instead of re-reading raw notes every
+time a question comes up. It's vectorized with
+[qmd](https://github.com/tobi/qmd) so it's efficient for LLMs to parse, and
+it's become the place we check instead of re-explaining ERP concepts from
+scratch. We use it to answer questions, write PRDs, and help with
+diagramming in Figma.
+
+_[Screenshot: knowledge base]_
+
+## Outcome
+
+The journey map and knowledge base became the foundation for Q2, giving the
+team a shared vision instead of scattered assumptions. Three projects came
+out of it directly:
+
+- Automation routines
+- RAID 2.0, with a human in the loop
+- Meeting taxonomy templates
+
+![Tato automations home screen](/casestudies/tato-automations-home.webp)
+
+![Tato RAID dashboard screen](/casestudies/tato-raid-dashboard.webp)
+
+![Tato meeting overview screen](/casestudies/tato-meeting-overview.webp)
