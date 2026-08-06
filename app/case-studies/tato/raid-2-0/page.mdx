@@ -1,0 +1,51 @@
+import { CaseStudyHeader } from "@ui-kit/CaseStudyHeader";
+import { Problems } from "@ui-kit/Problems";
+import { Figure } from "@ui-kit/Figure";
+
+export const metadata = {
+	title: "RAID 2.0 — Tato Case Study | PG Gonni",
+	description:
+		"A look at RAID 2.0's human-in-the-loop workflow at Tato, and the product foundation that made it possible.",
+	openGraph: {
+		title: "RAID 2.0 — Tato Case Study | PG Gonni",
+		description:
+			"A look at RAID 2.0's human-in-the-loop workflow at Tato, and the product foundation that made it possible.",
+		images: "/og-image.jpg",
+	},
+};
+
+<CaseStudyHeader
+	eyebrow="Tato · Case study"
+	title="RAID 2.0"
+	description="[One or two sentences on what this project was and why it mattered.]"
+/>
+
+_[What was broken, missing, or painful before this — for users or the
+business? What made this worth solving?]_
+
+<Problems
+	items={[
+		"[Problem one]",
+		"[Problem two]",
+		"[Problem three]",
+	]}
+/>
+
+## Approach
+
+_[How you worked through it — key decisions, tradeoffs, what you designed
+vs. what you shipped yourself. This is where the human-in-the-loop design
+decisions would go.]_
+
+{/* <Figure src="/casestudies/raid-2-0-1.webp" alt="[Alt text]" caption="[Caption]" /> */}
+
+## Outcome
+
+_[What changed as a result — metrics if you have them, qualitative wins if
+you don't.]_
+
+<Figure
+	src="/casestudies/tato-raid-dashboard.webp"
+	alt="Tato RAID dashboard screen"
+	caption="RAID 2.0, with a human in the loop"
+/>

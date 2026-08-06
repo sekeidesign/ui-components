@@ -26,13 +26,33 @@ export const LIFELINE_RAIL_SCALE_POWER = 0.45
  */
 export const LIFELINE_FADE_SCALE_MAX = 1.5
 
+const INTRO_LAST_PLAYED_KEY = "lifeline-intro-last-played"
+
+function hasPlayedIntroToday() {
+  try {
+    return window.localStorage.getItem(INTRO_LAST_PLAYED_KEY) === new Date().toDateString()
+  } catch {
+    // Storage unavailable (private browsing, etc.) — just let it replay.
+    return false
+  }
+}
+
+function markIntroPlayedToday() {
+  try {
+    window.localStorage.setItem(INTRO_LAST_PLAYED_KEY, new Date().toDateString())
+  } catch {
+    // Ignore — worst case the intro replays next load.
+  }
+}
+
 export function useLifelineIntro(markerWidths: number[]) {
-  // Skip straight to the settled end state for users who prefer reduced motion.
-  const [shouldPlay] = useState(
-    () =>
-      typeof window === "undefined" ||
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-  )
+  // Skip straight to the settled end state for users who prefer reduced
+  // motion, or who have already seen the sweep-in today.
+  const [shouldPlay] = useState(() => {
+    if (typeof window === "undefined") return true
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false
+    return !hasPlayedIntroToday()
+  })
   const [isPlaying, setIsPlaying] = useState(true)
   const [isComplete, setIsComplete] = useState(false)
   const introTimeoutRef = useRef(0)
@@ -110,6 +130,10 @@ export function useLifelineIntro(markerWidths: number[]) {
       setIsPlaying(false)
     }, introDuration)
   }, [introDuration])
+
+  useEffect(() => {
+    if (shouldPlay) markIntroPlayedToday()
+  }, [shouldPlay])
 
   useEffect(() => {
     return () => window.clearTimeout(introTimeoutRef.current)

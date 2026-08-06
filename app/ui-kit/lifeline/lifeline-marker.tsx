@@ -25,6 +25,28 @@ interface LifelineMarkerColumnProps {
   introDuration?: number
 }
 
+// Renders the whole marker body as a single link when a company has an
+// href, instead of just the company name — anchors can't nest, so this
+// replaces the old per-company link rather than wrapping around it.
+function LinkOrDiv({
+  href,
+  className,
+  children,
+}: {
+  href?: string
+  className?: string
+  children: React.ReactNode
+}) {
+  if (href) {
+    return (
+      <Link href={href} className={className}>
+        {children}
+      </Link>
+    )
+  }
+  return <div className={className}>{children}</div>
+}
+
 export const LifelineMarkerColumn = forwardRef<
   HTMLDivElement,
   LifelineMarkerColumnProps
@@ -42,6 +64,7 @@ export const LifelineMarkerColumn = forwardRef<
     marker.events.length > 0 ? getLifelineEventTitle(marker.events[0]) : undefined
   const people = aggregateLifelinePeople(marker)
   const photos = marker.photos ?? []
+  const primaryHref = marker.companies?.find((company) => company.href)?.href
   const hoverImage = useLifelineHoverImage()
   const fireworks = useLifelineFireworks()
   // Fresh tilts per visit; stacked neighbors lean apart.
@@ -88,7 +111,8 @@ export const LifelineMarkerColumn = forwardRef<
                 a column whose events run past the floor pushes its own
                 portraits below them instead of under them. pb-6 is the gap
                 in the overflow case — absorbed by the floor otherwise. */}
-            <div
+            <LinkOrDiv
+              href={primaryHref}
               className={cn(
                 "flex w-full flex-col items-start pt-6",
                 people.length > 0 &&
@@ -120,16 +144,7 @@ export const LifelineMarkerColumn = forwardRef<
                   {marker.companies.map((company, index) => (
                     <span key={company.id}>
                       {index > 0 && ", "}
-                      {company.href ? (
-                        <Link
-                          href={company.href}
-                          className="underline decoration-zinc-300 hover:decoration-zinc-600 underline-offset-2 transition-colors duration-300 dark:decoration-zinc-700 dark:hover:decoration-zinc-400"
-                        >
-                          {company.name}
-                        </Link>
-                      ) : (
-                        company.name
-                      )}
+                      {company.name}
                     </span>
                   ))}
                 </p>
@@ -201,7 +216,7 @@ export const LifelineMarkerColumn = forwardRef<
                   ))}
                 </div>
               )}
-            </div>
+            </LinkOrDiv>
 
             {people.length > 0 && (
               <div className="w-full">
