@@ -16,6 +16,8 @@ export interface LifelineMetPerson {
 export interface LifelineCompany {
   id: CompanyIconId
   name: string
+  /** When set, the company name links out (e.g. to a case study page). */
+  href?: string
 }
 
 export type LifelineEventSegment =

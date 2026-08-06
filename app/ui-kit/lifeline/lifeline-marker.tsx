@@ -2,6 +2,7 @@
 
 import { forwardRef, useState, type CSSProperties } from "react"
 import { Film, Image as ImageIcon } from "lucide-react"
+import Link from "next/link"
 import { cn } from "../cn"
 import {
   getLifelineEventEffect,
@@ -116,7 +117,21 @@ export const LifelineMarkerColumn = forwardRef<
 
               {marker.companies && marker.companies.length > 0 && (
                 <p className="mb-2 max-w-[18rem] text-[13px] font-medium text-zinc-500 transition-colors duration-300 group-hover:text-zinc-700 dark:group-hover:text-zinc-300">
-                  {marker.companies.map((company) => company.name).join(", ")}
+                  {marker.companies.map((company, index) => (
+                    <span key={company.id}>
+                      {index > 0 && ", "}
+                      {company.href ? (
+                        <Link
+                          href={company.href}
+                          className="underline decoration-zinc-300 hover:decoration-zinc-600 underline-offset-2 transition-colors duration-300 dark:decoration-zinc-700 dark:hover:decoration-zinc-400"
+                        >
+                          {company.name}
+                        </Link>
+                      ) : (
+                        company.name
+                      )}
+                    </span>
+                  ))}
                 </p>
               )}
 

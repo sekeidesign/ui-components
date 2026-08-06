@@ -145,7 +145,7 @@ const MARKERS: LifelineMarker[] = [
 				text: "Joined as Head of Product Design, promoted to Head of Product in 2026. Own the product roadmap — defining priorities and strategy while staying hands-on in design and engineering, bringing product, design, and engineering together as one function.",
 			},
 		],
-		companies: [{ id: "tato", name: "Tato" }],
+		companies: [{ id: "tato", name: "Tato", href: "/case-studies/tato" }],
 		photos: [
 			{
 				src: "/casestudies/tato-automations-home.webp",
