@@ -52,6 +52,7 @@ export function LifelinePhotoCard({
 	animateIntro = false,
 	introDelay = 0,
 	introDuration = 420,
+	interactive = true,
 }: {
 	photo: LifelinePhoto;
 	/** Resolved resting tilt, degrees. */
@@ -63,6 +64,8 @@ export function LifelinePhotoCard({
 	animateIntro?: boolean;
 	introDelay?: number;
 	introDuration?: number;
+	/** Drag + tap-to-lightbox. Off renders a plain, static card. */
+	interactive?: boolean;
 }) {
 	const [offset, setOffset] = useState({ x: 0, y: 0 });
 	const [active, setActive] = useState(false);
@@ -141,6 +144,38 @@ export function LifelinePhotoCard({
 		setActive(false);
 		setOffset({ x: drag.current.baseX, y: drag.current.baseY });
 	};
+
+	if (!interactive) {
+		return (
+			<div
+				style={
+					{
+						...style,
+						width,
+						transform: `translate(0px, 0px) rotate(${rotate}deg)`,
+					} as CSSProperties
+				}
+				className={cn("pointer-events-none", className)}
+			>
+				<div
+					className={cn(
+						"overflow-hidden rounded-md shadow-xl ring-1 ring-black/10",
+						animateIntro && "lifeline-marker-intro",
+					)}
+					style={
+						animateIntro
+							? ({
+									animationDelay: `${introDelay}ms`,
+									"--lifeline-marker-fade-ms": `${introDuration}ms`,
+								} as CSSProperties)
+							: undefined
+					}
+				>
+					<LifelineEventMedia media={photo} className="block w-full" />
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<>

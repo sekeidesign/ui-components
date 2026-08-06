@@ -4,7 +4,7 @@ import type { LifelineMarker } from "./ui-kit/lifeline";
 import { Lifeline } from "./ui-kit/lifeline";
 import { useHoverGroup } from "./ui-kit/HoverContext";
 
-const BIRTH_YEAR = 1994;
+export const BIRTH_YEAR = 1994;
 
 // `year` doubles as sort/spacing position on the axis — it doesn't have to
 // be a whole calendar year, so each role gets its own marker (fractional,
@@ -14,7 +14,7 @@ const BIRTH_YEAR = 1994;
 // otherwise inherit the fractional year and show e.g. "23.75". The "Years"
 // row already carries the date, so event text is the role description,
 // not a repeated date range.
-const MARKERS: LifelineMarker[] = [
+export const MARKERS: LifelineMarker[] = [
 	{
 		id: "golden-hour-media",
 		year: 2017 + 9 / 12,
@@ -163,7 +163,7 @@ const MARKERS: LifelineMarker[] = [
 // The timeline reads newest-first, left to right — the current role is the
 // first thing visible. MARKERS stays chronological above so the data is
 // natural to edit.
-const MARKERS_NEWEST_FIRST = [...MARKERS].reverse();
+export const MARKERS_NEWEST_FIRST = [...MARKERS].reverse();
 
 export function WorkExperiencePanel() {
 	const experience = useHoverGroup("experience");

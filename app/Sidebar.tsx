@@ -53,8 +53,8 @@ export const Sidebar = () => {
 
 			{/* Hidden on mobile until there's a proper compact nav — the full
 			    stack of items ate half the screen. */}
-			<nav className="md:flex flex-col gap-px hidden">
-				{navItems.map((item) => {
+			<nav className="panel md:flex flex-col hidden p-0.5">
+				{navItems.map((item, index) => {
 					const isActive =
 						!item.external &&
 						(item.href === "/"
@@ -68,9 +68,9 @@ export const Sidebar = () => {
 							target={item.external ? "_blank" : undefined}
 							rel={item.external ? "noopener noreferrer" : undefined}
 							className={cn(
-								"panel p-4 text-sm font-[500] transition-colors flex items-center gap-2 justify-between",
+								"p-3 text-sm rounded-sm font-[500] transition-colors flex items-center gap-2 justify-between",
 								isActive
-									? "text-gray-900"
+									? "text-gray-900 bg-gray-200"
 									: "text-gray-500 hover:text-gray-900",
 							)}
 						>

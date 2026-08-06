@@ -9,27 +9,46 @@ const LastUpdated = () => {
 		sha: string;
 		date: string;
 	} | null>(null);
+	const [status, setStatus] = useState<"loading" | "loaded" | "error">(
+		"loading",
+	);
 
 	useEffect(() => {
 		const fetchCommit = async () => {
-			const res = await fetch(
-				"https://api.github.com/repos/sekeidesign/ui-components/commits/main",
-			);
-			const data = await res.json();
-			setCommit({
-				message: data.commit.message,
-				url: data.html_url,
-				sha: data.sha.slice(0, 7),
-				date: new Date(data.commit.author.date).toLocaleDateString("en-US", {
-					month: "short",
-					day: "numeric",
-					year: "numeric",
-				}),
-			});
+			try {
+				const res = await fetch(
+					"https://api.github.com/repos/sekeidesign/ui-components/commits/main",
+				);
+				if (!res.ok) throw new Error(`GitHub API returned ${res.status}`);
+				const data = await res.json();
+				setCommit({
+					message: data.commit.message,
+					url: data.html_url,
+					sha: data.sha.slice(0, 7),
+					date: new Date(data.commit.author.date).toLocaleDateString(
+						"en-US",
+						{
+							month: "short",
+							day: "numeric",
+							year: "numeric",
+						},
+					),
+				});
+				setStatus("loaded");
+			} catch {
+				setStatus("error");
+			}
 		};
 
 		fetchCommit();
 	}, []);
+
+	if (status === "error")
+		return (
+			<p className="text-xs font-[500] text-gray-400 py-2">
+				Latest commit unavailable
+			</p>
+		);
 
 	if (!commit)
 		return (
