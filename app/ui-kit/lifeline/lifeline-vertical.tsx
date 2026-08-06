@@ -240,7 +240,7 @@ const LifelineVerticalEntry = forwardRef<
 			</div>
 
 			{hasContent && (
-				<div className={`${GRID_CLASS} mt-6`}>
+				<div className={`${GRID_CLASS} mt-2`}>
 					<div aria-hidden="true" />
 					<div className="min-w-0 text-zinc-500 transition-colors duration-300">
 						{marker.badges && marker.badges.length > 0 && (
