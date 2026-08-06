@@ -48,7 +48,9 @@ export function getMarkerHeight(marker: LifelineMarker, nextYear?: number) {
 
   if (!nextYear) return Math.min(520, Math.max(peopleOnly ? 148 : 188, height))
 
-  const gap = Math.max(1, nextYear - marker.year)
+  // abs: markers may be ordered newest-first, so the neighbor gap can be
+  // negative while still measuring the same span of time.
+  const gap = Math.max(1, Math.abs(nextYear - marker.year))
   height += Math.min(32, gap * 3)
 
   return Math.min(520, Math.max(peopleOnly ? 148 : 188, height))

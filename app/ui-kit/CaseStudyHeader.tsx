@@ -1,3 +1,5 @@
+import { SparkleDivider } from "./SparkleDivider";
+
 interface CaseStudyHeaderProps {
 	eyebrow: string;
 	title: string;
@@ -20,7 +22,7 @@ export function CaseStudyHeader({
 					{description}
 				</p>
 			)}
-			<hr className="border-gray-200 mt-8" />
+			<SparkleDivider className="mt-8" />
 		</header>
 	);
 }

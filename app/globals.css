@@ -378,7 +378,7 @@ body {
 
 .lifeline-rail-intro {
   transform: scaleX(var(--lifeline-intro-progress, 0));
-  transform-origin: left center;
+  transform-origin: right center;
 }
 
 .lifeline-rail-intro-vertical {

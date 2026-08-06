@@ -128,7 +128,7 @@ export function LifelineDesktop({
             >
               <div
                 className={cn(
-                  "h-px w-full border-t border-dashed border-zinc-300 transition-colors duration-300 dark:border-zinc-800",
+                  "h-px w-full border-t border-dashed border-zinc-300 transition-colors duration-300",
                   showIntro && "lifeline-rail-intro",
                 )}
               />

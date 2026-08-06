@@ -1,5 +1,6 @@
 import type { MDXComponents } from "mdx/types";
 import Link from "next/link";
+import { SparkleDivider } from "@ui-kit/SparkleDivider";
 import { TextLink } from "@ui-kit/TextLink";
 
 // Matches the site's existing type scale/palette (see AboutPanel,
@@ -13,11 +14,16 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 				{...props}
 			/>
 		),
-		h2: (props) => (
-			<h2
-				className="text-xl font-[550] text-gray-900 leading-snug mt-10 mb-3"
-				{...props}
-			/>
+		h2: ({ children, ...props }) => (
+			<>
+				<SparkleDivider className="mt-10 mb-10" />
+				<h2
+					className="text-xl font-[550] text-gray-900 leading-snug mb-3"
+					{...props}
+				>
+					{children}
+				</h2>
+			</>
 		),
 		h3: (props) => (
 			<h3

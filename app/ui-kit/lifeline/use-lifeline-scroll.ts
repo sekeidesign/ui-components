@@ -12,6 +12,9 @@ const FADE_ZONE = 200
 const FADE_ZONE_COARSE = 72
 const LEFT_EXIT_FADE_ZONE = 400
 const LEFT_EXIT_FADE_ZONE_COARSE = 160
+// Markers near either edge dim to this floor instead of 0 — the container's
+// edge mask already handles the final fade-out at the boundary.
+const EDGE_FADE_FLOOR = 0.4
 const WHEEL_SPEED = 1.4
 const WHEEL_VELOCITY_FRAME_MS = 16.67
 const WHEEL_MOMENTUM_BLEND = 0.65
@@ -280,11 +283,16 @@ export function useLifelineScroll(
       const naturalLeft = markerLeft + translatePx.current
       const restLeft = Math.min(naturalLeft, leftFadeZone)
       if (markerLeft < restLeft) {
-        opacity = markerLeft <= 0 ? 0 : markerLeft / restLeft
+        const progress = markerLeft <= 0 ? 0 : markerLeft / restLeft
+        opacity = EDGE_FADE_FLOOR + (1 - EDGE_FADE_FLOOR) * progress
       }
 
       if (center > stageRect.width - fadeZone) {
-        opacity = Math.min(opacity, (stageRect.width - center) / fadeZone)
+        const progress = clamp((stageRect.width - center) / fadeZone, 0, 1)
+        opacity = Math.min(
+          opacity,
+          EDGE_FADE_FLOOR + (1 - EDGE_FADE_FLOOR) * progress,
+        )
       }
 
       if (isCoarse) {
@@ -447,9 +455,9 @@ export function useLifelineScroll(
 
     if (!initialized.current) {
       // A skipped intro parks the rail where the intro would have settled
-      // it — its end, the present. Embedded is no different: it is the same
-      // intro and the same resting place.
-      translatePx.current = introSkippedRef.current ? max : 0
+      // it — translate 0, the newest markers. A playing intro opens at the
+      // far end so the sweep can travel right-to-left into the present.
+      translatePx.current = introSkippedRef.current ? 0 : max
       initialized.current = true
     }
 
@@ -524,7 +532,7 @@ export function useLifelineScroll(
         introScrollStart.current = now
         onIntroScrollStartRef.current?.()
         sectionRef.current?.style.setProperty("--lifeline-intro-progress", "0")
-        applyTranslateRef.current(0)
+        applyTranslateRef.current(max)
       }
 
       const elapsed = now - introScrollStart.current
@@ -536,7 +544,9 @@ export function useLifelineScroll(
         "--lifeline-intro-progress",
         String(progress),
       )
-      applyTranslateRef.current(progress * max)
+      // Progress 0 → 1 runs the sweep right-to-left: the track opens at
+      // its far end (the past) and settles at translate 0 (the present).
+      applyTranslateRef.current((1 - progress) * max)
 
       if (progress < 1) {
         introScrollId.current = requestAnimationFrame(step)
@@ -544,7 +554,7 @@ export function useLifelineScroll(
       }
 
       sectionRef.current?.style.setProperty("--lifeline-intro-progress", "1")
-      applyTranslateRef.current(max)
+      applyTranslateRef.current(0)
       introScrollId.current = 0
     }
 

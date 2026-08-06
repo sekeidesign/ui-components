@@ -85,11 +85,6 @@ const MARKERS: LifelineMarker[] = [
 				alt: "Koble mobile app screen",
 				width: 88,
 			},
-			{
-				src: "/casestudies/metalab-koble-2.webp",
-				alt: "Koble mobile app screen",
-				width: 88,
-			},
 		],
 	},
 	{
@@ -165,17 +160,22 @@ const MARKERS: LifelineMarker[] = [
 	},
 ];
 
+// The timeline reads newest-first, left to right — the current role is the
+// first thing visible. MARKERS stays chronological above so the data is
+// natural to edit.
+const MARKERS_NEWEST_FIRST = [...MARKERS].reverse();
+
 export function WorkExperiencePanel() {
 	const experience = useHoverGroup("experience");
 
 	return (
 		<div
-			className="panel w-full h-[560px] p-0 md:p-2 pb-4 md:pb-6 overflow-hidden"
+			className="panel w-full h-auto md:h-[560px] p-0 md:p-2 pb-4 md:pb-6 overflow-hidden"
 			onMouseEnter={experience.onMouseEnter}
 			onMouseLeave={experience.onMouseLeave}
 		>
 			<Lifeline
-				markers={MARKERS}
+				markers={MARKERS_NEWEST_FIRST}
 				birthYear={BIRTH_YEAR}
 				title="Work experience"
 				mode="embed"

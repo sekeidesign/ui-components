@@ -1,6 +1,7 @@
 import { CaseStudyHeader } from "@ui-kit/CaseStudyHeader";
-import { Problems } from "@ui-kit/Problems";
 import { Figure } from "@ui-kit/Figure";
+import { NextCaseStudy } from "@ui-kit/NextCaseStudy";
+import { Problems } from "@ui-kit/Problems";
 
 export const metadata = {
 	title: "Automation Routines — Tato Case Study | PG Gonni",
@@ -17,34 +18,73 @@ export const metadata = {
 <CaseStudyHeader
 	eyebrow="Tato · Case study"
 	title="Automation routines"
-	description="[One or two sentences on what this project was and why it mattered.]"
+	description="Tato's skills and reports were useful, but someone had to remember to run them. Routines let the system run them instead."
 />
 
-_[What was broken, missing, or painful before this — for users or the
-business? What made this worth solving?]_
+_The product and user research behind this project came out of the
+[Q2 reset](/case-studies/tato/q2-reset), worth a look for the full context._
+
+When we mapped job stories for the quarter, the same ask kept coming back
+in different shapes: send Tato's output to the tools I already work in,
+without more effort on my part. A skill that surfaces open risks is
+valuable, but only if someone runs it. The moment a workflow needs active
+effort to trigger, it stops happening.
 
 <Problems
 	items={[
-		"[Problem one]",
-		"[Problem two]",
-		"[Problem three]",
+		"Every skill and report needed someone to start it by hand.",
+		"Workflows that depend on memory happen inconsistently, then not at all.",
+		"Outputs stayed inside Tato instead of reaching Teams, email, or the tools people track their work in.",
 	]}
 />
 
 ## Approach
 
-_[How you worked through it — key decisions, tradeoffs, what you designed
-vs. what you shipped yourself.]_
+One job story from that mapping became the spine of the project:
+
+> When I create a clear, high value workflow, I want to automate it to run
+> on a timely basis or triggered by an event, so I can get proactive value
+> continuously without additional work on my part.
+
+A routine is three choices: a skill or report that works well, a trigger,
+and a destination. Pick your weekly risk summary, schedule it for Monday
+morning, send it to the steering committee's inbox. From then on it just
+arrives.
 
 {/* <Figure src="/casestudies/automation-routines-1.webp" alt="[Alt text]" caption="[Caption]" /> */}
 
+### Meeting users where they work
+
+The destination is what makes a routine worth having. Our users spend
+their day in Teams and email, not in Tato, so we built integrations with
+both and made them first-class outputs. A routine can post to a Teams
+channel or land in an inbox, which means Tato does the work where people
+actually need it instead of waiting to be checked.
+
+### Keeping v1 small
+
+We cut aggressively. Event triggers, multi-step routines, and conditional
+logic all went to v2. The definition of done was one sentence: a user can
+schedule a skill to run weekly and the output lands in an inbox. Everything
+else could wait until that worked.
+
 ## Outcome
 
-_[What changed as a result — metrics if you have them, qualitative wins if
-you don't.]_
+Routines turned Tato's outputs from something you fetch into something that
+arrives. A risk summary before the steering committee, a decision log at
+the end of the week, without anyone remembering to ask. It also became the
+base other features build on: report scheduling and output routing were
+unified on top of routines soon after.
+
+Routines were the biggest lever on an objective I own: make Tato's AI
+touchpoints so frictionless that using them becomes instinctive instead of
+a context switch, measured by doubling the number of times Tato gets
+invoked. Every routine that runs is an invocation nobody had to remember.
 
 <Figure
 	src="/casestudies/tato-automations-home.webp"
 	alt="Tato automations home screen"
 	caption="Automation routines"
 />
+
+<NextCaseStudy href="/case-studies/tato/raid-2-0" title="RAID 2.0" />

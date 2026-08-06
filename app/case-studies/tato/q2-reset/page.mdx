@@ -1,6 +1,7 @@
 import { CaseStudyHeader } from "@ui-kit/CaseStudyHeader";
+import { CaseStudyLink } from "@ui-kit/CaseStudyLink";
+import { NextCaseStudy } from "@ui-kit/NextCaseStudy";
 import { Problems } from "@ui-kit/Problems";
-import { Figure } from "@ui-kit/Figure";
 
 export const metadata = {
 	title: "Q2 Reset — Tato Case Study | PG Gonni",
@@ -82,24 +83,25 @@ scattered assumptions, and became the foundation for how we built product
 for the rest of the year, not just that quarter. A few of the projects it
 shaped:
 
-- Automation routines
-- RAID 2.0, with a human in the loop
-- Meeting taxonomy templates
-
-<Figure
-	src="/casestudies/tato-automations-home.webp"
-	alt="Tato automations home screen"
-	caption="Automation routines"
+<CaseStudyLink
+	href="/case-studies/tato/automation-routines"
+	title="Automation routines"
+	description="Turning skills and reports from something you run into something that arrives on its own."
 />
 
-<Figure
-	src="/casestudies/tato-raid-dashboard.webp"
-	alt="Tato RAID dashboard screen"
-	caption="RAID 2.0, with a human in the loop"
+<CaseStudyLink
+	href="/case-studies/tato/raid-2-0"
+	title="RAID 2.0"
+	description="Cutting meeting extraction noise in half and putting a human in the loop."
 />
 
-<Figure
-	src="/casestudies/tato-meeting-overview.webp"
-	alt="Tato meeting overview screen"
-	caption="Meeting taxonomy templates"
+<CaseStudyLink
+	href="/case-studies/tato/meeting-taxonomy"
+	title="Meeting taxonomy"
+	description="Making meeting summaries match the shape of the meeting they came from."
+/>
+
+<NextCaseStudy
+	href="/case-studies/tato/automation-routines"
+	title="Automation routines"
 />

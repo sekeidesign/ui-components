@@ -1,6 +1,7 @@
 import { CaseStudyHeader } from "@ui-kit/CaseStudyHeader";
-import { Problems } from "@ui-kit/Problems";
 import { Figure } from "@ui-kit/Figure";
+import { NextCaseStudy } from "@ui-kit/NextCaseStudy";
+import { Problems } from "@ui-kit/Problems";
 
 export const metadata = {
 	title: "Meeting Taxonomy — Tato Case Study | PG Gonni",
@@ -16,35 +17,58 @@ export const metadata = {
 
 <CaseStudyHeader
 	eyebrow="Tato · Case study"
-	title="Meeting taxonomy"
-	description="[One or two sentences on what this project was and why it mattered.]"
+	title="Meeting taxonomy templates"
+	description="Every meeting summary in Tato looked the same, whether it came from a stand-up or a steering committee. Templates made the output match the meeting."
 />
 
-_[What was broken, missing, or painful before this — for users or the
-business? What made this worth solving?]_
+_The product and user research behind this project came out of the
+[Q2 reset](/case-studies/tato/q2-reset), worth a look for the full context._
+
+Every meeting type has a different shape. A fit-gap workshop needs
+requirements and decisions. A steering committee needs risks and status. A
+stand-up needs blockers. Tato produced the same generic summary for all of
+them. One customer PM ran Copilot, Tato, and ChatGPT in combination just to
+get a committee summary in the right executive tone.
 
 <Problems
 	items={[
-		"[Problem one]",
-		"[Problem two]",
-		"[Problem three]",
+		"Summaries had one structure regardless of meeting type.",
+		"Users reformatted output by hand, or stacked other AI tools on top of Tato to get the shape they needed.",
+		"A generic summary buried what each meeting type actually produces.",
 	]}
 />
 
 ## Approach
 
-_[How you worked through it — key decisions, tradeoffs, what you designed
-vs. what you shipped yourself.]_
+When a meeting is tagged with a type, Tato applies that type's default
+template. The template controls the summary structure, which RAID types get
+extracted, and the tone. The applied template is named right on the
+summary, so nothing happens invisibly: you can see what Tato used and swap
+it from a selector.
+
+### Templates people can shape
+
+We shipped a library of built-in templates for common meeting types, then
+let users take over. Anyone can edit a template's sections and save it as
+the new project default or as a separate named variant. When the default
+doesn't match how a team runs their meetings, the fix takes a minute and
+sticks for every meeting after.
 
 {/* <Figure src="/casestudies/meeting-taxonomy-1.webp" alt="[Alt text]" caption="[Caption]" /> */}
 
 ## Outcome
 
-_[What changed as a result — metrics if you have them, qualitative wins if
-you don't.]_
+Summaries now come out shaped like the meeting they came from. The
+customer who was stacking three AI tools to get an executive summary gets
+it from Tato directly, because Tato knows what kind of meeting it was. And
+since routines can already trigger on meeting type, taxonomy tags became
+the hook that connects a recorded meeting to everything that should happen
+after it.
 
 <Figure
 	src="/casestudies/tato-meeting-overview.webp"
 	alt="Tato meeting overview screen"
 	caption="Meeting taxonomy templates"
 />
+
+<NextCaseStudy href="/case-studies/tato/q2-reset" title="Q2 reset" />

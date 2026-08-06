@@ -1,22 +1,29 @@
+import Image from "next/image";
 import { BookLink } from "./ui-kit/BookLink";
-import { Highlightable } from "./ui-kit/Highlightable";
 import { TextLink } from "./ui-kit/TextLink";
 
 export function AboutPanel() {
 	return (
-		<div className="space-y-2 flex-1 panel p-4 md:p-6">
-			<p className="text-gray-500 text-lg font-[450] leading-normal cursor-default">
-				<Highlightable id="intro" className="pb-1 block">
-					Design engineer from Forli, Italy, currently based in Montréal, QC.
-				</Highlightable>
-				<Highlightable id="experience" className="py-1 block">
+		<div className="space-y-4 flex-1 panel p-4 md:p-6">
+			<div className="size-fit bg-white rounded-full ring ring-gray-500/10 shadow-skew p-0.5">
+				<Image
+					src="/avatar.jpg"
+					alt="PG Gonni"
+					width={64}
+					height={64}
+					className="size-16 rounded-full object-cover ring ring-gray-500/10 shadow-skew"
+				/>
+			</div>
+			<p className="text-gray-500 text-base font-[450] leading-normal cursor-default">
+				<span className="pb-1 block">
 					Head of Product at{" "}
 					<TextLink href="https://www.tato.co" hasFavicon>
 						Tato
 					</TextLink>
-					, shaping, designing, and shipping code for an AI native ERP tool.
-				</Highlightable>
-				<Highlightable id="projects" className="py-1 block">
+					, shaping, designing, and shipping code for an AI native ERP tool,
+					based in Montréal, QC.
+				</span>
+				<span className="pt-1 block">
 					Building{" "}
 					<TextLink
 						href="https://www.tomokanji.app"
@@ -24,11 +31,8 @@ export function AboutPanel() {
 						favicon="/tomokanji-icon-light.jpg"
 					>
 						Tomokanji
-					</TextLink>
-					, in my free time.
-				</Highlightable>
-				<Highlightable id="reading" className="pt-1 block">
-					Currently reading{" "}
+					</TextLink>{" "}
+					in my free time, and currently reading{" "}
 					<BookLink
 						href="https://www.amazon.ca/Apple-China-Capture-Greatest-Company/dp/1668053373"
 						cover="https://covers.openlibrary.org/b/id/15151586-L.jpg"
@@ -39,7 +43,7 @@ export function AboutPanel() {
 						Apple in China
 					</BookLink>
 					.
-				</Highlightable>
+				</span>
 			</p>
 		</div>
 	);

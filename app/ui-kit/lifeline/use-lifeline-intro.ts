@@ -9,8 +9,8 @@ import {
 } from "./lifeline-intro-timing"
 
 /** Tweak these */
-export const LIFELINE_LABELS_MS = 600
-export const LIFELINE_RAIL_MS = 3200
+export const LIFELINE_LABELS_MS = 400
+export const LIFELINE_RAIL_MS = 1800
 /**
  * Track length (px on desktop, tall lifelines on mobile) the base rail
  * duration was tuned for — roughly a 40-year personal lifeline. Longer
@@ -88,7 +88,18 @@ export function useLifelineIntro(markerWidths: number[]) {
         return Math.min(elapsedMs / railDuration, 1)
       }
 
-      return trackProgressAtTime(elapsedMs, markerWidths, railDuration)
+      // Mirrored in time: the sweep travels right-to-left, so the eased
+      // curve runs backwards and its slow region — the first (newest)
+      // markers — lands at the end of the journey. The rail decelerates
+      // into the present instead of easing out of the past.
+      return (
+        1 -
+        trackProgressAtTime(
+          Math.max(0, railDuration - elapsedMs),
+          markerWidths,
+          railDuration,
+        )
+      )
     },
     [markerWidths, railDuration, shouldPlay, totalMarkersWidth],
   )
@@ -97,14 +108,21 @@ export function useLifelineIntro(markerWidths: number[]) {
     (index: number) => {
       if (!shouldPlay || totalMarkersWidth <= 0) return 0
 
+      // The sweep front moves right-to-left, so a marker fades in when the
+      // front reaches its right edge — the rightmost (oldest) marker opens
+      // first, the leftmost (newest) last.
       const offset = markerWidths
-        .slice(0, index)
+        .slice(0, index + 1)
         .reduce((sum, width) => sum + width, 0)
 
-      return timeAtTrackProgress(
-        offset / totalMarkersWidth,
-        markerWidths,
-        railDuration,
+      return Math.max(
+        0,
+        railDuration -
+          timeAtTrackProgress(
+            offset / totalMarkersWidth,
+            markerWidths,
+            railDuration,
+          ),
       )
     },
     [markerWidths, railDuration, shouldPlay, totalMarkersWidth],
