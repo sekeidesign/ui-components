@@ -196,7 +196,7 @@ const ExperimentDescription = ({ children }: ExperimentDescriptionProps) => {
 	);
 };
 
-export function ExperimentDivider() {
+export function ExperimentDivider({ inline = false }: { inline?: boolean }) {
 	return (
 		<motion.div
 			className="flex gap-px w-full"
@@ -205,8 +205,18 @@ export function ExperimentDivider() {
 			exit={{ opacity: 0 }}
 			transition={{ duration: 0.2, ease: "easeInOut" }}
 		>
-			<div className="panel flex-1 shrink xl:block hidden" />
-			<div className="flex gap-4 w-full h-10 flex-4 grow-20 xl:max-w-screen-md shrink-0 panel items-center justify-center md:p-6 p-4">
+			<div
+				className={cn(
+					"panel flex-1 shrink ",
+					inline ? "hidden" : "xl:block hidden",
+				)}
+			/>
+			<div
+				className={cn(
+					"flex gap-4 w-full h-10 flex-4 grow-20 xl:max-w-screen-md shrink-0 panel items-center justify-center",
+					inline ? "p-0" : "md:p-6 p-4",
+				)}
+			>
 				<hr className="w-full border-gray-200" />
 				<svg
 					viewBox="0 0 15 15"
@@ -221,7 +231,12 @@ export function ExperimentDivider() {
 				</svg>
 				<hr className="w-full border-gray-200" />
 			</div>
-			<div className="panel flex-1 shrink xl:block hidden" />
+			<div
+				className={cn(
+					"panel flex-1 shrink ",
+					inline ? "hidden" : "xl:block hidden",
+				)}
+			/>
 		</motion.div>
 	);
 }

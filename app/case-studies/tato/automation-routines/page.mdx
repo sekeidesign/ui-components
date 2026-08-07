@@ -1,7 +1,9 @@
 import { CaseStudyHeader } from "@ui-kit/CaseStudyHeader";
+import { CaseStudyLink } from "@ui-kit/CaseStudyLink";
 import { Figure } from "@ui-kit/Figure";
 import { NextCaseStudy } from "@ui-kit/NextCaseStudy";
 import { Problems } from "@ui-kit/Problems";
+import { ExperimentDivider } from "@ui-kit/Experiment";
 
 export const metadata = {
 	title: "Automation Routines — Tato Case Study | PG Gonni",
@@ -21,9 +23,6 @@ export const metadata = {
 	description="Tato's skills and reports were useful, but someone had to remember to run them. Routines let the system run them instead."
 />
 
-_The product and user research behind this project came out of the
-[Q2 reset](/case-studies/tato/q2-reset), worth a look for the full context._
-
 When we mapped job stories for the quarter, the same ask kept coming back
 in different shapes: send Tato's output to the tools I already work in,
 without more effort on my part. A skill that surfaces open risks is
@@ -40,11 +39,34 @@ effort to trigger, it stops happening.
 
 ## Approach
 
-One job story from that mapping became the spine of the project:
+I learned in our research process that the highest value work is strategic. 
+I also learned that this type of work is often bogged down by the clerical work: 
+extracting meeting outputs, moving data from one system to another, generating recurring outputs, etc.
 
-> When I create a clear, high value workflow, I want to automate it to run
-> on a timely basis or triggered by an event, so I can get proactive value
-> continuously without additional work on my part.
+<Figure
+	src="/casestudies/automation-routines/pm-spectrum.webp"
+	alt="A spectrum of PM roles, from strategic to clerical"
+	caption="The PM spectrum"
+	image="/casestudies/q2-reset/journey-map.webp"
+/>
+
+<ExperimentDivider inline />
+
+<CaseStudyLink
+	href="/case-studies/tato/closing-the-understanding-gap"
+	title="Closing the understanding gap"
+	description="Read more about the product and user research behind this project."
+/>
+
+<ExperimentDivider inline />
+
+Several job stories from that mapping became the spine of the project to help Project Managers focus on the highest value work:
+
+<Figure
+	src="/casestudies/automation-routines/job-story-workflows.webp"
+	alt="A list of job stories, including 'When I create a clear, high value workflow, I want to automate it to run on a timely basis or triggered by an event, so I can get proactive value continuously without additional work on my part.'"
+	caption="Job stories"
+/>
 
 A routine is three choices: a skill or report that works well, a trigger,
 and a destination. Pick your weekly risk summary, schedule it for Monday
@@ -65,13 +87,13 @@ tweak, not a blank page.
 ### Meeting users where they work
 
 The destination is what makes a routine worth having. Our users spend
-their day in Teams and email, not in Tato, so we built integrations with
+most of their day in Teams and email, rather than in Tato, so we built integrations with
 both and made them first-class outputs. A routine can post to a Teams
 channel, a private Teams message, an inbox, or Tato's own chat, which
 means Tato does the work where people actually need it instead of waiting
 to be checked.
 
-### Time or a meeting can start it
+### Time and event based triggers
 
 Most routines run on a schedule — daily, weekly, or monthly, optionally
 scoped to weekdays. But some workflows aren't calendar-shaped, they're

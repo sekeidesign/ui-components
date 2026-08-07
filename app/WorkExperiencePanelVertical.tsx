@@ -1,8 +1,8 @@
 "use client";
 
-import { LifelineVertical } from "../ui-kit/lifeline/lifeline-vertical";
-import { useHoverGroup } from "../ui-kit/HoverContext";
-import { BIRTH_YEAR, MARKERS_NEWEST_FIRST } from "../WorkExperiencePanel";
+import { LifelineVertical } from "./ui-kit/lifeline/lifeline-vertical";
+import { useHoverGroup } from "./ui-kit/HoverContext";
+import { BIRTH_YEAR, MARKERS_NEWEST_FIRST } from "./WorkExperiencePanel";
 
 // Forces the always-vertical (LinkedIn-style) stacked layout regardless of
 // viewport width, instead of the responsive Lifeline that swaps to a
