@@ -22,7 +22,7 @@ export default function Home() {
 			</Experiment>
 			<ExperimentDivider />
 			<Experiment className="p-0 md:p-0 gap-px bg-gray-200! flex flex-col xl:max-w-3xl">
-				<div className="flex gap-px bg-gray-200">
+				<div className="md:flex-row flex flex-col gap-px bg-gray-200">
 					<GlobePanel />
 					<AppsPanel />
 				</div>
