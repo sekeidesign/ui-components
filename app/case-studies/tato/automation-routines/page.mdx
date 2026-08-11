@@ -8,11 +8,11 @@ import { ExperimentDivider } from "@ui-kit/Experiment";
 export const metadata = {
 	title: "Automation Routines — Tato Case Study | PG Gonni",
 	description:
-		"A look at Tato's automation routines, and the product foundation that made them possible.",
+		"How we automated user's workflows, and met them where they worked.",
 	openGraph: {
 		title: "Automation Routines — Tato Case Study | PG Gonni",
 		description:
-			"A look at Tato's automation routines, and the product foundation that made them possible.",
+			"How we automated user's workflows, and met them where they worked.",
 		images: "/og-image.jpg",
 	},
 };
@@ -20,20 +20,21 @@ export const metadata = {
 <CaseStudyHeader
 	eyebrow="Tato · Case study"
 	title="Automation routines"
-	description="Tato's skills and reports were useful, but someone had to remember to run them. Routines let the system run them instead."
+	description="Our agent, along with skills and reports, were useful to users, but needed to be triggered manually, and outputs were only available in Tato's chat. To make Tato more sticky and a core part of our user's workflows, we built automation routines."
 />
 
-When we mapped job stories for the quarter, the same ask kept coming back
-in different shapes: send Tato's output to the tools I already work in,
-without more effort on my part. A skill that surfaces open risks is
-valuable, but only if someone runs it. The moment a workflow needs active
-effort to trigger, it stops happening.
+When we mapped job stories for the quarter, we found a recurring gap: Tato's outputs are helpful and based on a treasure trove of data. 
+Accessing those outputs, however, required users being familiar with Tato, and jumping out of the tools they were working in, breaking their workflows.
+As power users started to develop more skills and reports, we wanted all of their collegues and stakeholders to benefit from them.
+These skills include weekly status reports, Monday morning prep digests, and team wins round-ups, all of which can be run predictably on a schedule or triggered by an event.
+
+What we've built is now one of the most used features at Tato, and a foundation for much of our core functionality.
 
 <Problems
 	items={[
 		"Every skill and report needed someone to start it by hand.",
-		"Workflows that depend on memory happen inconsistently, then not at all.",
-		"Outputs stayed inside Tato instead of reaching Teams, email, or the tools people track their work in.",
+		"Users needed to be in Tato regularly to access its value.",
+		"Adoption of the tool was limited to power users.",
 	]}
 />
 
@@ -42,6 +43,9 @@ effort to trigger, it stops happening.
 I learned in our research process that the highest value work is strategic. 
 I also learned that this type of work is often bogged down by the clerical work: 
 extracting meeting outputs, moving data from one system to another, generating recurring outputs, etc.
+
+This clerical work is important, but it's often repetitive, relatively simple, and often based on language patterns.
+These qualities make it the ideal candidate for automation.
 
 <Figure
 	src="/casestudies/automation-routines/pm-spectrum.webp"
@@ -60,18 +64,22 @@ extracting meeting outputs, moving data from one system to another, generating r
 
 <ExperimentDivider inline />
 
-Several job stories from that mapping became the spine of the project to help Project Managers focus on the highest value work:
+At the same time, while our most active users love the tool and get a lot of value from it, they were often copying outputs and pasting them in other tools. 
+This made it hard to expose more users to the tool, and also limited the outputs to plain text that could be copied and pasted.
+
+Ultimately I wanted to help Project Managers focus on the highest value work, and (as per my OKR) make accessing Tato so frictionless that it becomes a core part of the user's daily workflow. 
+These learnings led me to generate a few job stories that became the spine of the project:
 
 <Figure
 	src="/casestudies/automation-routines/job-story-workflows.webp"
 	alt="A list of job stories, including 'When I create a clear, high value workflow, I want to automate it to run on a timely basis or triggered by an event, so I can get proactive value continuously without additional work on my part.'"
-	caption="Job stories"
+	caption="Job stories extracted from user interview outputs"
 />
 
 A routine is three choices: a skill or report that works well, a trigger,
-and a destination. Pick your weekly risk summary, schedule it for Monday
-morning, send it to the steering committee's inbox. From then on it just
-arrives.
+and a destination. To make that first routine easier to reach for, empty projects ship with a
+few ready-made templates: a weekly status report, a Monday morning
+prep digest, and a team wins round-up. This makes it easier for users to get started with automations, and reduces the dreaded blank page syndrome.
 
 <Figure
 	src="/casestudies/automation-routines/automations-empty-state.webp"
@@ -79,27 +87,14 @@ arrives.
 	caption="Starting from a template instead of a blank routine"
 />
 
-To make that first routine easier to reach for, empty projects ship with a
-few ready-made templates — a weekly status report, a Monday morning
-prep digest, a team wins round-up — so the first one a user creates is a
-tweak, not a blank page.
-
-### Meeting users where they work
-
-The destination is what makes a routine worth having. Our users spend
-most of their day in Teams and email, rather than in Tato, so we built integrations with
-both and made them first-class outputs. A routine can post to a Teams
-channel, a private Teams message, an inbox, or Tato's own chat, which
-means Tato does the work where people actually need it instead of waiting
-to be checked.
-
 ### Time and event based triggers
 
-Most routines run on a schedule — daily, weekly, or monthly, optionally
-scoped to weekdays. But some workflows aren't calendar-shaped, they're
-tied to an event. So a routine can also trigger off a meeting, firing the
-moment one is created or right after it wraps, narrowed down with filters
-on the meeting name, the organizer, or the attendees.
+Based on the core workflows we identified, we decided to start with two main triggers: 
+schedule-based (daily, weekly, monthly) and event-based (relative to the start of a meeting, or once a meeting ends).
+
+To make these automations more targeted and contextually aware, we also built a suite of filters, 
+meaning the automation can be fired only when a meeting title includes a keyword or specific attendees, 
+or even if a key stakeholder wasn't able to attend that specific meeting.
 
 <Figure
 	src="/casestudies/automation-routines/meeting-trigger-flow.webp"
@@ -107,7 +102,16 @@ on the meeting name, the organizer, or the attendees.
 	caption="Setting up a meeting trigger"
 />
 
-A daily scrum agenda routine is a good example of the pattern: it fires
+### Meeting users where they work
+
+These outputs, however, are only valuable if they reach a wide audience. Reports, agendas, and celebrating team wins are assets prepared for a larger set of stakeholders. 
+These stakeholders spend most of their day in Teams and email, rather than in Tato, so we built integrations with
+both and made them first-class outputs. 
+
+A routine can post to a Teams channel, a private Teams message, email an arbitrary list of users, and outputs to Tato's own chat.
+Tato now does the work where people actually need it, and more closely aligns with our vision of Tato being a virtual teammate who helps you work better and faster.
+
+A daily scrum agenda routine is a good example: it fires
 right after the standup ends, pulls open risks and action items straight
 from the project's RAID log, and posts the summary to both a Teams
 channel and Tato's own chat.
@@ -120,8 +124,7 @@ channel and Tato's own chat.
 
 ### Keeping v1 small
 
-We cut aggressively. Multi-step routines and conditional logic went to v2,
-and even the meeting trigger above shipped after the first cut. The
+We cut aggressively. Multi-step routines and conditional logic went to v2. The
 definition of done was one sentence: a user can schedule a skill to run
 weekly and the output lands in an inbox. Everything else could wait until
 that worked.
