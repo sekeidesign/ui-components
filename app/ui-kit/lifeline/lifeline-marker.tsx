@@ -1,6 +1,6 @@
 "use client"
 
-import { forwardRef, useState, type CSSProperties } from "react"
+import { forwardRef, type CSSProperties } from "react"
 import { Film, Image as ImageIcon } from "lucide-react"
 import Link from "next/link"
 import { cn } from "../cn"
@@ -13,8 +13,8 @@ import {
 } from "./lifeline-event"
 import { useLifelineFireworks } from "./lifeline-fireworks"
 import { useLifelineHoverImage } from "./lifeline-hover-image"
+import { LifelineCaseStudiesButton } from "./lifeline-case-studies-button"
 import { aggregateLifelinePeople, LifelinePeople } from "./lifeline-people"
-import { LifelinePhotoCard } from "./lifeline-photos"
 import type { LifelineMarker } from "./types"
 
 interface LifelineMarkerColumnProps {
@@ -67,14 +67,6 @@ export const LifelineMarkerColumn = forwardRef<
   const primaryHref = marker.companies?.find((company) => company.href)?.href
   const hoverImage = useLifelineHoverImage()
   const fireworks = useLifelineFireworks()
-  // Fresh tilts per visit; stacked neighbors lean apart.
-  const [photoTilts] = useState(() =>
-    photos.map((_, index) => {
-      const sign =
-        photos.length > 1 ? (index % 2 === 0 ? -1 : 1) : Math.random() > 0.5 ? 1 : -1
-      return sign * (2 + Math.random() * 4)
-    }),
-  )
 
   return (
     <div
@@ -204,16 +196,16 @@ export const LifelineMarkerColumn = forwardRef<
               </div>
 
               {photos.length > 0 && (
-                <div className="mt-6 flex flex-wrap items-start gap-3">
-                  {photos.map((photo, index) => (
-                    <LifelinePhotoCard
-                      key={`${photo.src}-${index}`}
-                      photo={photo}
-                      rotate={photo.rotate ?? photoTilts[index] ?? 0}
-                      width={photo.width ?? 140}
-                      className="relative"
-                    />
-                  ))}
+                <div className="mt-6">
+                  {/* The whole column above is already `primaryHref`'s
+                      anchor (via LinkOrDiv) when it's set — a nested
+                      anchor here would be invalid HTML, so this always
+                      renders as a plain chip, never its own link. */}
+                  <LifelineCaseStudiesButton
+                    photos={photos}
+                    href={primaryHref}
+                    as="static"
+                  />
                 </div>
               )}
             </LinkOrDiv>

@@ -24,8 +24,8 @@ import {
 	LifelineLightbox,
 	type LifelineLightboxStart,
 } from "./lifeline-lightbox";
+import { LifelineCaseStudiesButton } from "./lifeline-case-studies-button";
 import { aggregateLifelinePeople, LifelinePeople } from "./lifeline-people";
-import { LifelinePhotoCard } from "./lifeline-photos";
 import type { LifelineEvent, LifelineMarker, LifelineProps } from "./types";
 import { getMarkerHeight, hasMarkerContent } from "./lifeline-utils";
 import { useLifelineIntro } from "./use-lifeline-intro";
@@ -189,9 +189,8 @@ const LifelineVerticalEntry = forwardRef<
 	},
 	ref,
 ) {
-	const linkHref = staticMedia
-		? marker.companies?.find((company) => company.href)?.href
-		: undefined;
+	const primaryHref = marker.companies?.find((company) => company.href)?.href;
+	const linkHref = staticMedia ? primaryHref : undefined;
 	const firstTitle =
 		marker.events.length > 0
 			? getLifelineEventTitle(marker.events[0])
@@ -199,20 +198,6 @@ const LifelineVerticalEntry = forwardRef<
 	const people = aggregateLifelinePeople(marker);
 	const photos = marker.photos ?? [];
 	const hasContent = hasMarkerContent(marker) || photos.length > 0;
-	// Fresh tilts per visit; stacked neighbors lean apart.
-	const [photoTilts] = useState(() =>
-		(marker.photos ?? []).map((_, index) => {
-			const sign =
-				(marker.photos?.length ?? 0) > 1
-					? index % 2 === 0
-						? -1
-						: 1
-					: Math.random() > 0.5
-						? 1
-						: -1;
-			return sign * (2 + Math.random() * 4);
-		}),
-	);
 
 	const body = (
 		<div
@@ -300,17 +285,15 @@ const LifelineVerticalEntry = forwardRef<
 						)}
 
 						{photos.length > 0 && (
-							<div className="mt-6 flex flex-wrap items-start">
-								{photos.map((photo, index) => (
-									<LifelinePhotoCard
-										key={`${photo.src}-${index}`}
-										photo={photo}
-										rotate={photo.rotate ?? photoTilts[index] ?? 0}
-										width={photo.width ?? 220}
-										className={cn("relative", index > 0 && "-ml-4 mt-6")}
-										interactive={!staticMedia}
-									/>
-								))}
+							<div className="mt-6">
+								{/* staticMedia entries are already wrapped in `linkHref`'s
+								    anchor below — a nested anchor here would be invalid
+								    HTML, so that case renders as a plain chip. */}
+								<LifelineCaseStudiesButton
+									photos={photos}
+									href={primaryHref}
+									as={staticMedia ? "static" : "link"}
+								/>
 							</div>
 						)}
 
