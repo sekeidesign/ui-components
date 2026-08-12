@@ -14,6 +14,15 @@ import { StarIcon } from "./ui-kit/icons/StarIcon";
 // placeholders until the real ones come in.
 const BOOKS: Book[] = [
 	{
+		id: "competing-against-luck",
+		title: "Competing Against Luck",
+		author: "Christensen et al.",
+		cover: "https://covers.openlibrary.org/b/id/8138391-L.jpg",
+		spineColor: "#4a5568",
+		depth: 20,
+		rating: 0,
+	},
+	{
 		id: "apple-in-china",
 		title: "Apple in China",
 		author: "Patrick McGee",
@@ -30,6 +39,15 @@ const BOOKS: Book[] = [
 		spineColor: "#7c4430",
 		depth: 30,
 		rating: 3,
+	},
+	{
+		id: "that-will-never-work",
+		title: "That Will Never Work",
+		author: "Marc Randolph",
+		cover: "https://covers.openlibrary.org/b/id/10663066-L.jpg",
+		spineColor: "#8a4a3a",
+		depth: 22,
+		rating: 5,
 	},
 	{
 		id: "working-backwards",
@@ -122,7 +140,7 @@ function StarRating({ rating }: { rating: number }) {
 
 export function LibraryPanel() {
 	const reading = useHoverGroup("reading");
-	// Only one book is ever open — Apple in China (the one I'm currently
+	// Only one book is ever open — Competing Against Luck (the one I'm currently
 	// reading) by default, then whichever the user picks by click or chevron.
 	const [activeIndex, setActiveIndex] = useState(0);
 	const active = BOOKS[activeIndex];
