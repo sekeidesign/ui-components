@@ -16,45 +16,6 @@ export const BIRTH_YEAR = 1994;
 // not a repeated date range.
 export const MARKERS: LifelineMarker[] = [
 	{
-		id: "golden-hour-media",
-		year: 2017 + 9 / 12,
-		label: "Oct 2017",
-		age: 2017 - BIRTH_YEAR,
-		events: [
-			{
-				title: "Web Developer & UX Designer",
-				text: "Freelance — front-end development, custom CMS builds, and on-page SEO/content strategy for client marketing sites.",
-			},
-		],
-		companies: [{ id: "golden-hour-media", name: "Golden Hour Media" }],
-	},
-	{
-		id: "samuel-associates",
-		year: 2020,
-		label: "Jan 2020",
-		age: 2020 - BIRTH_YEAR,
-		events: [
-			{
-				title: "Digital Designer",
-				text: "Owned clients' digital touchpoints — UX/UI design, web development, and branding — while managing the Integrated Digital Marketing team.",
-			},
-		],
-		companies: [{ id: "samuel-associates", name: "Samuel Associates" }],
-	},
-	{
-		id: "field-effect",
-		year: 2021,
-		label: "Jan 2021",
-		age: 2021 - BIRTH_YEAR,
-		events: [
-			{
-				title: "Product Designer",
-				text: "Placeholder description — swap in real details later.",
-			},
-		],
-		companies: [{ id: "field-effect", name: "Field Effect" }],
-	},
-	{
 		id: "metalab",
 		year: 2021 + 9 / 12,
 		label: "Oct 2021",
