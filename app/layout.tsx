@@ -60,13 +60,13 @@ export default function RootLayout({
 					{/* Striped gutters flank the sidebar and the feed together, so the
 					    sidebar sits right against the content instead of being pushed
 					    away by a gutter of its own. */}
-					<div className="flex md:flex-row flex-col justify-center mx-auto h-screen p-px gap-px">
-						<div className="panel stripes flex-1 shrink xl:block hidden" />
+					<div className="flex md:flex-row flex-col justify-center mx-auto min-h-screen md:h-screen p-px gap-px">
+						<div className="panel stripes flex-1 shrink md:block hidden" />
 						<Sidebar />
 						{/* One continuous panel: posts are separated by dividers, not by
 						    being individual blocks. */}
-						<div className="panel flex flex-col w-full md:max-w-screen-md shrink-0 h-full overflow-y-auto">
-							<main className="flex flex-col w-full p-5">
+						<div className="panel flex flex-col w-full md:max-w-screen-md min-w-0 md:h-full md:overflow-y-auto">
+							<main className="flex flex-col w-full p-2 md:p-5">
 								{/* One counts fetch for the whole app, so navigating between
 								    the feed and a post doesn't refetch. */}
 								<SocialProvider
@@ -77,7 +77,7 @@ export default function RootLayout({
 							</main>
 							<Footer className="md:hidden grid" />
 						</div>
-						<div className="panel stripes flex-1 shrink xl:block hidden" />
+						<div className="panel stripes flex-1 shrink md:block hidden" />
 					</div>
 				</div>
 					</FilterProvider>

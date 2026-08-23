@@ -130,7 +130,10 @@ function Root({
 			href={href}
 			onPointerEnter={onPointerEnter}
 			onPointerLeave={onPointerLeave}
-			className={cn("flex items-center gap-8 md:p-8 p-4", className)}
+			className={cn(
+				"flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-8 p-2 md:p-8",
+				className,
+			)}
 		>
 			{children}
 		</PostRow>

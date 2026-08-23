@@ -16,7 +16,7 @@ import useMeasure from "react-use-measure";
 
 const ProfileMenu = () => {
 	return (
-		<div className="h-full w-full flex items-start justify-start bg-gray-50 pb-1">
+		<div className="h-80 w-full flex items-end justify-start bg-gray-50 pb-1">
 			<Sidebar />
 			<MainContent />
 		</div>

@@ -475,19 +475,31 @@ body {
 }
 
 
-/* The phone's bottom fade dissolves into the card, so its end colour has to
-   track the card's own background — including the hover state. Exposed as a
-   variable the fade reads, rather than hardcoding two hex values.
+/* The card's hover state: the background fill and the variable the phone's
+   bottom fade reads, so the fade tracks the card instead of being matched by
+   hand. Both live in one rule because they have to agree.
 
-   srgb, not oklab: the hover background is `bg-gray-200/40`, and browsers
-   alpha-composite in gamma-encoded sRGB, so mixing in any other space would
-   land on a slightly different colour than the card actually paints. */
-.post-fade-host {
+   Inside @media (hover: hover) on purpose. Tailwind gates its own hover:
+   variant this way, but a hand-written :hover selector isn't gated — and on a
+   touch device an ungated hover sticks after a tap.
+
+   srgb, not oklab: browsers alpha-composite in gamma-encoded sRGB, so mixing
+   in another space lands a shade off what the card actually paints.
+
+   :not(:has(...)) keeps the fill off while the pointer is inside a live demo. */
+.post-card {
   --post-bg: var(--color-gray-100);
 }
 
-.post-fade-host:hover:not(:has([data-no-card-link]:hover)) {
-  --post-bg: color-mix(in srgb, var(--color-gray-200) 40%, var(--color-gray-100));
+@media (hover: hover) {
+  .post-card:hover:not(:has([data-no-card-link]:hover)) {
+    --post-bg: color-mix(
+      in srgb,
+      var(--color-gray-200) 40%,
+      var(--color-gray-100)
+    );
+    background-color: var(--post-bg);
+  }
 }
 
 /* Range inputs, styled rather than left native. --fill is the played portion,

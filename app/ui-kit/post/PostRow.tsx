@@ -83,10 +83,7 @@ export function PostRow({
 			// surface (a live demo), so poking at a component doesn't look like
 			// you're about to navigate. :has() does this in CSS — no pointer state
 			// to track and no re-render.
-			className={cn(
-				"post-fade-host cursor-pointer rounded-2xl [&:hover:not(:has([data-no-card-link]:hover))]:bg-gray-200/40",
-				className,
-			)}
+			className={cn("post-card cursor-pointer rounded-2xl", className)}
 		>
 			{children}
 		</PanelRow>
