@@ -2,7 +2,7 @@
 
 import { Experiment } from "@ui-kit/Experiment";
 import { TextLink } from "@ui-kit/TextLink";
-import { FamilyStatusButton } from "./FamilyStatusButton";
+import { FamilyStatusButton } from "@/content/transaction-status-button/FamilyStatusButton";
 
 export function TransactionStatusButtonExperiment() {
 	return (

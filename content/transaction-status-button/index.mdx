@@ -1,0 +1,19 @@
+---
+title: Transaction status button
+date: 2025-07-01
+kind: experiment
+tags: [motion, layout, tailwind, react]
+excerpt: A status button that morphs between states without the text going jelly.
+preview: live
+previewCost: light
+previewHeight: 240
+sourceUrl: https://github.com/sekeidesign/ui-components/blob/main/content/transaction-status-button/FamilyStatusButton.tsx
+---
+
+Based on [Family](https://family.co/) by [Benji Taylor](https://benji.org/family-values).
+
+In my first attempt the text had a "jelly" effect, particularly when animating between the "Analyzing" and "Success" states.
+
+Thankfully I had recently read about [how Motion's "magic" layout property works](https://www.nan.fyi/magic-motion), which made it clear that this was caused by the text trying to transform from one string to the next.
+
+The fix was simply to add a unique key to the text for each state, which ensures only the button magically transforms between states, while the label simply translates on the x axis and fades in and out.

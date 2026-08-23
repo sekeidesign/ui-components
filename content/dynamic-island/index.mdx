@@ -1,0 +1,20 @@
+---
+title: Dynamic island
+date: 2025-10-04
+kind: experiment
+tags: [motion, Motion+ Ticker, useMeasure, tailwind, react]
+excerpt: A media player interface with a masked marquee title, inspired by Alcove.
+preview: live
+# heavy: the Ticker marquee runs continuously, so it unmounts offscreen
+# rather than burning main thread in a feed.
+previewCost: heavy
+previewHeight: 240
+previewClassName: p-0 items-start
+sourceUrl: https://github.com/sekeidesign/ui-components/blob/main/content/dynamic-island/DynamicIsland.tsx
+---
+
+**Click the island or swipe down with two fingers to smoothly expand it. You can interact with the media controls within there. Leave the island to smoothly collapse it.**
+
+*Note: This behaves awkwardly in a scrolling feed because the two finger gesture is also a scroll.*
+
+A media player interface inspired by [Alcove](https://tryalcove.com/), a clean and beautiful little app to add Dynamic Island like functionality to your Mac's notch. It also uses Motion+ Ticker to animate the podcast title with a smoothly masked marquee.

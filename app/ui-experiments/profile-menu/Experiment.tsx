@@ -2,7 +2,7 @@
 
 import { Experiment } from "@ui-kit/Experiment";
 import { TextLink } from "@ui-kit/TextLink";
-import { ProfileMenu } from "./ProfileMenu";
+import { ProfileMenu } from "@/content/profile-menu/ProfileMenu";
 
 export function ProfileMenuExperiment() {
 	return (

@@ -1,0 +1,94 @@
+---
+date: 2026-08-06
+title: "RAID 2.0"
+kind: writing
+tags: [Tato, case study]
+excerpt: "Tato pulled six kinds of items out of every meeting, and most of them were noise. RAID 2.0 cut the list to three and put a human in the loop."
+cover: "/casestudies/raid-2-0/edit-and-track.webp"
+---
+
+import { Figure } from "@ui-kit/Figure";
+import { NextCaseStudy } from "@ui-kit/NextCaseStudy";
+import { Problems } from "@ui-kit/Problems";
+
+
+
+Tato extracted six entity types from every meeting: Changes, Risks,
+Assumptions, Action Items, Issues, and Decisions. On paper that's thorough.
+In practice it produced a wall of overlapping items that most users
+scrolled past.
+
+<Problems
+	items={[
+		"The six types overlapped: a change was usually a decision, an issue was a risk that had already happened.",
+		"Extraction produced more items per meeting than anyone could act on.",
+		"Items were read-only snippets. If Tato got one slightly wrong, you were stuck with it.",
+	]}
+/>
+
+## Approach
+
+We replaced the six types with three: Risk, Action Item, Decision. A risk
+has an owner and a priority: critical, high, medium, or low. An action
+item has an assignee and a due date. A decision is attributable to a
+person and tied to the meeting where it was made. Everything else was cut.
+The target was blunt: roughly half the items per meeting, so the list
+after a meeting is short enough to act on in a minute.
+
+### A human in the loop
+
+Cleaner extraction only matters if people trust it, so every item became
+reviewable. After a meeting, items land in a needs-review list on the
+summary. From there the user edits what Tato got slightly wrong, dismisses
+false positives, and tracks what matters. Tracked items move to the RAID
+page and get monitored across meetings, with badges showing what's new and
+what changed since last time. Tato does the reading; the user makes the
+calls.
+
+<Figure
+	src="/casestudies/raid-2-0/needs-review.webp"
+	alt="A meeting summary's needs-review list, with action items and decisions awaiting review, dismissal, or tracking"
+	caption="The needs-review list on a meeting summary"
+/>
+
+Editing isn't limited to a form, either. Drop in a file or tell Tato what
+changed in chat, and it updates the item and timestamps the edit. Risks,
+actions, and decisions link to each other too, so a decision traces back
+to the risk that prompted it.
+
+<Figure
+	src="/casestudies/raid-2-0/edit-and-track.webp"
+	alt="A risk's edit panel, showing its assignee, priority, and scope, with a save and track action"
+	caption="Editing a risk before tracking it"
+/>
+
+### The rollout
+
+Replacing entity types means touching customers' existing data, so the
+rollout became its own project. We ran it in three phases over a month: a
+banner prompted people to review and track what mattered, the new view
+became default two weeks later with a manual switch-back, then the cutover
+went permanent. Tracked items migrated with full history. Everything else,
+including the retired Changes, Assumptions, and Issues types, was archived
+instead of deleted, and CS could still pull an item back on request.
+
+<Figure
+	src="/casestudies/tato-raid-dashboard.webp"
+	alt="Tato RAID dashboard screen"
+	caption="RAID 2.0, with a human in the loop"
+/>
+
+## Outcome
+
+RAID went from a wall of snippets people scrolled past to a short list
+they clear after each meeting. Risks persist until someone resolves them,
+and decisions carry a paper trail back to the meeting and speaker where
+they were made. The project is also the core of Proactive Visibility, an
+objective I own: giving customers independent visibility into
+implementation risk before sign-off, not after.
+
+
+<NextCaseStudy
+	href="/p/customer-knowledge-base"
+	title="Customer knowledge base"
+/>

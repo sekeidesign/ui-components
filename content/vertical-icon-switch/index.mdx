@@ -1,0 +1,21 @@
+---
+title: Vertical icon switch
+date: 2025-07-01
+kind: experiment
+tags: [motion, clip-path, useTransform, tailwind, react]
+excerpt: A switch that uses a specific icon per direction, built with clip-path and useTransform.
+preview: live
+previewCost: light
+previewHeight: 240
+sourceUrl: https://github.com/sekeidesign/ui-components/blob/main/content/vertical-icon-switch/VerticalIconSwitch.tsx
+---
+
+Based on [this Threads post](https://www.threads.com/@ozanoz/post/DDUEYvaCf4M) by [Ozan Öztaskiran](https://www.threads.com/@ozanoz).
+
+The original example was a more typical switch, with a checkmark icon that moves up and down based on the selection. I left [a comment](https://www.threads.com/@sekeidesign/post/DDUnuo4xL7v) suggesting that the switch use a specific icon for each direction for added clarity.
+
+I also wanted to use this as an opportunity to make use of clip-path, which I learned about in one of the earlier modules of Emil Kowalski's [Animations for the Web](https://animations.dev/), while also trying to learn to use Motion's [useTransform](https://motion.dev/docs/react-use-transform) function.
+
+Finally, I decided to animate the icons when the state switches, which added complexity to the code but also a nice little flair.
+
+While I like the final effect, I'm not super happy with all the magic numbers I'm using to make the clip-path move smoothly between the two states.
