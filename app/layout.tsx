@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { Sidebar } from "./Sidebar";
+import { FilterProvider } from "./ui-kit/filters/FilterContext";
 import { SocialProvider } from "./ui-kit/social/SocialProvider";
 import { TooltipProvider, TooltipSurface } from "./ui-kit/Tooltip";
 import { getTimeline } from "@/lib/timeline";
@@ -54,6 +55,7 @@ export default function RootLayout({
 					{/* One shared tooltip for every trigger in the app, so moving between
 					    controls repositions the same element instead of swapping popups. */}
 					<TooltipSurface />
+					<FilterProvider>
 					<div className="font-[family-name:var(--font-geist-sans)] w-screen box-border text-[15px]">
 					{/* Striped gutters flank the sidebar and the feed together, so the
 					    sidebar sits right against the content instead of being pushed
@@ -78,6 +80,7 @@ export default function RootLayout({
 						<div className="panel stripes flex-1 shrink xl:block hidden" />
 					</div>
 				</div>
+					</FilterProvider>
 				</TooltipProvider>
 			</body>
 		</html>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import type { MouseEvent, ReactNode } from "react";
+import type { MouseEvent, PointerEventHandler, ReactNode } from "react";
 import { cn } from "../cn";
 import { PanelRow } from "../PanelRow";
 
@@ -20,17 +20,26 @@ export function PostRow({
 	id,
 	className,
 	children,
+	onPointerEnter,
+	onPointerLeave,
 }: {
 	href?: string;
 	id?: string;
 	className?: string;
 	children: ReactNode;
+	onPointerEnter?: PointerEventHandler<HTMLDivElement>;
+	onPointerLeave?: PointerEventHandler<HTMLDivElement>;
 }) {
 	const router = useRouter();
 
 	if (!href) {
 		return (
-			<PanelRow id={id} className={className}>
+			<PanelRow
+				id={id}
+				className={className}
+				onPointerEnter={onPointerEnter}
+				onPointerLeave={onPointerLeave}
+			>
 				{children}
 			</PanelRow>
 		);
@@ -65,6 +74,8 @@ export function PostRow({
 		<PanelRow
 			id={id}
 			onClick={onClick}
+			onPointerEnter={onPointerEnter}
+			onPointerLeave={onPointerLeave}
 			// The row sits on the column's gray-100, so a touch of gray-200 over it
 			// reads as ~5 values darker. No important modifier needed now that the
 			// row itself doesn't carry the unlayered `.panel` class.
@@ -73,7 +84,7 @@ export function PostRow({
 			// you're about to navigate. :has() does this in CSS — no pointer state
 			// to track and no re-render.
 			className={cn(
-				"cursor-pointer rounded-2xl [&:hover:not(:has([data-no-card-link]:hover))]:bg-gray-200/40",
+				"post-fade-host cursor-pointer rounded-2xl [&:hover:not(:has([data-no-card-link]:hover))]:bg-gray-200/40",
 				className,
 			)}
 		>

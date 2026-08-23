@@ -14,9 +14,19 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
-      // The timeline became the home page; filters are root-level segments.
+      // Filters moved from route segments to a query param, so several can be
+      // active at once.
       { source: "/timeline", destination: "/", permanent: true },
-      { source: "/timeline/:slug", destination: "/:slug", permanent: true },
+      ...["apps", "books", "experiments", "work", "writing", "photos"].flatMap(
+        (slug) => [
+          { source: `/${slug}`, destination: `/?kind=${slug}`, permanent: true },
+          {
+            source: `/timeline/${slug}`,
+            destination: `/?kind=${slug}`,
+            permanent: true,
+          },
+        ],
+      ),
       // Case studies moved from route folders into content/, served by /p/<slug>.
       { source: "/case-studies/tato", destination: "/p/tato", permanent: true },
       {

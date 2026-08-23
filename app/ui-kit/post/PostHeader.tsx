@@ -23,7 +23,7 @@ export function PostHeader({
 
 	return (
 		<>
-			<Post.Meta kind={entry.kind} date={entry.date} />
+			<Post.Meta kind={entry.kind} date={entry.date} draft={entry.draft} />
 
 			<Post.Title
 				href={href}

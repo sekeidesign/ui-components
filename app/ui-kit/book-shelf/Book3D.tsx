@@ -16,6 +16,12 @@ const GUTTER = 6;
 // sliver of light, matching how a pulled book actually sits.
 const SPINE_ANGLE = 90;
 const COVER_ANGLE = -16;
+/**
+ * Extra swing for the cover alone when `openMore` is set. Applied to a nested
+ * rotation on the cover face rather than to the assembly: the cover, spine and
+ * page-edge are siblings, so turning the assembly turns all three.
+ */
+const COVER_EXTRA_ANGLE = -10;
 
 const SPRING = {
 	type: "spring",
@@ -28,6 +34,9 @@ interface Book3DProps {
 	/** Whether this is the single active book (cover-out). Only one book in
 	 * a shelf should be open at a time, selected by click, not hover. */
 	open: boolean;
+	/** Swings the cover further open. The spine and page-edge stay put, so it
+	 * reads as the cover lifting rather than the book turning. */
+	openMore?: boolean;
 	/** How far to slide over (px) to clear room for another book's popped
 	 * cover — animated with the same spring as the cover/spine rotation so
 	 * both moves read as one motion. */
@@ -48,6 +57,7 @@ interface Book3DProps {
 export function Book3D({
 	book,
 	open,
+	openMore = false,
 	shiftX = 0,
 	onClick,
 	className,
@@ -93,23 +103,35 @@ export function Book3D({
 				}}
 				transition={SPRING}
 			>
-				{/* cover */}
-				<div
-					className="absolute inset-0 overflow-hidden rounded-[2px]"
+				{/* cover — hinged at the spine edge on its own, so it can lift
+				    without the spine and page-edge coming along */}
+				<motion.div
+					className="absolute inset-0"
 					style={{
-						boxShadow:
-							"1px 2px 6px rgba(0,0,0,0.22), 0 0 0 0.5px rgba(0,0,0,0.35)",
+						transformOrigin: "0% 50%",
+						transformStyle: "preserve-3d",
 					}}
+					initial={false}
+					animate={{ rotateY: openMore ? COVER_EXTRA_ANGLE : 0 }}
+					transition={SPRING}
 				>
-					<Image
-						src={book.cover}
-						alt={book.coverAlt ?? book.title}
-						fill
-						sizes="110px"
-						className="object-cover"
-					/>
-					<span className="absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-black/15" />
-				</div>
+					<div
+						className="absolute inset-0 overflow-hidden rounded-[2px]"
+						style={{
+							boxShadow:
+								"1px 2px 6px rgba(0,0,0,0.22), 0 0 0 0.5px rgba(0,0,0,0.35)",
+						}}
+					>
+						<Image
+							src={book.cover}
+							alt={book.coverAlt ?? book.title}
+							fill
+							sizes="110px"
+							className="object-cover"
+						/>
+						<span className="absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-black/15" />
+					</div>
+				</motion.div>
 
 				{/* spine */}
 				<div

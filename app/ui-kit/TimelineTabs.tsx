@@ -1,21 +1,19 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { cn } from "./cn";
+import { useFilters } from "./filters/FilterContext";
 import { KIND_META } from "./post/Post";
 import type { EntryKind } from "@/lib/timeline";
 import {
 	FILTER_KINDS,
 	FILTER_LABELS,
 	type FilterSlug,
-	filterHref,
 } from "@/lib/timeline-filters";
 
 // Both states share size, radius and padding; only fill, border and text
 // colour change. Icons stay gray-400 in both, per the design.
 const TAB_BASE =
-	"flex items-center gap-1 h-[26px] rounded-full text-[14px] leading-[1.43] font-[500] whitespace-nowrap";
+	"flex items-center gap-1 h-[26px] rounded-full text-[14px] leading-[1.43] font-[500] whitespace-nowrap cursor-pointer";
 const TAB_ON = "bg-white ring-1 ring-gray-500/10 shadow-skew text-gray-900/75";
 const TAB_OFF =
 	"bg-gray-500/5 outline outline-1 outline-gray-500/10 text-gray-500/75 hover:bg-gray-500/15 hover:text-gray-700";
@@ -25,36 +23,6 @@ function Count({ value }: { value: number }) {
 	return <span className="text-gray-400 tabular-nums">{value}</span>;
 }
 
-/**
- * The active tab is a span, not a link: it points at the page you're on, so
- * there's nothing to navigate to and no hover state to imply otherwise.
- */
-function Tab({
-	href,
-	active,
-	padding,
-	children,
-}: {
-	href: string;
-	active: boolean;
-	padding: string;
-	children: React.ReactNode;
-}) {
-	if (active) {
-		return (
-			<span aria-current="page" className={cn(TAB_BASE, padding, TAB_ON)}>
-				{children}
-			</span>
-		);
-	}
-
-	return (
-		<Link href={href} className={cn(TAB_BASE, padding, TAB_OFF)}>
-			{children}
-		</Link>
-	);
-}
-
 export function TimelineTabs({
 	available,
 	counts,
@@ -62,36 +30,39 @@ export function TimelineTabs({
 	available: FilterSlug[];
 	counts: Partial<Record<EntryKind, number>>;
 }) {
-	const pathname = usePathname();
-	const segment = pathname.split("/").filter(Boolean)[0];
-	const active = segment && segment in FILTER_KINDS ? segment : undefined;
-	// Only the home page is "All posts". On a post or the lab, no tab is current.
-	const allActive = pathname === "/";
+	const { selected, toggle, clear } = useFilters();
 	const total = Object.values(counts).reduce((sum, n) => sum + n, 0);
+	const showingAll = selected.size === 0;
 
 	return (
 		// Wraps rather than scrolls: the sidebar is narrower than the feed was.
 		<div className="flex flex-wrap items-center gap-1.5">
-			<Tab href={filterHref()} active={allActive} padding="px-2">
+			<button
+				type="button"
+				aria-pressed={showingAll}
+				onClick={clear}
+				className={cn(TAB_BASE, "px-2", showingAll ? TAB_ON : TAB_OFF)}
+			>
 				All posts
 				<Count value={total} />
-			</Tab>
+			</button>
 
 			{available.map((slug) => {
-				const isActive = active === slug;
+				const isOn = selected.has(slug);
 				const { Icon } = KIND_META[FILTER_KINDS[slug]];
 
 				return (
-					<Tab
+					<button
 						key={slug}
-						href={filterHref(slug)}
-						active={isActive}
-						padding="pl-1.5 pr-2"
+						type="button"
+						aria-pressed={isOn}
+						onClick={() => toggle(slug)}
+						className={cn(TAB_BASE, "pl-1.5 pr-2", isOn ? TAB_ON : TAB_OFF)}
 					>
-						<Icon filled={isActive} className="text-gray-400" />
+						<Icon filled={isOn} className="text-gray-400" />
 						{FILTER_LABELS[slug]}
 						<Count value={counts[FILTER_KINDS[slug]] ?? 0} />
-					</Tab>
+					</button>
 				);
 			})}
 		</div>

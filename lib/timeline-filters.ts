@@ -1,9 +1,11 @@
 import type { EntryKind } from "./timeline";
 
 /**
- * URL segment for each kind, so a filtered feed is a real shareable route:
- * /books rather than a client-only toggle. The unfiltered feed is the home page.
+ * Filters live in a query param so several can be active at once:
+ * /?kind=apps,experiments,work. No param means everything.
  */
+export const FILTER_PARAM = "kind";
+
 export const FILTER_KINDS = {
 	apps: "launch",
 	books: "book",
@@ -34,8 +36,22 @@ export const FILTER_LABELS: Record<FilterSlug, string> = {
 	photos: "Photos",
 };
 
+/** Reverse lookup, for deciding whether an entry passes the current filter. */
+export const KIND_FILTER = Object.fromEntries(
+	Object.entries(FILTER_KINDS).map(([slug, kind]) => [kind, slug]),
+) as Record<EntryKind, FilterSlug>;
+
 export function isFilterSlug(value: string): value is FilterSlug {
 	return value in FILTER_KINDS;
 }
 
-export const filterHref = (slug?: FilterSlug) => (slug ? `/${slug}` : "/");
+/** Unknown slugs are dropped rather than 404ing — a stale link still works. */
+export function parseFilters(value: string | null): Set<FilterSlug> {
+	if (!value) return new Set();
+	return new Set(value.split(",").map((s) => s.trim()).filter(isFilterSlug));
+}
+
+/** Serialised in FILTER_ORDER so the same selection always gives the same URL. */
+export function serializeFilters(selected: Set<FilterSlug>): string {
+	return FILTER_ORDER.filter((slug) => selected.has(slug)).join(",");
+}

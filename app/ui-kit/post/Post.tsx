@@ -3,7 +3,7 @@
 import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import type { ComponentType, ReactNode } from "react";
+import type { ComponentType, PointerEventHandler, ReactNode } from "react";
 import { cn } from "../cn";
 import { CameraIcon } from "../icons/CameraIcon";
 import {
@@ -79,7 +79,7 @@ const MEDIA_INNER = MEDIA_SIZE - 8;
  * runs off the bottom and a gradient dissolves it into the surface, so it reads
  * as a screen you're looking down at rather than a cropped rectangle.
  */
-const PHONE = { width: 120, height: 257, top: 19, fade: 79 };
+const PHONE = { width: 120, height: 257, top: 1, fade: 79 };
 
 
 /**
@@ -114,16 +114,22 @@ function Root({
 	id,
 	/** Post page, if it has one. Makes the whole card a click target. */
 	href,
+	onPointerEnter,
+	onPointerLeave,
 }: {
 	children: ReactNode;
 	className?: string;
 	id?: string;
 	href?: string;
+	onPointerEnter?: PointerEventHandler<HTMLDivElement>;
+	onPointerLeave?: PointerEventHandler<HTMLDivElement>;
 }) {
 	return (
 		<PostRow
 			id={id}
 			href={href}
+			onPointerEnter={onPointerEnter}
+			onPointerLeave={onPointerLeave}
 			className={cn("flex items-center gap-8 md:p-8 p-4", className)}
 		>
 			{children}
@@ -140,32 +146,51 @@ function Body({ children }: { children: ReactNode }) {
 	);
 }
 
-function Meta({ kind, date }: { kind: EntryKind; date: string }) {
+function Meta({
+	kind,
+	date,
+	draft,
+}: {
+	kind: EntryKind;
+	date: string;
+	draft?: boolean;
+}) {
 	const { label, Icon } = KIND_META[kind];
 
 	return (
 		<div className="flex items-center gap-1 self-stretch text-gray-400">
 			<Icon filled />
-			<span className="flex-1 text-[14px] leading-[1.43] font-[500]">
-				{label}
-			</span>
+			<span className="text-[14px] leading-[1.43] font-[500]">{label}</span>
+			<span className="px-1 text-[14px] leading-[1.43] font-[500]">•</span>
 			<time
 				dateTime={date}
 				className="shrink-0 text-[12px] leading-[1.33] font-mono font-[450]"
 			>
 				{DATE_FORMAT.format(new Date(`${date}T00:00:00Z`))}
 			</time>
+			{/* Drafts never reach production, so this only ever shows in dev — but
+			    without it there's no way to tell a draft from a published post while
+			    working, which makes `draft: true` look like it does nothing. Pushed
+			    right so it doesn't break up the category · date reading. */}
+			{draft && (
+				<span className="ml-auto shrink-0 text-[12px] leading-[1.33] font-mono font-[450] text-[#FF5500]">
+					Draft
+				</span>
+			)}
 		</div>
 	);
 }
 
 /**
- * The shortest form Intl offers: 8/23/26. UTC because a post's date is a plain
- * yyyy-mm-dd with no time — parsing it locally would shift it a day west of
- * Greenwich.
+ * Short month name rather than dateStyle: "short" — all-numeric dates (8/6/26,
+ * 8/7/26) are hard to tell apart in a list. UTC because a post's date is a
+ * plain yyyy-mm-dd with no time, so parsing it locally would shift it a day
+ * west of Greenwich.
  */
 const DATE_FORMAT = new Intl.DateTimeFormat("en-US", {
-	dateStyle: "short",
+	month: "short",
+	day: "numeric",
+	year: "numeric",
 	timeZone: "UTC",
 });
 
@@ -312,11 +337,13 @@ function PhoneMedia({
 	priority?: boolean;
 }) {
 	return (
+		// No surface behind a phone: the device carries its own outline and
+		// shadow, and the card's own background reads as the space around it.
 		<div
 			style={{ width: MEDIA_SIZE, height: MEDIA_SIZE }}
-			className={cn("shrink-0 rounded-xl", SURFACE_OUTER)}
+			className="relative shrink-0 overflow-clip rounded-xl"
 		>
-			<div className={cn("relative size-full rounded-lg", SURFACE_INNER)}>
+			<div className="absolute inset-0">
 				<div
 					style={{
 						width: PHONE.width,
@@ -337,13 +364,20 @@ function PhoneMedia({
 					/>
 				</div>
 
-				{/* A layer over the top, not a mask on the device. A mask applies to
-				    the element's whole rendering — including its box-shadow — so the
-				    fade took the shadow with it. The cost is that this has to match
-				    the surface's colour, which is why it fades to white. */}
+				{/* A layer over the top, not a mask on the device: a mask applies to
+				    the element's whole rendering — box-shadow included — so it took
+				    the shadow with it. The cost is being colour-coupled to what's
+				    behind, which is now the card itself, hence gray-100. */}
 				<div
-					style={{ height: PHONE.fade, bottom: -1 }}
-					className="absolute inset-x-0 bg-linear-to-b from-transparent to-white"
+					style={{
+						height: PHONE.fade,
+						bottom: 0,
+						// --post-bg is set by the card and follows its hover state; the
+						// fallback covers a card that never hovers, like a post page.
+						backgroundImage:
+							"linear-gradient(to bottom, transparent, var(--post-bg, var(--color-gray-100)))",
+					}}
+					className="absolute inset-x-0"
 				/>
 
 			</div>
@@ -358,7 +392,7 @@ function PhoneMedia({
  * the design's cover did. The cover is taller than the square, so it clips at
  * the bottom, which is also what the design shows.
  */
-function BookCover({ book }: { book: Book }) {
+function BookCover({ book, hovered }: { book: Book; hovered?: boolean }) {
 	return (
 		<div
 			style={{ width: MEDIA_SIZE, height: MEDIA_SIZE }}
@@ -391,7 +425,7 @@ function BookCover({ book }: { book: Book }) {
 						viewport={{ once: true, amount: 0.4 }}
 						transition={{ type: "spring", duration: 0.6, bounce: 0.25 }}
 					>
-						<Book3D book={book} open />
+						<Book3D book={book} open openMore={hovered} />
 					</motion.div>
 				</div>
 			</div>

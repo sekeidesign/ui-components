@@ -473,3 +473,76 @@ body {
     opacity: 0;
   }
 }
+
+
+/* The phone's bottom fade dissolves into the card, so its end colour has to
+   track the card's own background — including the hover state. Exposed as a
+   variable the fade reads, rather than hardcoding two hex values.
+
+   srgb, not oklab: the hover background is `bg-gray-200/40`, and browsers
+   alpha-composite in gamma-encoded sRGB, so mixing in any other space would
+   land on a slightly different colour than the card actually paints. */
+.post-fade-host {
+  --post-bg: var(--color-gray-100);
+}
+
+.post-fade-host:hover:not(:has([data-no-card-link]:hover)) {
+  --post-bg: color-mix(in srgb, var(--color-gray-200) 40%, var(--color-gray-100));
+}
+
+/* Range inputs, styled rather than left native. --fill is the played portion,
+   set inline by the Slider component, so the track shows progress without JS
+   painting on every frame. Vendor pseudo-elements can't be combined in one
+   selector list — a browser drops the whole rule if it doesn't recognise part
+   of it — so WebKit and Firefox are declared separately. */
+.control-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 20px;
+  background: transparent;
+  cursor: grab;
+}
+
+.control-slider:active {
+  cursor: grabbing;
+}
+
+.control-slider::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    to right,
+    var(--color-gray-800) var(--fill, 0%),
+    var(--color-gray-200) var(--fill, 0%)
+  );
+  box-shadow: inset 0 1px 2px #36415312;
+}
+
+.control-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-top: -4px;
+  border-radius: 9999px;
+  background: #fff;
+  box-shadow: 0 0 0 1px #6a72821a, 0 1px 3px #36415312;
+}
+
+.control-slider::-moz-range-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    to right,
+    var(--color-gray-800) var(--fill, 0%),
+    var(--color-gray-200) var(--fill, 0%)
+  );
+}
+
+.control-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 0;
+  border-radius: 9999px;
+  background: #fff;
+  box-shadow: 0 0 0 1px #6a72821a, 0 1px 3px #36415312;
+}

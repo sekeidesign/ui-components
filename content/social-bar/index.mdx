@@ -1,0 +1,52 @@
+---
+# TODO: written in my words, not yours — rewrite the body if you want it in
+# your voice. The date puts it alongside today's posts.
+date: 2026-08-23
+title: Social bar
+kind: experiment
+tags: [CSS, mask, Motion, Base UI, Upstash]
+excerpt: Reactions and a copy-link button, with a dot-matrix wave rippling out from whichever one you press.
+preview: live
+previewCost: light
+# No previewHeight: the stage falls back to the 240px floor and the box
+# sizes to the control panel, which is taller than that anyway.
+previewClassName: p-0 items-stretch
+sourceUrl: https://github.com/sekeidesign/ui-components/blob/main/app/ui-kit/social/SocialBar.tsx
+---
+
+Two counters that persist to Upstash, and everything around them that makes
+pressing one feel like something happened. The knobs above are the real
+variables — the bar reads each one with a `var()` fallback, so the sliders
+override the shipped defaults without the component knowing it's being poked at.
+
+## The wave
+
+A dot lattice, invisible until a masked ring travels across it. Masking rather
+than scaling matters: scaling the layer would enlarge the dots as the wave
+moved, so the lattice itself would appear to grow. With a mask the dots hold
+their size and the wave crosses them.
+
+The ring's radius is a registered `@property`, which is what makes it
+animatable at all — an unregistered custom property jumps between values
+instead of interpolating.
+
+## The press
+
+Two transitions, not one. Pressing snaps down fast and linear; releasing runs an
+overshooting cubic-bezier so the icon springs back past its resting size. No
+spring solver, and no per-frame JavaScript — a transform transition stays on the
+compositor, which matters when a feed holds dozens of these sitting idle.
+
+The amplitude is the hard part. The overshoot is a fraction of the press
+*delta*, not of the icon, so a 16px glyph pressed to 0.9 peaks about 1% over
+resting — a real spring, and completely invisible. Pull the depth slider up and
+down to see where it starts reading.
+
+## The copy button
+
+The link icon and the check swap in the same slot on blur, scale and opacity
+together, rather than one replacing the other. The wave tints itself sky instead
+of orange, so the two actions are distinguishable without a label.
+
+Counters run on a memory transport here: clicking is real, the persistence
+isn't, so playing with it costs nothing.
