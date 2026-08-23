@@ -72,7 +72,7 @@ export default async function TimelinePage({
 			.filter((entry) => !entry.hasPage)
 			.map(async (entry) => {
 				const { default: Body } = await import(
-					`../../../content/${entry.slug}/index.mdx`
+					`../../content/${entry.slug}/index.mdx`
 				);
 				bodies[entry.slug] = <Body />;
 			}),
@@ -85,7 +85,8 @@ export default async function TimelinePage({
 					<PostCard entry={entry} eager={index === 0}>
 						{bodies[entry.slug]}
 					</PostCard>
-					<ExperimentDivider inline />
+					{/* Dividers sit between posts, so the feed doesn't end on one. */}
+					{index < entries.length - 1 && <ExperimentDivider inline />}
 				</Fragment>
 			))}
 		</>

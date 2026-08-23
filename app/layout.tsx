@@ -3,7 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { Sidebar } from "./Sidebar";
+import { SocialProvider } from "./ui-kit/social/SocialProvider";
 import { TooltipProvider, TooltipSurface } from "./ui-kit/Tooltip";
+import { getTimeline } from "@/lib/timeline";
 import { Footer } from "./Footer";
 
 const geistSans = Geist({
@@ -62,7 +64,15 @@ export default function RootLayout({
 						{/* One continuous panel: posts are separated by dividers, not by
 						    being individual blocks. */}
 						<div className="panel flex flex-col w-full md:max-w-screen-md shrink-0 h-full overflow-y-auto">
-							<main className="flex flex-col w-full p-5">{children}</main>
+							<main className="flex flex-col w-full p-5">
+								{/* One counts fetch for the whole app, so navigating between
+								    the feed and a post doesn't refetch. */}
+								<SocialProvider
+									slugs={getTimeline().map((entry) => entry.slug)}
+								>
+									{children}
+								</SocialProvider>
+							</main>
 							<Footer className="md:hidden grid" />
 						</div>
 						<div className="panel stripes flex-1 shrink xl:block hidden" />

@@ -14,6 +14,9 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      // The timeline became the home page; filters are root-level segments.
+      { source: "/timeline", destination: "/", permanent: true },
+      { source: "/timeline/:slug", destination: "/:slug", permanent: true },
       // Case studies moved from route folders into content/, served by /p/<slug>.
       { source: "/case-studies/tato", destination: "/p/tato", permanent: true },
       {

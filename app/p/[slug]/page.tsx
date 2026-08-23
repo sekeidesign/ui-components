@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { ExperimentDivider } from "@ui-kit/Experiment";
 import { PanelRow } from "@ui-kit/PanelRow";
 import { PostCard } from "@ui-kit/post/PostCard";
-import { SocialProvider } from "@ui-kit/social/SocialProvider";
 import { TagRow } from "@ui-kit/TagRow";
 import { getTimeline } from "@/lib/timeline";
 
@@ -53,9 +52,7 @@ export default async function PostPage({
 		<>
 			{/* The identical card from the feed, unlinked because this is where it
 			    would link to. Everything below is the post's own content. */}
-			<SocialProvider slugs={[entry.slug]}>
-				<PostCard entry={entry} eager linked={false} />
-			</SocialProvider>
+			<PostCard entry={entry} eager linked={false} />
 
 			<ExperimentDivider inline />
 

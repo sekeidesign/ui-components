@@ -50,10 +50,21 @@ function writeStored(slug: string, counts: SocialCounts) {
 export function SocialProvider({
 	slugs,
 	children,
+	/**
+	 * "memory" keeps everything local: no counts fetched, nothing written to
+	 * Redis, and localStorage left alone. For working on the interaction
+	 * without spending commands or leaving state behind on real posts.
+	 */
+	transport = "api",
+	/** Starting counts, for the memory transport. */
+	seed,
 }: {
 	slugs: string[];
 	children: React.ReactNode;
+	transport?: "api" | "memory";
+	seed?: CountMap;
 }) {
+	const isMemory = transport === "memory";
 	const [counts, setCounts] = useState<CountMap>({});
 	const [mine, setMine] = useState<CountMap>({});
 
@@ -67,16 +78,22 @@ export function SocialProvider({
 	// Active state is read after mount: touching localStorage during render
 	// would mismatch the server HTML.
 	useEffect(() => {
+		if (isMemory) return;
 		const stored: CountMap = {};
 		for (const slug of slugKey ? slugKey.split(",") : []) {
 			stored[slug] = readStored(slug);
 		}
 		setMine(stored);
-	}, [slugKey]);
+	}, [slugKey, isMemory]);
+
+	// Seeded once so the sandbox starts from realistic numbers.
+	useEffect(() => {
+		if (isMemory && seed) setCounts(seed);
+	}, [isMemory, seed]);
 
 	// One request for the whole feed, not one per post.
 	useEffect(() => {
-		if (!slugKey) return;
+		if (isMemory || !slugKey) return;
 		let cancelled = false;
 		fetch(`/api/social?slugs=${encodeURIComponent(slugKey)}`)
 			.then((r) => (r.ok ? r.json() : null))
@@ -89,9 +106,11 @@ export function SocialProvider({
 		return () => {
 			cancelled = true;
 		};
-	}, [slugKey]);
+	}, [slugKey, isMemory]);
 
-	const flush = useCallback((slug: string, keepalive = false) => {
+	const flush = useCallback(
+		(slug: string, keepalive = false) => {
+		if (isMemory) return;
 		const deltas = pending.current[slug];
 		if (!deltas) return;
 		delete pending.current[slug];
@@ -119,7 +138,9 @@ export function SocialProvider({
 			.catch(() => {
 				// Optimistic count stands; the next click retries.
 			});
-	}, []);
+		},
+		[isMemory],
+	);
 
 	const bump = useCallback(
 		(slug: string, kind: SocialKind) => {
@@ -131,7 +152,7 @@ export function SocialProvider({
 			setMine((prev) => {
 				const current = prev[slug] ?? emptyCounts();
 				const next = { ...current, [kind]: current[kind] + 1 };
-				writeStored(slug, next);
+				if (!isMemory) writeStored(slug, next);
 				return { ...prev, [slug]: next };
 			});
 
@@ -143,7 +164,7 @@ export function SocialProvider({
 			clearTimeout(timers.current[slug]);
 			timers.current[slug] = setTimeout(() => flush(slug), FLUSH_DELAY);
 		},
-		[flush],
+		[flush, isMemory],
 	);
 
 	// Don't lose the last clicks when the reader navigates away mid-debounce.

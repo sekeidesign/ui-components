@@ -407,3 +407,69 @@ body {
     ui-sans-serif, system-ui, sans-serif;
   font-family: var(--lifeline-font);
 }
+
+/* Dot-matrix chip surface, after Clerk's integrations grid. Kept in CSS rather
+   than canvas — a canvas per chip would mean a context and an rAF loop for a
+   26px surface, where this is a background image and one masked overlay.
+
+   Geometry comes from --dot-gap and --dot-size, read with var() fallbacks
+   rather than defaults declared here, so an ancestor can override them (the
+   sandbox sliders do exactly that).
+
+   The base lattice is INVISIBLE by default: --dot-color is transparent, so only
+   the ripple's masked ring lights any dots. Set --dot-color to reveal it. */
+.dot-matrix {
+  background-image: radial-gradient(
+    var(--dot-color, transparent) var(--dot-size, 0.5px),
+    transparent calc(var(--dot-size, 0.5px) + 0.5px)
+  );
+  background-size: var(--dot-gap, 3px) var(--dot-gap, 3px);
+  background-position: center;
+}
+
+/* Registered so the ring radius can be interpolated by an animation; an
+   unregistered custom property would jump rather than tween. */
+@property --ripple-r {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+/* The wave: the same lattice in orange, revealed through an expanding ring
+   mask. Masking rather than scaling the element keeps the dots a constant size
+   as the wave travels, so it reads as a wave crossing the lattice instead of
+   the lattice itself growing. */
+.dot-ripple {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    var(--ripple-color, #ff5500) var(--dot-size, 0.5px),
+    transparent calc(var(--dot-size, 0.5px) + 0.5px)
+  );
+  background-size: var(--dot-gap, 3px) var(--dot-gap, 3px);
+  background-position: center;
+  mask-image: radial-gradient(
+    circle at var(--ripple-x, 50%) 50%,
+    transparent calc(var(--ripple-r) - 14px),
+    #000 var(--ripple-r),
+    transparent calc(var(--ripple-r) + 14px)
+  );
+  animation: dot-ripple var(--ripple-duration, 800ms) var(--ripple-delay, 80ms)
+    ease-out both;
+}
+
+@keyframes dot-ripple {
+  0% {
+    --ripple-r: 0px;
+    opacity: 0;
+  }
+  1% {
+    --ripple-r: 0px;
+    opacity: 1;
+  }
+  100% {
+    --ripple-r: 110px;
+    opacity: 0;
+  }
+}

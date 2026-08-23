@@ -63,14 +63,16 @@ export function TimelineTabs({
 	counts: Partial<Record<EntryKind, number>>;
 }) {
 	const pathname = usePathname();
-	const segment = pathname.split("/").filter(Boolean)[1];
+	const segment = pathname.split("/").filter(Boolean)[0];
 	const active = segment && segment in FILTER_KINDS ? segment : undefined;
+	// Only the home page is "All posts". On a post or the lab, no tab is current.
+	const allActive = pathname === "/";
 	const total = Object.values(counts).reduce((sum, n) => sum + n, 0);
 
 	return (
 		// Wraps rather than scrolls: the sidebar is narrower than the feed was.
 		<div className="flex flex-wrap items-center gap-1.5">
-			<Tab href={filterHref()} active={!active} padding="px-2">
+			<Tab href={filterHref()} active={allActive} padding="px-2">
 				All posts
 				<Count value={total} />
 			</Tab>

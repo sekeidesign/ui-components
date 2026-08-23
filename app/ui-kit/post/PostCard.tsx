@@ -47,6 +47,8 @@ export function PostCard({
 				}}
 			/>
 		)
+	) : entry.kind === "launch" && entry.cover ? (
+		<Post.PhoneMedia src={entry.cover} alt={entry.title} priority={eager} />
 	) : !isExperiment && entry.kind !== "note" && (entry.cover || entry.icon) ? (
 		<Post.Media
 			src={entry.cover}

@@ -17,6 +17,7 @@ import {
 } from "../icons/KindIcons";
 import { Book3D, type Book } from "../book-shelf";
 import { TooltipTrigger } from "../Tooltip";
+import { ICON_PRESS } from "../press";
 import { PostRow } from "./PostRow";
 import type { EntryKind } from "@/lib/timeline";
 
@@ -39,8 +40,54 @@ const CHIP = "bg-white ring-1 ring-gray-500/10 shadow-skew";
 
 const MEDIA_SIZE = 179;
 
-/** Even breathing room on the left, top and right of a book cover. */
-const BOOK_INSET = 20;
+/**
+ * The nested-bezel surface from Problems: a gray-100 frame with a ring, holding
+ * a white card with its own ring. Reused here so a post's artwork sits on the
+ * same surface as the figures inside a case study.
+ */
+const SURFACE_OUTER =
+	"ring ring-gray-500/10 bg-gray-100 shadow-skew overflow-hidden p-1";
+const SURFACE_INNER =
+	"ring ring-gray-500/10 bg-white shadow-skew overflow-hidden";
+
+/** A company or app mark in the same nested frame as the media surface. */
+function FramedIcon({
+	src,
+	alt,
+	size,
+}: {
+	src: string;
+	alt: string;
+	size: number;
+}) {
+	return (
+		// Tighter and white, rather than the media surface's p-1 gray-100 frame: a
+		// logo is small enough that a wide tinted bezel swallows it.
+		<div className="shrink-0 rounded-lg p-0.5 bg-white ring ring-gray-500/10 shadow-skew overflow-hidden">
+			<div className={cn("flex rounded-md", SURFACE_INNER)}>
+				<Image src={src} alt={alt} width={size} height={size} />
+			</div>
+		</div>
+	);
+}
+
+/** Inner width after the frame's padding, for image sizing. */
+const MEDIA_INNER = MEDIA_SIZE - 8;
+
+/**
+ * Phone geometry from the design. Taller than the square on purpose: the device
+ * runs off the bottom and a gradient dissolves it into the surface, so it reads
+ * as a screen you're looking down at rather than a cropped rectangle.
+ */
+const PHONE = { width: 120, height: 257, top: 19, fade: 79 };
+
+
+/**
+ * Breathing room on the left, top and right of a book cover, measured inside
+ * the surface's white card — the frame's own p-1 adds 4px on top, so this reads
+ * as 20px from the card's outer edge.
+ */
+const BOOK_INSET = 16;
 
 /**
  * Projected width of Book3D's open cover at scale 1, in px.
@@ -53,8 +100,13 @@ const BOOK_INSET = 20;
  */
 const BOOK_PROJECTED_WIDTH = 130.5;
 
-/** Derived, so BOOK_INSET is the only number to tune. */
-const BOOK_SCALE = (MEDIA_SIZE - BOOK_INSET * 2) / BOOK_PROJECTED_WIDTH;
+/**
+ * Derived, so BOOK_INSET is the only number to tune. Measured against
+ * MEDIA_INNER, not MEDIA_SIZE: the book sits inside the surface's white card,
+ * and scaling to the outer box overhangs it by the frame's padding — which
+ * lands entirely on the right, since the cover is pinned to the left edge.
+ */
+const BOOK_SCALE = (MEDIA_INNER - BOOK_INSET * 2) / BOOK_PROJECTED_WIDTH;
 
 function Root({
 	children,
@@ -107,10 +159,13 @@ function Meta({ kind, date }: { kind: EntryKind; date: string }) {
 	);
 }
 
+/**
+ * The shortest form Intl offers: 8/23/26. UTC because a post's date is a plain
+ * yyyy-mm-dd with no time — parsing it locally would shift it a day west of
+ * Greenwich.
+ */
 const DATE_FORMAT = new Intl.DateTimeFormat("en-US", {
-	month: "long",
-	day: "numeric",
-	year: "numeric",
+	dateStyle: "short",
 	timeZone: "UTC",
 });
 
@@ -176,16 +231,7 @@ function Title({
 					</span>
 				)}
 			</div>
-			{icon && (
-				<div
-					className={cn(
-						"flex items-center justify-center overflow-clip rounded-lg shrink-0",
-						CHIP,
-					)}
-				>
-					<Image src={icon} alt={iconAlt ?? ""} width={40} height={40} />
-				</div>
-			)}
+			{icon && <FramedIcon src={icon} alt={iconAlt ?? ""} size={40} />}
 		</div>
 	);
 }
@@ -228,28 +274,79 @@ function Media({
 	return (
 		<div
 			style={{ width: MEDIA_SIZE, height: MEDIA_SIZE }}
-			className="relative shrink-0 overflow-clip rounded-xl bg-gray-400/10 border border-gray-400/10"
+			className={cn("shrink-0 rounded-xl", SURFACE_OUTER)}
 		>
-			{src && (
-				<Image
-					src={src}
-					alt={alt}
-					fill
-					sizes={`${MEDIA_SIZE}px`}
-					priority={priority}
-					className="object-cover"
-				/>
-			)}
-			{badge && (
+			<div className={cn("relative size-full rounded-lg", SURFACE_INNER)}>
+				{src && (
+					<Image
+						src={src}
+						alt={alt}
+						fill
+						sizes={`${MEDIA_INNER}px`}
+						priority={priority}
+						className="object-cover"
+					/>
+				)}
+				{badge && (
+					<div className="absolute top-[5px] right-[5px]">
+						<FramedIcon src={badge} alt={badgeAlt ?? ""} size={24} />
+					</div>
+				)}
+			</div>
+		</div>
+	);
+}
+
+/**
+ * A screenshot in a phone, for app launches. The device is just a rounded rect
+ * with a hairline outline and a layered shadow — no bezel artwork — so any
+ * screenshot drops straight in.
+ */
+function PhoneMedia({
+	src,
+	alt,
+	priority,
+}: {
+	src: string;
+	alt: string;
+	priority?: boolean;
+}) {
+	return (
+		<div
+			style={{ width: MEDIA_SIZE, height: MEDIA_SIZE }}
+			className={cn("shrink-0 rounded-xl", SURFACE_OUTER)}
+		>
+			<div className={cn("relative size-full rounded-lg", SURFACE_INNER)}>
 				<div
-					className={cn(
-						"absolute top-[5px] right-[5px] flex items-center justify-center overflow-clip rounded-md",
-						CHIP,
-					)}
+					style={{
+						width: PHONE.width,
+						height: PHONE.height,
+						top: PHONE.top,
+						boxShadow:
+							"0 8px 24px #99a1af1a, 0 4px 12px #99a1af1a, 0 2px 3px #99a1af1a",
+					}}
+					className="absolute left-1/2 -translate-x-1/2 overflow-clip rounded-xl outline outline-1 outline-gray-400/15 bg-white"
 				>
-					<Image src={badge} alt={badgeAlt ?? ""} width={24} height={24} />
+					<Image
+						src={src}
+						alt={alt}
+						fill
+						sizes={`${PHONE.width}px`}
+						priority={priority}
+						className="object-cover"
+					/>
 				</div>
-			)}
+
+				{/* A layer over the top, not a mask on the device. A mask applies to
+				    the element's whole rendering — including its box-shadow — so the
+				    fade took the shadow with it. The cost is that this has to match
+				    the surface's colour, which is why it fades to white. */}
+				<div
+					style={{ height: PHONE.fade, bottom: -1 }}
+					className="absolute inset-x-0 bg-linear-to-b from-transparent to-white"
+				/>
+
+			</div>
 		</div>
 	);
 }
@@ -265,35 +362,38 @@ function BookCover({ book }: { book: Book }) {
 	return (
 		<div
 			style={{ width: MEDIA_SIZE, height: MEDIA_SIZE }}
-			className="relative shrink-0 overflow-clip rounded-xl bg-gray-400/10 border border-gray-400/10"
+			className={cn("shrink-0 rounded-xl", SURFACE_OUTER)}
 		>
-			{/* pointer-events-none: Book3D is a <button>, so without this it would
-			    take the cursor and swallow the card's hover and click. */}
-			{/* Rises into the square from below, clipped by the box on the way up.
-			    The scale lives on this wrapper and the travel on the inner one, so
-			    Motion's transform doesn't overwrite the scale. */}
-			<div
-				className="absolute origin-top-left pointer-events-none"
-				// Book3D shifts its open cover left by its own 26px depth, and this
-				// paddingLeft cancels that exactly — so the cover's left edge lands on
-				// the wrapper origin at any scale, and BOOK_INSET reads the same on
-				// the left as on the right. Height still overruns the square, so it
-				// clips at the bottom by design.
-				style={{
-					top: BOOK_INSET,
-					left: BOOK_INSET,
-					paddingLeft: 26,
-					transform: `scale(${BOOK_SCALE})`,
-				}}
-			>
-				<motion.div
-					initial={{ y: 40, opacity: 0 }}
-					whileInView={{ y: 0, opacity: 1 }}
-					viewport={{ once: true, amount: 0.4 }}
-					transition={{ type: "spring", duration: 0.6, bounce: 0.25 }}
+			<div className={cn("relative size-full rounded-lg", SURFACE_INNER)}>
+				{/* Rises into the square from below, clipped by the surface on the way
+				    up. The scale lives on this wrapper and the travel on the inner one,
+				    so Motion's transform doesn't overwrite the scale.
+
+				    pointer-events-none because Book3D is a <button>: without it, the
+				    cover takes the cursor and swallows the card's hover and click. */}
+				<div
+					className="absolute origin-top-left pointer-events-none"
+					// Book3D shifts its open cover left by its own 26px depth, and this
+					// paddingLeft cancels that exactly — so the cover's left edge lands
+					// on the wrapper origin at any scale, and BOOK_INSET reads the same
+					// on the left as on the right. Height still overruns the square, so
+					// it clips at the bottom by design.
+					style={{
+						top: BOOK_INSET,
+						left: BOOK_INSET,
+						paddingLeft: 26,
+						transform: `scale(${BOOK_SCALE})`,
+					}}
 				>
-					<Book3D book={book} open />
-				</motion.div>
+					<motion.div
+						initial={{ y: 40, opacity: 0 }}
+						whileInView={{ y: 0, opacity: 1 }}
+						viewport={{ once: true, amount: 0.4 }}
+						transition={{ type: "spring", duration: 0.6, bounce: 0.25 }}
+					>
+						<Book3D book={book} open />
+					</motion.div>
+				</div>
 			</div>
 		</div>
 	);
@@ -322,11 +422,11 @@ function CodeLink({ href }: { href: string }) {
 						/>
 					)}
 					className={cn(
-						"flex items-center justify-center size-[26px] rounded-full shrink-0 text-gray-500 hover:bg-gray-100 hover:text-gray-700",
+						"group flex items-center justify-center size-[26px] rounded-full shrink-0 text-gray-500 hover:bg-gray-50",
 						CHIP,
 					)}
 				>
-					<CodeIcon filled />
+					<CodeIcon filled className={ICON_PRESS} />
 				</TooltipTrigger>
 
 	);
@@ -338,6 +438,7 @@ export const Post = Object.assign(Root, {
 	Title,
 	Description,
 	Media,
+	PhoneMedia,
 	BookCover,
 	Footer,
 	CodeLink,

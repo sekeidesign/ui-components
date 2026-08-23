@@ -2,9 +2,8 @@ import Image from "next/image";
 import { cn } from "./cn";
 
 /**
- * The portrait treatment from the old home panel: a white bezel, a faint inner
- * highlight blended over the image, and a hairline ring — so it reads as a
- * physical object rather than a cropped circle.
+ * The portrait treatment from the old home panel: a white bezel and a hairline
+ * ring, so it reads as a physical object rather than a cropped circle.
  */
 export function Avatar({
 	size = 64,
@@ -21,7 +20,6 @@ export function Avatar({
 			)}
 		>
 			<div className="size-full relative">
-				<div className="size-full absolute inset-0 inset-ring inset-ring-gray-50/25 mix-blend-plus-lighter rounded-full z-20" />
 				<Image
 					src="/avatar.jpg"
 					alt="PG Gonni"
