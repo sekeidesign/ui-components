@@ -20,8 +20,9 @@ export const FireIcon = ({
 			xmlns="http://www.w3.org/2000/svg"
 			className={className}
 			style={{ flexShrink: 0 }}
+			aria-hidden="true"
+			focusable="false"
 		>
-			<title>Reaction</title>
 			{filled ? (
 				<path
 					fillRule="evenodd"

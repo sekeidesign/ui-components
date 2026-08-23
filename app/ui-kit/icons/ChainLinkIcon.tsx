@@ -14,8 +14,9 @@ export const ChainLinkIcon = ({
 			xmlns="http://www.w3.org/2000/svg"
 			className={className}
 			style={{ flexShrink: 0 }}
+			aria-hidden="true"
+			focusable="false"
 		>
-			<title>Copy link</title>
 			<path
 				d="M3.923 6.471L3.159 7.236C1.614 8.781 1.614 11.299 3.159 12.843 4.698 14.383 7.221 14.388 8.766 12.843L9.531 12.079"
 				stroke="currentColor"

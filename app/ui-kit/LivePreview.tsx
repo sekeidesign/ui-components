@@ -1,8 +1,6 @@
 "use client";
 
-import { CommandLineIcon } from "@heroicons/react/16/solid";
 import { useInView } from "motion/react";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "./cn";
 import { previews } from "@/content/previews.generated";
@@ -14,7 +12,6 @@ interface LivePreviewProps {
 	previewCost: PreviewCost;
 	/** Reserved px, so mount/unmount never shifts the feed below it. */
 	previewHeight: number;
-	sourceUrl?: string;
 	/** Mount immediately instead of waiting for scroll. For above-the-fold. */
 	eager?: boolean;
 	className?: string;
@@ -24,7 +21,6 @@ export function LivePreview({
 	slug,
 	previewCost,
 	previewHeight,
-	sourceUrl,
 	eager = false,
 	className,
 }: LivePreviewProps) {
@@ -53,22 +49,15 @@ export function LivePreview({
 	return (
 		<div
 			ref={ref}
+			// The card is a link, but this surface is interactive in its own right —
+			// this marks it as excluded from the card's hover fill and click.
+			data-no-card-link
 			style={{ minHeight: previewHeight }}
 			className={cn(
-				"relative shadow-skew flex items-center justify-center rounded-xl ring-1 ring-gray-200 w-full p-10 h-fit bg-white overflow-hidden",
+				"relative flex items-center justify-center self-stretch w-full min-h-60 p-10 rounded-xl overflow-clip bg-white ring-1 ring-gray-200 shadow-skew cursor-default",
 				className,
 			)}
 		>
-			{sourceUrl && (
-				<Link
-					href={sourceUrl}
-					target="_blank"
-					title="View source code"
-					className="absolute top-2 right-2 z-10 bg-gray-200/60 hover:bg-gray-200 hover:text-gray-700 size-7 flex items-center justify-center rounded-md text-gray-500"
-				>
-					<CommandLineIcon className="w-4 h-4" />
-				</Link>
-			)}
 			{mounted && Preview && (
 				<PreviewActiveProvider value={eager || visible}>
 					<Preview />

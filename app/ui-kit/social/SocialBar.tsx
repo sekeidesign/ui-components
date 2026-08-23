@@ -1,10 +1,10 @@
 "use client";
 
-import { Tooltip } from "@base-ui-components/react/tooltip";
 import { useEffect, useRef, useState } from "react";
 import "slot-text/style.css";
 import { SlotText } from "slot-text/react";
 import { cn } from "../cn";
+import { TooltipTrigger } from "../Tooltip";
 import { ChainLinkIcon } from "../icons/ChainLinkIcon";
 import { FireIcon } from "../icons/FireIcon";
 import { useSocial } from "./SocialProvider";
@@ -27,22 +27,7 @@ const COUNT_CLASS =
 
 // #6A72821A ring + the theme's own shadow-skew, straight from the design.
 const SEGMENT =
-	"flex items-center justify-center gap-1 h-6.5 w-fit bg-white ring-1 ring-gray-500/10 shadow-skew text-gray-500 hover:text-gray-700 transition-colors cursor-pointer";
-
-function TooltipLabel({ children }: { children: React.ReactNode }) {
-	return (
-		<Tooltip.Portal>
-			{/* z-50 clears Book3D's open cover (z-20) and the sticky filter bar
-			    (z-30). A positive z-index paints above z-index:auto regardless of
-			    DOM order, so being portaled to the body isn't enough on its own. */}
-			<Tooltip.Positioner side="top" sideOffset={6} className="z-50">
-				<Tooltip.Popup className="bg-gray-900 text-gray-50 font-[450] p-2 py-1 text-xs rounded-md">
-					{children}
-				</Tooltip.Popup>
-			</Tooltip.Positioner>
-		</Tooltip.Portal>
-	);
-}
+	"flex items-center justify-center gap-1 h-6.5 w-fit bg-white ring-1 ring-gray-500/10 shadow-skew text-gray-500 hover:bg-gray-100 hover:text-gray-700 cursor-pointer";
 
 export function SocialBar({
 	slug,
@@ -79,11 +64,10 @@ export function SocialBar({
 	};
 
 	return (
-		<Tooltip.Provider delay={200}>
 			<div className={cn("flex items-start gap-px", className)}>
-				<Tooltip.Root>
-					<Tooltip.Trigger
+				<TooltipTrigger
 						type="button"
+						payload={reacted ? "Add another reaction" : "Add a reaction"}
 						onClick={() => bump("fire")}
 						aria-label={`Add a reaction. ${counts.fire} so far`}
 						className={cn(SEGMENT, "rounded-l-full px-1.5")}
@@ -97,15 +81,11 @@ export function SocialBar({
 							options={COUNT_ROLL}
 							className={COUNT_CLASS}
 						/>
-					</Tooltip.Trigger>
-					<TooltipLabel>
-						{reacted ? "Add another reaction" : "Add a reaction"}
-					</TooltipLabel>
-				</Tooltip.Root>
+					</TooltipTrigger>
 
-				<Tooltip.Root>
-					<Tooltip.Trigger
+				<TooltipTrigger
 						type="button"
+						payload={copied ? "Copied" : "Copy link"}
 						onClick={onLink}
 						aria-label={`Copy link to this post. Copied ${counts.link} times`}
 						className={cn(SEGMENT, "rounded-r-full pl-1.5 pr-2")}
@@ -116,10 +96,7 @@ export function SocialBar({
 							options={COUNT_ROLL}
 							className={COUNT_CLASS}
 						/>
-					</Tooltip.Trigger>
-					<TooltipLabel>{copied ? "Copied" : "Copy link"}</TooltipLabel>
-				</Tooltip.Root>
+					</TooltipTrigger>
 			</div>
-		</Tooltip.Provider>
 	);
 }

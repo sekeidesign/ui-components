@@ -70,6 +70,7 @@ export function Book3D({
 				zIndex: open ? 20 : 1,
 				...style,
 			}}
+			initial={false}
 			animate={{ x: shiftX }}
 			transition={SPRING}
 		>
@@ -84,6 +85,7 @@ export function Book3D({
 				whileHover={{
 					y: 0,
 				}}
+				initial={false}
 				animate={{
 					rotateY: open ? COVER_ANGLE : SPINE_ANGLE,
 					x: open ? -DEPTH : 0,

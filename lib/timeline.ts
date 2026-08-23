@@ -51,6 +51,10 @@ export interface TimelineEntry {
 	linkLabel?: string;
 	/** Artwork: a path under public/ (`/covers/x.png`) or an absolute URL. */
 	cover?: string;
+	/** Secondary line under the title, e.g. the company on a work post. */
+	subtitle?: string;
+	/** Square mark: company or app icon. public/ path or absolute URL. */
+	icon?: string;
 	/** Book author. */
 	author?: string;
 	/** Book rating, 0–5. */
@@ -79,12 +83,38 @@ function fail(slug: string, message: string): never {
 	throw new Error(`content/${slug}/index.mdx: ${message}`);
 }
 
+/**
+ * Card copy for entries that don't declare an `excerpt` — a book's review, say,
+ * which is written once in the body and shown clamped on the card. Rough on
+ * purpose: the card clamps to a couple of lines anyway, so this only has to
+ * strip syntax, not render Markdown.
+ */
+function deriveExcerpt(body: string): string | undefined {
+	const text = body
+		.replace(/\{\/\*[\s\S]*?\*\/\}/g, "")
+		.replace(/^\s*(?:import|export)\s.+$/gm, "")
+		.replace(/```[\s\S]*?```/g, "")
+		.replace(/<[^>]+>/g, "")
+		.replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1")
+		// Headings go entirely — a heading isn't prose. List and quote markers
+		// lose the marker but keep their text.
+		.replace(/^\s{0,3}#{1,6}\s+.*$/gm, "")
+		.replace(/^\s{0,3}(?:>|[-*+]|\d+\.)\s+/gm, "")
+		.replace(/[*_`]/g, "")
+		.replace(/\s+/g, " ")
+		.trim();
+
+	if (!text) return undefined;
+	return text.length > 280 ? `${text.slice(0, 277).trimEnd()}…` : text;
+}
+
 function parseEntry(slug: string): TimelineEntry {
 	const source = fs.readFileSync(
 		path.join(CONTENT_ROOT, slug, "index.mdx"),
 		"utf8",
 	);
-	const data = matter(source).data as Partial<TimelineEntry>;
+	const parsed = matter(source);
+	const data = parsed.data as Partial<TimelineEntry>;
 
 	if (!data.title) fail(slug, "missing `title`");
 	if (!data.date) fail(slug, "missing `date`");
@@ -125,6 +155,16 @@ function parseEntry(slug: string): TimelineEntry {
 			`\`cover\` must start with "/" (a public/ path) or be an absolute URL, got "${data.cover}"`,
 		);
 
+	if (
+		data.icon &&
+		!data.icon.startsWith("/") &&
+		!/^https?:\/\//.test(data.icon)
+	)
+		fail(
+			slug,
+			`\`icon\` must start with "/" (a public/ path) or be an absolute URL, got "${data.icon}"`,
+		);
+
 	if (data.spineColor && !/^#[0-9a-fA-F]{3,8}$/.test(data.spineColor))
 		fail(slug, `\`spineColor\` must be a hex colour, got "${data.spineColor}"`);
 
@@ -143,7 +183,7 @@ function parseEntry(slug: string): TimelineEntry {
 		date,
 		kind: data.kind,
 		tags: data.tags ?? [],
-		excerpt: data.excerpt,
+		excerpt: data.excerpt ?? deriveExcerpt(parsed.content),
 		preview,
 		previewCost,
 		previewHeight: data.previewHeight ?? 240,
@@ -151,14 +191,16 @@ function parseEntry(slug: string): TimelineEntry {
 		link: data.link,
 		linkLabel: data.linkLabel,
 		cover: data.cover,
+		subtitle: data.subtitle,
+		icon: data.icon,
 		author: data.author,
 		rating: data.rating,
 		spineColor: data.spineColor,
 		coverAspect: data.coverAspect ?? "16 / 9",
-		// Notes and books are short enough that the feed shows all of them, so a
-		// page would just be the same words alone. Set `hasPage: true` on a book
-		// to give a longer review its own page.
-		hasPage: data.hasPage ?? !["note", "book"].includes(data.kind),
+		// A note's body already shows in full in the feed, so a page would just
+		// be the same words alone. Everything else gets one, which is also what
+		// makes the whole card a link.
+		hasPage: data.hasPage ?? data.kind !== "note",
 		sourceUrl: data.sourceUrl,
 		draft: data.draft ?? false,
 	};
