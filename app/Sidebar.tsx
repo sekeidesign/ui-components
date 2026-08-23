@@ -23,7 +23,7 @@ export const Sidebar = () => {
 	);
 
 	return (
-		<div className="w-full md:max-w-2xs xl:max-w-xs md:sticky top-0 md:h-full md:shrink-0 flex flex-col gap-px">
+		<div className="w-full md:max-w-2xs xl:max-w-xs md:sticky md:top-px md:h-[calc(100vh-2px)] md:shrink-0 flex flex-col gap-px">
 			<Link href="/timeline" className="panel p-4 flex flex-col gap-4">
 				<Avatar />
 				<div>

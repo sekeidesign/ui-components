@@ -56,16 +56,16 @@ export default function RootLayout({
 					    controls repositions the same element instead of swapping popups. */}
 					<TooltipSurface />
 					<FilterProvider>
-					<div className="font-[family-name:var(--font-geist-sans)] w-screen box-border text-[15px]">
+					<div className="font-[family-name:var(--font-geist-sans)] w-full box-border text-[15px]">
 					{/* Striped gutters flank the sidebar and the feed together, so the
 					    sidebar sits right against the content instead of being pushed
 					    away by a gutter of its own. */}
-					<div className="flex md:flex-row flex-col justify-center mx-auto min-h-screen md:h-screen p-px gap-px">
-						<div className="panel stripes flex-1 shrink md:block hidden" />
+					<div className="flex md:flex-row flex-col justify-center mx-auto min-h-screen p-px gap-px">
+						<div className="panel stripes flex-1 shrink md:block hidden md:sticky md:top-px md:self-start md:h-[calc(100vh-2px)]" />
 						<Sidebar />
 						{/* One continuous panel: posts are separated by dividers, not by
 						    being individual blocks. */}
-						<div className="panel flex flex-col w-full md:max-w-screen-md min-w-0 md:h-full md:overflow-y-auto">
+						<div className="panel flex flex-col w-full md:max-w-screen-md min-w-0">
 							<main className="flex flex-col w-full p-2 md:p-5">
 								{/* One counts fetch for the whole app, so navigating between
 								    the feed and a post doesn't refetch. */}
@@ -77,7 +77,7 @@ export default function RootLayout({
 							</main>
 							<Footer className="md:hidden grid" />
 						</div>
-						<div className="panel stripes flex-1 shrink md:block hidden" />
+						<div className="panel stripes flex-1 shrink md:block hidden md:sticky md:top-px md:self-start md:h-[calc(100vh-2px)]" />
 					</div>
 				</div>
 					</FilterProvider>
