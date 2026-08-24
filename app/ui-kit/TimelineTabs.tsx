@@ -30,9 +30,12 @@ export function TimelineTabs({
 	available: FilterSlug[];
 	counts: Partial<Record<EntryKind, number>>;
 }) {
-	const { selected, toggle, clear } = useFilters();
+	const { selected, toggle, clear, active } = useFilters();
 	const total = Object.values(counts).reduce((sum, n) => sum + n, 0);
-	const showingAll = selected.size === 0;
+	// Only lit on the feed. Off it nothing is filtered, so "everything" isn't
+	// the current state either — the whole row reads unselected and each tab is
+	// a way back to the feed rather than a toggle.
+	const showingAll = active && selected.size === 0;
 
 	return (
 		// Wraps rather than scrolls: the sidebar is narrower than the feed was.

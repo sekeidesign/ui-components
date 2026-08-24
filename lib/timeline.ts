@@ -69,8 +69,20 @@ export interface TimelineEntry {
 	 * frontmatter overrides that, and a remote cover falls back to 16/9.
 	 */
 	coverAspect?: string;
-	/** Whether this entry gets its own /p/<slug> page. Notes default to false. */
+	/**
+	 * Whether this entry gets its own /p/<slug> page — and so whether its card
+	 * is a link at all. Set `hasPage: false` to publish the card while the page
+	 * behind it is still half-written: the route 404s and nothing links to it.
+	 * Notes default to false because their body is already the whole post.
+	 */
 	hasPage: boolean;
+	/**
+	 * Whether the body renders in full inside the feed card. True for a note
+	 * with no page of its own — there, the post IS the content. Kept separate
+	 * from `hasPage` so switching a page off doesn't spill an unfinished body
+	 * into the timeline instead.
+	 */
+	inline: boolean;
 	draft?: boolean;
 }
 
@@ -190,6 +202,17 @@ function parseEntry(slug: string): TimelineEntry {
 	if (data.linkLabel && !data.link)
 		fail(slug, "`linkLabel` set but no `link` to label");
 
+	// A note is short enough that a page would just be the same words alone, so
+	// it gets none by default. Everything else does, and `hasPage: false` takes
+	// it away again — the card still publishes, the page behind it doesn't.
+	const hasPage = data.hasPage ?? data.kind !== "note";
+
+	// Inline is a note without a page: the body IS the post, so the feed shows
+	// it in full. A note that does have a page (a role with case studies under
+	// it) keeps its body there, and switching any other kind's page off leaves
+	// its half-written body out of the feed rather than spilling it in.
+	const inline = data.inline ?? (data.kind === "note" && !hasPage);
+
 	return {
 		slug,
 		title: data.title,
@@ -211,10 +234,8 @@ function parseEntry(slug: string): TimelineEntry {
 		spineColor: data.spineColor,
 		coverAspect:
 			data.coverAspect ?? intrinsicAspect(data.cover) ?? "16 / 9",
-		// A note's body already shows in full in the feed, so a page would just
-		// be the same words alone. Everything else gets one, which is also what
-		// makes the whole card a link.
-		hasPage: data.hasPage ?? data.kind !== "note",
+		hasPage,
+		inline,
 		sourceUrl: data.sourceUrl,
 		draft: data.draft ?? false,
 	};

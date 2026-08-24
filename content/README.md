@@ -19,7 +19,8 @@ mis-sorting.
 | `tags` | no | `[]` | Rendered as chips |
 | `excerpt` | no | — | Feed copy. Notes don't use it — their body shows in full. |
 | `draft` | no | `false` | Visible in dev, excluded from production |
-| `hasPage` | no | `true`, or `false` for notes | Whether `/p/<slug>` exists |
+| `hasPage` | no | `true`, or `false` when `inline` | Whether `/p/<slug>` exists. `false` publishes the card but leaves it unclickable and 404s the page — for a post whose page isn't finished. |
+| `inline` | no | `true` for notes | Body renders in full in the feed. Independent of `hasPage`. |
 | `link` | no | — | Absolute http(s) URL. Renders an outbound button. |
 | `linkLabel` | no | link hostname | |
 | `cover` | no | — | Path under `public/`, must start with `/` |

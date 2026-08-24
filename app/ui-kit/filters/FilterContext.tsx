@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname, useRouter } from "next/navigation";
 import {
 	createContext,
 	type ReactNode,
@@ -20,7 +21,16 @@ interface FilterContextValue {
 	selected: Set<FilterSlug>;
 	toggle: (slug: FilterSlug) => void;
 	clear: () => void;
+	/**
+	 * Whether the filters actually apply to what's on screen. False anywhere but
+	 * the feed — on a post page nothing is being filtered, so every tab reads
+	 * unselected, "All posts" included.
+	 */
+	active: boolean;
 }
+
+/** The one route the filters describe. */
+const FEED_PATH = "/";
 
 const FilterContext = createContext<FilterContextValue | null>(null);
 
@@ -33,11 +43,26 @@ const FilterContext = createContext<FilterContextValue | null>(null);
  *
  * pushState rather than router.replace, so toggling a tab is instant and
  * doesn't refetch the route — and back/forward still work, via popstate.
+ *
+ * Off the feed the tabs stop being state and become navigation: nothing on a
+ * post page is filtered, so they show unselected and a click takes you home
+ * with that filter applied.
  */
 export function FilterProvider({ children }: { children: ReactNode }) {
 	const [selected, setSelected] = useState<Set<FilterSlug>>(new Set());
+	const router = useRouter();
+	// usePathname, not useSearchParams: the route stays static, and the param
+	// itself is read from window.location once the client is running.
+	const onFeed = usePathname() === FEED_PATH;
 
 	useEffect(() => {
+		// Leaving the feed drops the selection rather than carrying it along —
+		// a lit tab beside a post would claim the post was one of N results.
+		if (!onFeed) {
+			setSelected(new Set());
+			return;
+		}
+
 		const read = () =>
 			setSelected(
 				parseFilters(
@@ -47,21 +72,32 @@ export function FilterProvider({ children }: { children: ReactNode }) {
 		read();
 		window.addEventListener("popstate", read);
 		return () => window.removeEventListener("popstate", read);
-	}, []);
+	}, [onFeed]);
 
-	const write = useCallback((next: Set<FilterSlug>) => {
-		setSelected(next);
-		const params = new URLSearchParams(window.location.search);
-		const value = serializeFilters(next);
-		if (value) params.set(FILTER_PARAM, value);
-		else params.delete(FILTER_PARAM);
-		const query = params.toString();
-		window.history.pushState(
-			null,
-			"",
-			query ? `?${query}` : window.location.pathname,
-		);
-	}, []);
+	const write = useCallback(
+		(next: Set<FilterSlug>) => {
+			setSelected(next);
+			const value = serializeFilters(next);
+
+			// Off the feed there are no existing params worth preserving and no feed
+			// to re-filter in place, so this is a real navigation.
+			if (!onFeed) {
+				router.push(value ? `${FEED_PATH}?${FILTER_PARAM}=${value}` : FEED_PATH);
+				return;
+			}
+
+			const params = new URLSearchParams(window.location.search);
+			if (value) params.set(FILTER_PARAM, value);
+			else params.delete(FILTER_PARAM);
+			const query = params.toString();
+			window.history.pushState(
+				null,
+				"",
+				query ? `?${query}` : window.location.pathname,
+			);
+		},
+		[onFeed, router],
+	);
 
 	const toggle = useCallback(
 		(slug: FilterSlug) => {
@@ -76,8 +112,8 @@ export function FilterProvider({ children }: { children: ReactNode }) {
 	const clear = useCallback(() => write(new Set()), [write]);
 
 	const value = useMemo(
-		() => ({ selected, toggle, clear }),
-		[selected, toggle, clear],
+		() => ({ selected, toggle, clear, active: onFeed }),
+		[selected, toggle, clear, onFeed],
 	);
 
 	return (

@@ -10,13 +10,14 @@ export const metadata = {
 export default async function HomePage() {
 	const timeline = getTimeline();
 
-	// Entries without a page of their own show in full in the feed, so their
-	// bodies compile here on the server — the prose travels in the RSC payload
-	// instead of shipping MDX to the client.
+	// Entries that show in full in the feed compile their bodies here on the
+	// server — the prose travels in the RSC payload instead of shipping MDX to
+	// the client. Keyed off `inline`, not `!hasPage`: a post whose page is
+	// switched off while it's half-written must not spill into the feed instead.
 	const bodies: Record<string, ReactNode> = {};
 	await Promise.all(
 		timeline
-			.filter((entry) => !entry.hasPage)
+			.filter((entry) => entry.inline)
 			.map(async (entry) => {
 				const { default: Body } = await import(
 					`../content/${entry.slug}/index.mdx`
