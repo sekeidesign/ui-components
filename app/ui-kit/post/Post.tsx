@@ -74,6 +74,9 @@ function FramedIcon({
 /** Inner width after the frame's padding, for image sizing. */
 const MEDIA_INNER = MEDIA_SIZE - 8;
 
+/** The screen-md column minus the card's md:p-8, for full-width image sizing. */
+const COLUMN_INNER = 768 - 64;
+
 /**
  * Phone geometry from the design. Taller than the square on purpose: the device
  * runs off the bottom and a gradient dissolves it into the surface, so it reads
@@ -108,12 +111,25 @@ const BOOK_PROJECTED_WIDTH = 130.5;
  */
 const BOOK_SCALE = (MEDIA_INNER - BOOK_INSET * 2) / BOOK_PROJECTED_WIDTH;
 
+/**
+ * How a card arranges its copy and its artwork.
+ *
+ * `aside` — artwork beside the copy at every width. For a book cover or a phone:
+ * both read as objects sitting next to the text, and one blown up to the full
+ * card width would be a poster.
+ * `column` — one column at every width. A case study's screenshot runs full
+ * width inside it, in the slot a live demo occupies on an experiment, which is
+ * what makes those two kinds the big cards in the feed.
+ */
+export type PostLayout = "aside" | "column";
+
 function Root({
 	children,
 	className,
 	id,
 	/** Post page, if it has one. Makes the whole card a click target. */
 	href,
+	layout = "column",
 	onPointerEnter,
 	onPointerLeave,
 }: {
@@ -121,6 +137,7 @@ function Root({
 	className?: string;
 	id?: string;
 	href?: string;
+	layout?: PostLayout;
 	onPointerEnter?: PointerEventHandler<HTMLDivElement>;
 	onPointerLeave?: PointerEventHandler<HTMLDivElement>;
 }) {
@@ -131,7 +148,11 @@ function Root({
 			onPointerEnter={onPointerEnter}
 			onPointerLeave={onPointerLeave}
 			className={cn(
-				"flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-8 p-2 md:p-8",
+				"p-2 md:p-8",
+				layout === "aside" && "flex flex-row items-center gap-6 md:gap-8",
+				// No items-start: the body has to fill the card's width, or a live demo
+				// or cover inside it shrink-wraps to its own copy.
+				layout === "column" && "flex flex-col gap-2.5",
 				className,
 			)}
 		>
@@ -163,11 +184,11 @@ function Meta({
 	return (
 		<div className="flex items-center gap-1 self-stretch text-gray-400">
 			<Icon filled />
-			<span className="text-[14px] leading-[1.43] font-[500]">{label}</span>
-			<span className="px-1 text-[14px] leading-[1.43] font-[500]">•</span>
+			<span className="text-[13px] leading-[1.43] font-[500]">{label}</span>
+			<span className="px-1 text-[13px] leading-[1.43] font-[500]">•</span>
 			<time
 				dateTime={date}
-				className="shrink-0 text-[12px] leading-[1.33] font-mono font-[450]"
+				className="shrink-0 text-[13px] leading-[1.43] font-[500]"
 			>
 				{DATE_FORMAT.format(new Date(`${date}T00:00:00Z`))}
 			</time>
@@ -238,6 +259,7 @@ function Title({
 
 	return (
 		<div className="flex items-center gap-3 self-stretch">
+					{icon && <FramedIcon src={icon} alt={iconAlt ?? ""} size={40} />}
 			<div className="flex-1 min-w-0 flex flex-col items-start justify-center">
 				<div className="flex items-baseline gap-1.5 flex-wrap">
 					{href ? (
@@ -259,7 +281,6 @@ function Title({
 					</span>
 				)}
 			</div>
-			{icon && <FramedIcon src={icon} alt={iconAlt ?? ""} size={40} />}
 		</div>
 	);
 }
@@ -285,32 +306,41 @@ function Description({
 	);
 }
 
-/** Square artwork column: a cover or screenshot, with an optional corner mark. */
+/**
+ * A cover or screenshot, with an optional corner mark: full width at its own
+ * ratio, so nothing about it is cropped. Sits in the body above the social bar,
+ * the slot an experiment fills with its live demo.
+ */
 function Media({
 	src,
 	alt,
 	badge,
 	badgeAlt,
 	priority,
+	/** The image's own ratio as CSS aspect-ratio, e.g. "2000 / 1374". */
+	aspect,
 }: {
 	src?: string;
 	alt: string;
 	badge?: string;
 	badgeAlt?: string;
 	priority?: boolean;
+	aspect?: string;
 }) {
 	return (
-		<div
-			style={{ width: MEDIA_SIZE, height: MEDIA_SIZE }}
-			className={cn("shrink-0 rounded-xl", SURFACE_OUTER)}
-		>
-			<div className={cn("relative size-full rounded-lg", SURFACE_INNER)}>
+		<div className={cn("self-stretch w-full rounded-xl", SURFACE_OUTER)}>
+			<div
+				style={{ aspectRatio: aspect }}
+				className={cn("relative w-full rounded-lg", SURFACE_INNER)}
+			>
 				{src && (
 					<Image
 						src={src}
 						alt={alt}
 						fill
-						sizes={`${MEDIA_INNER}px`}
+						// The column caps at screen-md and the card spends 64px of it on
+						// padding, so a cover never needs more than what is left.
+						sizes={`(min-width: 768px) ${COLUMN_INNER}px, 100vw`}
 						priority={priority}
 						className="object-cover"
 					/>

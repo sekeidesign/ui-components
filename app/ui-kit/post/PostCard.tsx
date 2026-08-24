@@ -34,9 +34,9 @@ export function PostCard({
 	const isExperiment = entry.kind === "experiment";
 	const hasDemo = entry.preview === "live";
 
-	// A book's cover is portrait and overflows its box; every other kind uses
-	// the square media column. Experiments trade it for a full-width demo, and
-	// work posts carry their mark beside the title instead.
+	// A book's cover is portrait and overflows its box, and a launch gets a
+	// phone; a case study gets its screenshot full width. Experiments trade
+	// artwork for a live demo, and work posts carry their mark beside the title.
 	const media = isBook ? (
 		entry.cover && (
 			<Post.BookCover
@@ -60,13 +60,22 @@ export function PostCard({
 			badge={entry.icon}
 			badgeAlt={entry.subtitle ?? entry.title}
 			priority={eager}
+			aspect={entry.coverAspect}
 		/>
 	) : null;
+
+	// A book cover and a phone are objects beside the copy. A case study's
+	// screenshot instead runs full width in the body, above the social bar —
+	// the same slot and the same weight as an experiment's live demo, which is
+	// what makes those the big cards in the feed.
+	const aside = isBook || entry.kind === "launch";
+	const layout = media && aside ? "aside" : "column";
 
 	return (
 		<Post
 			id={entry.slug}
 			href={href}
+			layout={layout}
 			onPointerEnter={isBook ? () => setHovered(true) : undefined}
 			onPointerLeave={isBook ? () => setHovered(false) : undefined}
 		>
@@ -99,6 +108,8 @@ export function PostCard({
 					/>
 				)}
 
+				{layout === "column" && media}
+
 				<Post.Footer>
 					{/* One cluster on the left so the launch button reads as part of the
 					    same row of controls as the social chips. */}
@@ -118,7 +129,7 @@ export function PostCard({
 				</Post.Footer>
 			</Post.Body>
 
-			{media}
+			{layout === "aside" && media}
 		</Post>
 	);
 }

@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
+import { readPublicImageSize } from "./image-size";
 
 const CONTENT_ROOT = path.join(process.cwd(), "content");
 
@@ -61,7 +62,12 @@ export interface TimelineEntry {
 	rating?: number;
 	/** Book spine cloth colour for Book3D — covers rarely have a spine image. */
 	spineColor?: string;
-	/** CSS aspect-ratio for the cover box. Defaults to 16/9. */
+	/**
+	 * CSS aspect-ratio for the cover box, used wherever the cover isn't cropped
+	 * to a square — a full-width cover on mobile. Read off the file for covers
+	 * in public/, so a screenshot shows uncropped without anyone measuring it;
+	 * frontmatter overrides that, and a remote cover falls back to 16/9.
+	 */
 	coverAspect?: string;
 	/** Whether this entry gets its own /p/<slug> page. Notes default to false. */
 	hasPage: boolean;
@@ -106,6 +112,13 @@ function deriveExcerpt(body: string): string | undefined {
 
 	if (!text) return undefined;
 	return text.length > 280 ? `${text.slice(0, 277).trimEnd()}…` : text;
+}
+
+/** A public/ cover's own ratio as a CSS aspect-ratio, if it can be read. */
+function intrinsicAspect(cover: string | undefined): string | undefined {
+	if (!cover) return undefined;
+	const size = readPublicImageSize(cover);
+	return size && `${size.width} / ${size.height}`;
 }
 
 function parseEntry(slug: string): TimelineEntry {
@@ -196,7 +209,8 @@ function parseEntry(slug: string): TimelineEntry {
 		author: data.author,
 		rating: data.rating,
 		spineColor: data.spineColor,
-		coverAspect: data.coverAspect ?? "16 / 9",
+		coverAspect:
+			data.coverAspect ?? intrinsicAspect(data.cover) ?? "16 / 9",
 		// A note's body already shows in full in the feed, so a page would just
 		// be the same words alone. Everything else gets one, which is also what
 		// makes the whole card a link.
