@@ -301,7 +301,9 @@ function Portrait({
 				alt="PG Gonni"
 				width={332}
 				height={365}
-				className="relative z-30 size-full object-cover"
+				// Mirrored so the gaze runs into the card rather than off its left
+				// edge. Only the photo — the recess and its light stay put.
+				className="relative z-30 size-full object-cover -scale-x-100"
 			/>
 		</div>
 	);
