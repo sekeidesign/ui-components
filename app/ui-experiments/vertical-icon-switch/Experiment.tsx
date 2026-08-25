@@ -2,7 +2,7 @@
 
 import { Experiment } from "@ui-kit/Experiment";
 import { TextLink } from "@ui-kit/TextLink";
-import { VerticalIconSwitch } from "./VerticalIconSwitch";
+import { VerticalIconSwitch } from "@/content/vertical-icon-switch/VerticalIconSwitch";
 
 export function VerticalIconSwitchExperiment() {
 	return (

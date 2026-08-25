@@ -1,22 +1,11 @@
-import Image from "next/image";
+import { Avatar } from "./ui-kit/Avatar";
 import { BookLink } from "./ui-kit/BookLink";
 import { TextLink } from "./ui-kit/TextLink";
 
 export function AboutPanel() {
 	return (
 		<div className="space-y-4 flex-1 panel p-4 md:p-6">
-			<div className="size-fit bg-white rounded-full ring ring-gray-500/10 shadow-md p-0.5">
-				<div className="size-full relative">
-					<div className="size-full absolute inset-0 inset-ring inset-ring-gray-50/25 mix-blend-plus-lighter rounded-full z-20" />
-					<Image
-						src="/avatar.jpg"
-						alt="PG Gonni"
-						width={64}
-						height={64}
-						className="size-16 rounded-full object-cover ring ring-gray-500/10 shadow-sm relative z-10"
-					/>
-				</div>
-			</div>
+			<Avatar />
 			<p className="text-gray-500 text-base font-[450] leading-normal cursor-default">
 				<span className="pb-1 block">
 					Head of Product at{" "}

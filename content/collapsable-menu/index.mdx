@@ -1,0 +1,18 @@
+---
+title: Detachable island
+date: 2025-09-22
+kind: experiment
+tags: [motion, useDragControls, useMeasure, tailwind, react]
+excerpt: A draggable island that detaches from its container, then snaps back.
+preview: live
+previewCost: light
+previewHeight: 240
+previewClassName: p-0 items-end
+sourceUrl: https://github.com/sekeidesign/ui-components/blob/main/content/collapsable-menu/CollapsableMenu.tsx
+---
+
+**Drag the island outside of the container to detach it. Let go before detaching to snap back. Turn on debug to view the drag constraints and drag handle affordance.**
+
+I've been infatuated with islands, as they provide a great, malleable surface. They allow AI to live in a layer above the rest of the application, making them ideal for ever present, omnipotent agents. In this case, I wanted to experiment with a draggable island, snapping, and morphing.
+
+In [Rauno's](https://x.com/raunofreiberg?lang=en) course [Devouring Details](https://devouringdetails.com/introduction) I also learned the importance of ergonomic affordances, so the drag handle uses `after:content-['']` to increase its draggable area.

@@ -1,0 +1,125 @@
+---
+date: 2026-04-07
+title: "Closing the understanding gap"
+kind: writing
+icon: /logos/tato.webp
+tags: [Tato, case study]
+excerpt: "A shift in business strategy set in motion a company wide shift in focus. What came out of it became the foundation the whole org built on for the rest of the year."
+cover: "/casestudies/q2-reset/journey-map.webp"
+---
+
+import { CaseStudyLink } from "@ui-kit/CaseStudyLink";
+import { Figure } from "@ui-kit/Figure";
+import { NextCaseStudy } from "@ui-kit/NextCaseStudy";
+import { Problems } from "@ui-kit/Problems";
+
+
+
+Before we could fix anything, we had to name what wasn't working.
+
+<Problems
+	items={[
+		"We didn't know who our users were.",
+		"The team didn't understand the ERP space.",
+		"We didn't have a shared vision of what we were building.",
+	]}
+/>
+
+## Approach
+
+Q2 became a reset. We shifted our ICP from the Systems Integrator who sets
+up the ERP to the end customer who actually uses it, which meant closing a
+real understanding gap. ERPs are foreign territory for most people, and the
+team needed a shared sense of who we serve.
+
+I started by aligning with sales, then ran hour-long sessions with end
+customers. The sessions stayed open: no script, just understanding their
+world and their pains.
+
+### The journey map
+
+From those conversations I built a User Journey map, which became the
+foundation for the rest of our product work. Instead of scattered notes on
+what different customers said, it laid out their process step by step:
+what they're doing, where they get stuck, and what they need from an ERP
+integration at each point. That gave sales, design, and engineering one
+artifact to point to instead of separately held assumptions.
+
+<Figure
+	src="/casestudies/q2-reset/journey-map.webp"
+	alt="Tato user journey map"
+	caption="The user journey map"
+/>
+
+### Job stories
+
+I broke the journey down into Job Stories, then grouped those into themes
+and workflows. Job stories describe a situation and a motivation rather
+than a persona and a feature request, which kept us focused on what
+customers were trying to get done instead of designing around who we
+assumed they were.
+
+<Figure
+	src="/casestudies/q2-reset/job-stories.webp"
+	alt="Tato job stories board"
+	caption="Job stories grouped into themes and workflows"
+/>
+
+### The knowledge base
+
+Alongside it, I built an internal knowledge base, loosely modeled on
+[Karpathy's LLM wiki pattern](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f):
+a living wiki the team keeps current instead of re-reading raw notes every
+time a question comes up. It's vectorized with
+[qmd](https://github.com/tobi/qmd) so it's efficient for LLMs to parse, and
+it's become the place we check instead of re-explaining ERP concepts from
+scratch. We use it to answer questions, write PRDs, and help with
+diagramming in Figma.
+
+<Figure
+	src="/casestudies/q2-reset/knowledge-base.webp"
+	alt="Tato internal knowledge base"
+	caption="The internal knowledge base"
+/>
+
+## Key learnings
+
+<Problems
+	label="Key learnings"
+	items={[
+		"Project Managers live on a spectrum from clerical to strategic. The highest value work is strategic, but they get bogged down in clerical work.",
+		"End customers are good at their jobs, but often inexperienced in ERPs. They have knowledge gaps they don't know about, and those gaps are what cause friction with their consultants.",
+		"Implementations are long and complex, and most failures trace back to early miscommunication and requirements missed at the start.",
+	]}
+/>
+
+## Outcome
+
+The journey map and knowledge base gave the team a shared vision instead of
+scattered assumptions, and became the foundation for how we built product
+for the rest of the year, not just that quarter. A few of the projects it
+shaped:
+
+<CaseStudyLink
+	href="/p/automation-routines"
+	title="Automation routines"
+	description="Turning skills and reports from something you run into something that arrives on its own."
+/>
+
+<CaseStudyLink
+	href="/p/raid-2-0"
+	title="RAID 2.0"
+	description="Cutting meeting extraction noise in half and putting a human in the loop."
+/>
+
+{/* <CaseStudyLink
+	href="/p/meeting-taxonomy"
+	title="Meeting taxonomy"
+	description="Making meeting summaries match the shape of the meeting they came from."
+/> */}
+
+
+<NextCaseStudy
+	href="/p/automation-routines"
+	title="Automation routines"
+/>

@@ -2,7 +2,7 @@
 
 import { Experiment } from "@ui-kit/Experiment";
 import { TextLink } from "@ui-kit/TextLink";
-import DynamicIsland from "./DynamicIsland";
+import DynamicIsland from "@/content/dynamic-island/DynamicIsland";
 
 export function DynamicIslandExperiment() {
 	return (

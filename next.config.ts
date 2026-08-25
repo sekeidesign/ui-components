@@ -1,8 +1,41 @@
 import type { NextConfig } from "next";
 import createMDX from "@next/mdx";
 
+type MDXOptions = NonNullable<Parameters<typeof createMDX>[0]>["options"];
+type RemarkPlugins = NonNullable<NonNullable<MDXOptions>["remarkPlugins"]>;
+
 const nextConfig: NextConfig = {
+  // A production build and a running dev server both write to .next and
+  // corrupt each other's manifests. Set NEXT_DIST_DIR to build into its own
+  // directory while `pnpm dev` keeps running.
+  distDir: process.env.NEXT_DIST_DIR || ".next",
+
   pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
+
+  async redirects() {
+    return [
+      // Filters moved from route segments to a query param, so several can be
+      // active at once.
+      { source: "/timeline", destination: "/", permanent: true },
+      ...["apps", "books", "experiments", "work", "writing", "photos"].flatMap(
+        (slug) => [
+          { source: `/${slug}`, destination: `/?kind=${slug}`, permanent: true },
+          {
+            source: `/timeline/${slug}`,
+            destination: `/?kind=${slug}`,
+            permanent: true,
+          },
+        ],
+      ),
+      // Case studies moved from route folders into content/, served by /p/<slug>.
+      { source: "/case-studies/tato", destination: "/p/tato", permanent: true },
+      {
+        source: "/case-studies/tato/:slug",
+        destination: "/p/:slug",
+        permanent: true,
+      },
+    ];
+  },
 
   images: {
     remotePatterns: [
@@ -15,6 +48,20 @@ const nextConfig: NextConfig = {
 
 };
 
-const withMDX = createMDX({});
+const withMDX = createMDX({
+  options: {
+    // Parses the YAML block in content/*/index.mdx so it stops rendering as
+    // literal text, and re-exports it as `frontmatter` for anything that
+    // needs it at the module level. lib/timeline.ts reads the same block with
+    // gray-matter instead, since listing posts must not compile their bodies.
+    // Plugins named as strings, not imported references: Turbopack serializes
+    // these options to hand them to its Rust MDX loader, which turns a
+    // function into null and fails with "Cannot use 'in' operator ... in null".
+    remarkPlugins: [
+      ["remark-frontmatter"],
+      ["remark-mdx-frontmatter", { name: "frontmatter" }],
+    ] as unknown as RemarkPlugins,
+  },
+});
 
 export default withMDX(nextConfig);

@@ -1,0 +1,144 @@
+---
+date: 2026-04-19
+title: "Building a Karpathy customer wiki"
+kind: writing
+icon: /logos/tato.webp
+tags: [Tato, case study]
+excerpt: "Everything the team knew about our customers lived in heads and scattered transcripts. I turned it into an LLM-maintained wiki that anyone, human or AI, can query."
+cover: "/casestudies/q2-reset/knowledge-base.webp"
+---
+
+import { Figure } from "@ui-kit/Figure";
+import { NextCaseStudy } from "@ui-kit/NextCaseStudy";
+import { Problems } from "@ui-kit/Problems";
+
+
+
+This started as a personal experiment: build a second brain, with AI doing
+the reading, writing, and remembering, and find out whether treating it as
+an actual thinking partner, not just a lookup tool, made my thinking
+clearer and my output faster.
+
+Customer knowledge was the obvious first target. Interview transcripts,
+sales calls, CRM exports, industry reports, and ERP documentation all held
+signal, but almost none of it was reachable when I was writing a PRD or
+debating positioning. It lived in people's heads and a pile of files nobody
+could search by meaning.
+
+<Problems
+	items={[
+		"Customer knowledge was tribal: locked in the heads of whoever had been on the call.",
+		"Every PRD, positioning debate, and pitch restarted from memory instead of evidence.",
+		"Raw transcripts and reports were unsearchable by meaning, so past conversations were effectively write-only.",
+	]}
+/>
+
+## Approach
+
+The design follows [Karpathy's LLM wiki pattern](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f):
+a repository of structured markdown pages with YAML frontmatter that Claude
+reads, reasons over, and maintains. Humans drop raw sources in; Claude owns
+the wiki.
+
+Sources are immutable. Transcripts, meeting notes, LinkedIn profiles, CRM
+exports, and industry documentation land in a `raw/` directory and are
+never edited. An `ingest` command has Claude read the source and distill
+it into typed wiki pages: contacts, companies, cross-customer themes,
+buying signals, objections, vocabulary, and industry context. Each page
+carries a confidence rating (explicit quote, inference, or hypothesis),
+namespaced tags, and `[[wiki links]]`, so the whole thing forms a
+traversable knowledge graph. Because the raw layer is preserved, the wiki
+can always be re-derived, and git history is the audit trail.
+
+Search runs through [qmd](https://github.com/tobi/qmd), a local hybrid
+BM25/vector engine for markdown. It vectorizes every page on-device with no
+API keys, and exposes itself as an MCP server: when Claude gets a
+question, it retrieves by meaning first, then follows links for context
+instead of grepping filenames.
+
+### One source of truth, behind SSO
+
+A knowledge base only compounds if the whole company reads from it. We
+shipped a small Next.js app that renders the wiki and put it behind Clerk
+SSO: anyone signs in with their @tato.co Google account and browses every
+page. The same repository serves three audiences: the web app for the
+team, Obsidian for graph exploration, and Claude for retrieval.
+
+### Ingest at scale, then think
+
+The core loop is mass ingestion followed by conversation. I batch-feed
+customer calls and meeting exports, let Claude distill them into pages,
+then push back on what it found: where does this contradict what Michael
+told us in April, which of these quotes came from a pitch-heavy call we
+shouldn't over-trust. Every customer-facing transcript gets scored against
+the Mom Test on ingest, so compliments and hypotheticals from a pitch
+don't masquerade as evidence.
+
+That back-and-forth is where the leverage shows up. The strongest insight
+in the wiki, that systems integrators resist Tato because it removes their
+commercial leverage, which makes SI resistance a buying signal rather than
+an objection, came out of a thinking session across multiple ingested
+calls, not from any single one.
+
+### PRDs with the Linear MCP
+
+The wiki became the substrate for the rest of my product workflow. When I
+scope a project, Claude queries the knowledge base for the pains, quotes,
+and vocabulary relevant to it, then drafts the PRD as a set of issues and
+documents directly in Linear through the
+[Linear MCP](https://linear.app/docs/mcp): problem statement, personas,
+and acceptance criteria, each grounded in a citation back to the wiki page
+it came from instead of my recollection of a call. I read and edit from
+there, but the first draft already argues from evidence.
+
+One quarter I used this to restructure the whole backlog into build-order
+milestones: Claude worked through the wiki theme by theme and produced a
+full set of PRDs directly as Linear issues, sequenced so each one unblocked
+the next instead of landing as a flat, unordered list. Anyone reviewing a
+PRD could click straight through to the transcript or quote it was built
+on, so disagreements became "let's look at the source" instead of
+"I remember it differently."
+
+### Diagramming and ideation with the Figma MCP
+
+The same loop applies to diagramming. I bring rough notes, or just describe
+a flow out loud, and Claude pulls in the wiki's context (the personas, edge
+cases, and vocabulary that apply) and produces a first-pass diagram
+directly on a Figma page through the
+[Figma MCP](https://developers.figma.com/docs/figma-mcp-server/): frames,
+flows, entity relationships, whatever the conversation calls for. From
+there I refine by hand or keep iterating conversationally, telling Claude
+what's wrong with the layout instead of redrawing it myself.
+
+The real value showed up at the ideation stage. Sketching a diagram used to
+be expensive enough that I'd only do it once I was fairly sure of the idea.
+With Claude producing a rough version in the time it takes to describe it,
+the cost of visualizing a half-formed idea dropped close to zero, so more
+of them got explored instead of staying as notes. The starting point is
+never a blank canvas anymore.
+
+{/* <Figure src="/casestudies/customer-knowledge-base-1.webp" alt="[Alt text]" caption="[Caption]" /> */}
+
+## Outcome
+
+Two customers ingested became twenty-plus accounts and 140 wiki pages,
+with sixty logged operations (ingests, queries, PRDs, lints) in the
+activity log. Customer knowledge that used to evaporate after each call
+now compounds: every new transcript makes the next answer better, and
+industry pages feed directly into Tato's own agent initiative as curated
+per-vertical knowledge.
+
+The quieter shift is in how product work starts. PRDs, positioning
+discussions, and pitch prep now begin with a query instead of a memory,
+something like "what does our ICP actually say about vendor disputes",
+and the answer comes back with citations.
+
+The experiment held up: treating AI as a genuine collaborator, on top of a
+second brain it could actually read, sharpened my thinking and raised my
+output. I spend less time reconstructing context I already gathered once,
+and more time on the decision itself.
+
+<NextCaseStudy
+	href="/p/meeting-taxonomy"
+	title="Meeting taxonomy"
+/>

@@ -3,22 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
+    "dev": "node scripts/generate-previews.mjs && next dev --turbopack",
+    "build": "node scripts/generate-previews.mjs && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "content:sync": "node scripts/generate-previews.mjs"
   },
   "dependencies": {
     "@ark-ui/react": "^5.15.1",
-    "@base-ui-components/react": "1.0.0-beta.4",
+    "@base-ui/react": "1.7.0",
     "@heroicons/react": "^2.2.0",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@next/mdx": "^15.3.8",
     "@types/mdx": "^2.0.14",
+    "@upstash/redis": "^1.38.2",
     "@vercel/analytics": "^1.5.0",
     "clsx": "^2.1.1",
     "cobe": "^2.0.1",
+    "gray-matter": "^4.0.3",
     "lucide-react": "^1.28.0",
     "motion": "^12.19.1",
     "motion-plus": "https://api.motion.dev/registry?package=motion-plus&version=1.5.4&token=227e71e4be314f5a9e5ba600faa60c97e9323cf108da08d6962dcfe62c549fcd",
@@ -27,6 +30,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-use-measure": "^2.1.7",
+    "remark-frontmatter": "^5.0.0",
+    "remark-mdx-frontmatter": "^5.2.0",
     "slot-text": "^0.3.3",
     "tailwind-merge": "^3.3.1"
   },

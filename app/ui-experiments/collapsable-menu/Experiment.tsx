@@ -2,7 +2,7 @@
 
 import { Experiment } from "@ui-kit/Experiment";
 import { TextLink } from "@ui-kit/TextLink";
-import CollapsableMenu, { CollapsableMenuProvider } from "./CollapsableMenu";
+import CollapsableMenu, { CollapsableMenuProvider } from "@/content/collapsable-menu/CollapsableMenu";
 
 export function CollapsableMenuExperiment() {
 	return (

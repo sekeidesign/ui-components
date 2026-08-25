@@ -1,36 +1,30 @@
-import { AboutPanel } from "./AboutPanel";
-import { AppsPanel } from "./AppsPanel";
-import { GlobePanel } from "./GlobePanel";
-import { LibraryPanel } from "./LibraryPanel";
-import { Experiment, ExperimentDivider } from "./ui-kit/Experiment";
-import { HoverProvider } from "./ui-kit/HoverContext";
-import { WipBanner } from "./WipBanner";
-import { WorkExperiencePanelVertical } from "./WorkExperiencePanelVertical";
+import type { ReactNode } from "react";
+import { getTimeline } from "@/lib/timeline";
+import { TimelineFeed } from "./TimelineFeed";
 
-export default function Home() {
-	return (
-		<HoverProvider>
-			<Experiment className="p-0 md:p-0 gap-px bg-gray-200! flex flex-col xl:max-w-3xl">
-				<WipBanner />
-				<div className="flex gap-px bg-gray-200">
-					<AboutPanel />
-				</div>
-			</Experiment>
-			<ExperimentDivider />
-			<Experiment className="p-0 md:p-0 gap-px bg-gray-200! flex flex-col xl:max-w-3xl">
-				<WorkExperiencePanelVertical />
-			</Experiment>
-			<ExperimentDivider />
-			<Experiment className="p-0 md:p-0 gap-px bg-gray-200! flex flex-col xl:max-w-3xl">
-				<div className="md:flex-row flex flex-col gap-px bg-gray-200">
-					<GlobePanel />
-					<AppsPanel />
-				</div>
-				<div className="flex gap-px bg-gray-200">
-					{/* <GlobePanel /> */}
-					<LibraryPanel />
-				</div>
-			</Experiment>
-		</HoverProvider>
+export const metadata = {
+	title: "PG Gonni",
+	description: "Writing, UI experiments, books and updates, newest first.",
+};
+
+export default async function HomePage() {
+	const timeline = getTimeline();
+
+	// Entries that show in full in the feed compile their bodies here on the
+	// server — the prose travels in the RSC payload instead of shipping MDX to
+	// the client. Keyed off `inline`, not `!hasPage`: a post whose page is
+	// switched off while it's half-written must not spill into the feed instead.
+	const bodies: Record<string, ReactNode> = {};
+	await Promise.all(
+		timeline
+			.filter((entry) => entry.inline)
+			.map(async (entry) => {
+				const { default: Body } = await import(
+					`../content/${entry.slug}/index.mdx`
+				);
+				bodies[entry.slug] = <Body />;
+			}),
 	);
+
+	return <TimelineFeed entries={timeline} bodies={bodies} />;
 }

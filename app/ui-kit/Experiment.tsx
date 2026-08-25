@@ -150,7 +150,7 @@ const ExperimentExample = ({ children, className }: ExperimentExampleProps) => {
 	return (
 		<div
 			className={cn(
-				"relative shadow-skew size-24 flex items-center justify-center rounded-md border border-gray-200 w-full p-10 min-h-[240px] h-fit bg-white overflow-hidden",
+				"relative shadow-skew size-24 flex items-center justify-center rounded-xl ring-1 ring-gray-200 w-full p-10 min-h-[240px] h-fit bg-white overflow-hidden",
 				className,
 			)}
 		>
