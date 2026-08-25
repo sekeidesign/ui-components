@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { Footer } from "./Footer";
-import { Avatar } from "./ui-kit/Avatar";
+import { ProfileCard } from "./ui-kit/ProfileCard";
 import { TimelineTabs } from "./ui-kit/TimelineTabs";
 import { getTimeline, type EntryKind } from "@/lib/timeline";
 import { FILTER_KINDS, FILTER_ORDER } from "@/lib/timeline-filters";
@@ -24,15 +23,7 @@ export const Sidebar = () => {
 
 	return (
 		<div className="w-full md:max-w-2xs xl:max-w-xs md:sticky md:top-px md:h-[calc(100vh-2px)] md:shrink-0 flex flex-col gap-px">
-			<Link href="/timeline" className="panel p-4 flex flex-col gap-4">
-				<Avatar />
-				<div>
-					<h1 className="font-[550] text-gray-800 w-full">PG Gonni</h1>
-					<h2 className="font-[450] text-gray-500 w-full">
-						Building software in Montréal, QC
-					</h2>
-				</div>
-			</Link>
+			<ProfileCard />
 
 			{/* The block that used to be empty filler — it already stretches to the
 			    bottom of the sidebar, so the tabs live in it rather than in a panel
