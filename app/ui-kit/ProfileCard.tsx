@@ -32,13 +32,6 @@ const OFFSET_FACTOR = 100;
 const SPRING = { stiffness: 350, damping: 20 };
 
 /**
- * How far the card drops on hover, in px. It sits at the very top of a sticky
- * sidebar, so leaning it toward the viewer pushes its top edge past the top of
- * the screen — this gives the lift somewhere to happen.
- */
-const HOVER_SHIFT = 6;
-
-/**
  * The seal, as a mask over a moving gradient rather than a filled shape — the
  * artwork is only ever a silhouette here, and the light behind it is what makes
  * it read as a glossy sticker instead of a flat grey stamp. Lives in public/ so
@@ -72,7 +65,6 @@ export function ProfileCard({ className }: { className?: string }) {
 	const offsetX = useSpring(0, SPRING);
 	const offsetY = useSpring(0, SPRING);
 	const sheen = useSpring(0, SPRING);
-	const shift = useSpring(0, SPRING);
 	// Its own pair rather than the sweep's: those rest at 0, which is also one
 	// end of their travel, and the seal's highlight is visible at rest so it has
 	// to settle back to the middle instead.
@@ -90,7 +82,6 @@ export function ProfileCard({ className }: { className?: string }) {
 		offsetY.set(0);
 		z.set(0);
 		sheen.set(0);
-		shift.set(0);
 		sealX.set(50);
 		sealY.set(50);
 	};
@@ -99,7 +90,7 @@ export function ProfileCard({ className }: { className?: string }) {
 		<MotionLink
 			ref={cardRef}
 			href="/timeline"
-			style={{ transformPerspective: 500, z, rotateX, rotateY, y: shift }}
+			style={{ transformPerspective: 500, z, rotateX, rotateY }}
 			onPointerMove={(event) => {
 				// A finger has no hover, and a tap would otherwise leave the card
 				// parked at whatever angle it was released at.
@@ -124,7 +115,6 @@ export function ProfileCard({ className }: { className?: string }) {
 				if (event.pointerType !== "mouse") return;
 				z.set(10);
 				sheen.set(1);
-				shift.set(HOVER_SHIFT);
 			}}
 			onPointerLeave={settle}
 			onPointerCancel={settle}
