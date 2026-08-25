@@ -28,7 +28,12 @@ export async function generateMetadata({
 		openGraph: {
 			title,
 			description: entry.excerpt,
-			images: entry.cover ?? "/og-image.jpg",
+			// The site card, not the post's cover. A cover is drawn for a feed
+			// card at its own ratio — cropped to a 1.91:1 preview it lands
+			// somewhere arbitrary, and half of them are WebP, which LinkedIn in
+			// particular won't render. Per-post images want to be made for the
+			// slot rather than borrowed from one.
+			images: "/og-image.jpg",
 		},
 	};
 }
