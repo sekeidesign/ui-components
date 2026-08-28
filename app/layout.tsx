@@ -20,12 +20,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "PG Gonni",
-	description: "Design Engineer based in Montréal, QC",
+	title: {
+		default: "PG Gonni | Building software in Montréal",
+		template: "%s | PG Gonni",
+	},
+	description: "Design Engineer making beautiful software",
 	metadataBase: new URL("https://uikitchen.dev"),
 	openGraph: {
-		title: "PG Gonni",
-		description: "Design Engineer based in Montréal, QC",
+		title: "PG Gonni | Building software in Montréal",
+		description: "Design Engineer making beautiful software",
 		images: "/og-image.jpg",
 	},
 	icons: {
