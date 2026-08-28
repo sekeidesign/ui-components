@@ -77,14 +77,14 @@ export const WIPE_BOUNDS = {
 export type WipeNumericKey = keyof typeof WIPE_BOUNDS;
 
 export const WIPE_DIRECTIONS = [
-	{ glyph: "→", name: "Left to right", angleDeg: 0 },
-	{ glyph: "↘", name: "Top-left to bottom-right", angleDeg: 45 },
-	{ glyph: "↓", name: "Top to bottom", angleDeg: 90 },
-	{ glyph: "↙", name: "Top-right to bottom-left", angleDeg: 135 },
-	{ glyph: "←", name: "Right to left", angleDeg: 180 },
-	{ glyph: "↖", name: "Bottom-right to top-left", angleDeg: 225 },
-	{ glyph: "↑", name: "Bottom to top", angleDeg: 270 },
-	{ glyph: "↗", name: "Bottom-left to top-right", angleDeg: 315 },
+	{ name: "Left to right", angleDeg: 0 },
+	{ name: "Top-left to bottom-right", angleDeg: 45 },
+	{ name: "Top to bottom", angleDeg: 90 },
+	{ name: "Top-right to bottom-left", angleDeg: 135 },
+	{ name: "Right to left", angleDeg: 180 },
+	{ name: "Bottom-right to top-left", angleDeg: 225 },
+	{ name: "Bottom to top", angleDeg: 270 },
+	{ name: "Bottom-left to top-right", angleDeg: 315 },
 ] as const;
 
 export function easeInOutCubic(t: number): number {

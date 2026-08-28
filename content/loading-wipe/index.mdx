@@ -8,6 +8,10 @@ tags: [WebGPU, WGSL, shaders, canvas]
 excerpt: A loading surface that leaves by being swept off, with a turbulent gradient edge that reveals the real page underneath.
 preview: live
 previewCost: heavy
+# Matches the demo's fixed desktop height. previewCost is heavy, so the card
+# unmounts when it leaves the viewport — without a reserved slot the feed
+# would jump every time it did.
+previewHeight: 420
 previewClassName: p-0 items-stretch
 draft: false
 ---

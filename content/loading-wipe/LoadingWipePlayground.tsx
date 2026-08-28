@@ -7,11 +7,16 @@ import {
 	useRef,
 	useState,
 } from "react";
+import "slot-text/style.css";
+import { SlotText } from "slot-text/react";
 import {
 	ControlPanel,
 	ControlRow,
 	ControlSection,
 } from "@ui-kit/controls/ControlPanel";
+import { ArrowIcon } from "@ui-kit/icons/ArrowIcon";
+import { PlayIcon } from "@ui-kit/icons/PlayIcon";
+import { ResetIcon } from "@ui-kit/icons/ResetIcon";
 import { Slider } from "@ui-kit/controls/Slider";
 import { drawLoaderSurface } from "@ui-kit/loading-wipe/loader-surface";
 import {
@@ -250,7 +255,10 @@ export function LoadingWipePlayground() {
 	const atRest = scrub <= 0 && !playing;
 
 	return (
-		<div className="flex w-full flex-col items-stretch self-stretch md:flex-row">
+		// Fixed height side by side, rather than letting the panel's own length
+		// set it: fifteen rows of controls made a stage tall enough to fill a
+		// screen, and the skeleton has nothing to do with that space.
+		<div className="flex w-full flex-col items-stretch self-stretch md:h-[420px] md:flex-row">
 			<div ref={stageRef} className="relative flex-1 overflow-hidden">
 				<Skeleton />
 
@@ -292,22 +300,74 @@ export function LoadingWipePlayground() {
 					disabled={playing}
 					className="absolute right-3 bottom-3 flex cursor-pointer items-center gap-2 rounded-full bg-white px-3 py-1.5 text-[13px] font-[450] text-gray-600 shadow-skew ring-1 ring-gray-500/10 hover:bg-gray-50 disabled:cursor-default disabled:opacity-60"
 				>
-					{atRest && (
-						<svg
-							width="10"
-							height="12"
-							viewBox="0 0 10 12"
-							aria-hidden
-							className="shrink-0"
-						>
-							<path d="M0 0.75 L10 6 L0 11.25 Z" fill="currentColor" />
-						</svg>
-					)}
-					{playing ? "Sweeping…" : atRest ? "Play wipe" : "Reset"}
+					<span className="shrink-0">
+						{atRest ? <PlayIcon size={14} /> : <ResetIcon size={14} />}
+					</span>
+					{/* Rolled rather than swapped: the label changes under the
+					    pointer as the sweep starts and ends, and a hard cut there
+					    reads as the button being replaced. */}
+					<SlotText
+						text={playing ? "Sweeping…" : atRest ? "Play wipe" : "Reset"}
+						options={{
+							direction: "down",
+							bounce: 0.1,
+							duration: 300,
+							stagger: 14,
+							skipUnchanged: true,
+						}}
+					/>
 				</button>
 			</div>
 
-			<ControlPanel className="w-full shrink-0 rounded-none border-t border-gray-200 shadow-none ring-0 md:w-2/5 md:border-t-0 md:border-l">
+			{/* Scrolls inside its own column, so the knobs can outgrow the stage
+			    without dragging its height along with them. */}
+			<ControlPanel className="max-h-[320px] w-full shrink-0 overflow-y-auto rounded-none border-t border-gray-200 shadow-none ring-0 md:max-h-none md:w-2/5 md:border-t-0 md:border-l">
+				<ControlSection label="Colour" />
+				<div className="flex flex-wrap gap-1.5 px-3 py-2">
+					{PRESETS.map((preset) => {
+						const active = preset.colors.every(
+							(c, i) => c === params.colors[i],
+						);
+						return (
+							<button
+								key={preset.name}
+								type="button"
+								aria-pressed={active}
+								onClick={() =>
+									setParams((prev) => ({ ...prev, colors: preset.colors }))
+								}
+								className={
+									active
+										? "flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-900 py-1 pr-2.5 pl-1 text-[12px] font-[450] text-white shadow-skew"
+										: "flex cursor-pointer items-center gap-1.5 rounded-full bg-white py-1 pr-2.5 pl-1 text-[12px] font-[450] text-gray-500 shadow-skew ring-1 ring-gray-500/10 hover:bg-gray-50"
+								}
+							>
+								<span
+									className="h-4 w-6 shrink-0 rounded-full ring-1 ring-gray-900/10"
+									style={{
+										background: `linear-gradient(90deg, ${preset.colors.join(", ")})`,
+									}}
+								/>
+								{preset.name}
+							</button>
+						);
+					})}
+				</div>
+				<ControlRow label="Ribbon">
+					<div className="grid w-full grid-cols-4 gap-1.5">
+						{params.colors.map((hex, i) => (
+							<input
+								key={COLOR_LABELS[i]}
+								type="color"
+								value={hex}
+								aria-label={COLOR_LABELS[i]}
+								title={COLOR_LABELS[i]}
+								onChange={(event) => setColor(i, event.target.value)}
+								className="control-swatch"
+							/>
+						))}
+					</div>
+				</ControlRow>
 				<ControlSection label="Sweep" />
 				{/* No label: the glyphs say what they are, and the label column
 				    would squeeze eight buttons into half a row. */}
@@ -326,11 +386,14 @@ export function LoadingWipePlayground() {
 									onClick={() => setNumber("angleDeg", direction.angleDeg)}
 									className={
 										active
-											? "h-6 cursor-pointer rounded-md bg-gray-900 text-[12px] text-white shadow-skew"
-											: "h-6 cursor-pointer rounded-md bg-white text-[12px] text-gray-500 shadow-skew ring-1 ring-gray-500/10 hover:bg-gray-50"
+											? "flex h-6 cursor-pointer items-center justify-center rounded-md bg-gray-900 text-white shadow-skew"
+											: "flex h-6 cursor-pointer items-center justify-center rounded-md bg-white text-gray-500 shadow-skew ring-1 ring-gray-500/10 hover:bg-gray-50"
 									}
 								>
-									{direction.glyph}
+									{/* One glyph, turned. The sweep angle is measured from
+									    "left to right"; the icon is drawn pointing up, hence
+									    the quarter turn. */}
+									<ArrowIcon size={14} rotate={direction.angleDeg + 90} />
 								</button>
 							);
 						})}
@@ -420,52 +483,6 @@ export function LoadingWipePlayground() {
 					onChange={(v) => setNumber("grainAmount", v)}
 				/>
 
-				<ControlSection label="Colour" />
-				<div className="flex flex-wrap gap-1.5 px-3 py-2">
-					{PRESETS.map((preset) => {
-						const active = preset.colors.every(
-							(c, i) => c === params.colors[i],
-						);
-						return (
-							<button
-								key={preset.name}
-								type="button"
-								aria-pressed={active}
-								onClick={() =>
-									setParams((prev) => ({ ...prev, colors: preset.colors }))
-								}
-								className={
-									active
-										? "flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-900 py-1 pr-2.5 pl-1 text-[12px] font-[450] text-white shadow-skew"
-										: "flex cursor-pointer items-center gap-1.5 rounded-full bg-white py-1 pr-2.5 pl-1 text-[12px] font-[450] text-gray-500 shadow-skew ring-1 ring-gray-500/10 hover:bg-gray-50"
-								}
-							>
-								<span
-									className="h-4 w-6 shrink-0 rounded-full ring-1 ring-gray-900/10"
-									style={{
-										background: `linear-gradient(90deg, ${preset.colors.join(", ")})`,
-									}}
-								/>
-								{preset.name}
-							</button>
-						);
-					})}
-				</div>
-				<ControlRow label="Ribbon">
-					<div className="grid w-full grid-cols-4 gap-1.5">
-						{params.colors.map((hex, i) => (
-							<input
-								key={COLOR_LABELS[i]}
-								type="color"
-								value={hex}
-								aria-label={COLOR_LABELS[i]}
-								title={COLOR_LABELS[i]}
-								onChange={(event) => setColor(i, event.target.value)}
-								className="control-swatch"
-							/>
-						))}
-					</div>
-				</ControlRow>
 			</ControlPanel>
 		</div>
 	);
