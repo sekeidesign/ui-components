@@ -2,11 +2,6 @@ import type { ReactNode } from "react";
 import { getTimeline } from "@/lib/timeline";
 import { TimelineFeed } from "./TimelineFeed";
 
-export const metadata = {
-	title: "PG Gonni",
-	description: "Writing, UI experiments, books and updates, newest first.",
-};
-
 export default async function HomePage() {
 	const timeline = getTimeline();
 

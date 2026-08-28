@@ -3,7 +3,7 @@ import { Experiment } from "../ui-kit/Experiment";
 import { PhotographyGrid } from "./PhotographyGrid";
 
 export const metadata: Metadata = {
-	title: "Photography — PG Gonni",
+	title: "Photography",
 	description: "Concert & festival photography, Montréal, QC.",
 };
 

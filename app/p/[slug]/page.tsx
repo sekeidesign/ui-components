@@ -23,7 +23,10 @@ export async function generateMetadata({
 
 	const title = `${entry.title} | PG Gonni`;
 	return {
-		title,
+		// The root layout's template appends "| PG Gonni" to the tab title, so
+		// this passes the bare entry title and keeps the full string for OG,
+		// which isn't templated.
+		title: entry.title,
 		description: entry.excerpt,
 		openGraph: {
 			title,
