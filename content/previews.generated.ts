@@ -6,6 +6,7 @@ import type { ComponentType } from "react";
 export const previews: Record<string, ComponentType> = {
 	"collapsable-menu": dynamic(() => import("./collapsable-menu/Preview")),
 	"dynamic-island": dynamic(() => import("./dynamic-island/Preview")),
+	"loading-wipe": dynamic(() => import("./loading-wipe/Preview")),
 	"profile-menu": dynamic(() => import("./profile-menu/Preview")),
 	"social-bar": dynamic(() => import("./social-bar/Preview")),
 	"transaction-status-button": dynamic(() => import("./transaction-status-button/Preview")),

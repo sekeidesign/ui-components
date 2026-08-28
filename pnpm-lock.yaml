@@ -96,6 +96,9 @@ importers:
       '@types/react-dom':
         specifier: ^19
         version: 19.1.9(@types/react@19.1.13)
+      '@webgpu/types':
+        specifier: ^0.1.72
+        version: 0.1.72
       eslint:
         specifier: ^9
         version: 9.35.0(jiti@2.5.1)
@@ -1561,6 +1564,9 @@ packages:
         optional: true
       vue-router:
         optional: true
+
+  '@webgpu/types@0.1.72':
+    resolution: {integrity: sha512-0cF7RFM2edNoiIS1ODJp0/Gzv4/xSXhwoR0YCza+OWpJWtn4wmo9DvK91aLlH9+uUnwIriP7ZiC3WitmyhuzBw==}
 
   '@zag-js/accordion@1.24.1':
     resolution: {integrity: sha512-JOlmXjO+1tTlyeZ93S+chIlV8uDr8fodj3/XCjLFHc/G116O8cN18KG0Ug9pImy1vT2Kkwb9Ag9QOTyUAXM3PA==}
@@ -5007,6 +5013,8 @@ snapshots:
     optionalDependencies:
       next: 15.3.8(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react: 19.1.1
+
+  '@webgpu/types@0.1.72': {}
 
   '@zag-js/accordion@1.24.1':
     dependencies:
