@@ -39,7 +39,7 @@ const COLOR_LABELS = ["Edge", "Mid 1", "Mid 2", "Tail"] as const;
 /** Fraction of the sweep over which the loader's text clears. */
 const TEXT_EXIT = 0.55;
 /** How far it travels while doing so, in px. */
-const TEXT_RISE = 16;
+const TEXT_TRAVEL = 16;
 
 type Stops = readonly [string, string, string, string];
 
@@ -97,8 +97,19 @@ export function LoadingWipePlayground() {
 		// something the eye is still reading.
 		if (textRef.current) {
 			const out = Math.min(progress / TEXT_EXIT, 1);
+			// Along the sweep, not simply upward: the text is being carried off
+			// by the same motion as the surface, and a rise while the edge
+			// travels sideways reads as two unrelated exits.
+			//
+			// A unit vector rather than sweepAxis's, which is normalised by
+			// |dx| + |dy| so the edge reaches the far corner at every angle —
+			// that makes it shorter on the diagonals, and the text would drift
+			// less on those than on the axes.
+			const rad = (current.angleDeg * Math.PI) / 180;
+			const dx = Math.cos(rad) * TEXT_TRAVEL * out;
+			const dy = Math.sin(rad) * TEXT_TRAVEL * out;
 			textRef.current.style.opacity = String(1 - out);
-			textRef.current.style.transform = `translateY(${-TEXT_RISE * out}px)`;
+			textRef.current.style.transform = `translate(${dx}px, ${dy}px)`;
 		}
 
 		if (readyRef.current) {
@@ -205,10 +216,12 @@ export function LoadingWipePlayground() {
 	}, []);
 
 	// A knob moved: redraw the held frame, so the change shows without having
-	// to replay the whole sweep.
+	// to replay the whole sweep. `params` has to be in the deps — `render` is
+	// stable, so depending on it alone means this runs once on mount and never
+	// again, and every knob silently stops doing anything until the next play.
 	useEffect(() => {
 		if (readyRef.current !== null) render(progressRef.current);
-	}, [render]);
+	}, [render, params]);
 
 	// Repaint the page bitmap and hand it to the shader. Runs on mount, on a
 	// resize, and whenever a knob that the bitmap depends on moves — never per
