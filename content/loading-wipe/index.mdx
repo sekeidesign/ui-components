@@ -1,11 +1,9 @@
 ---
-# TODO: written in my words, not yours — rewrite the body if you want it in
-# your voice.
 date: 2026-08-28
 title: Loading wipe
 kind: experiment
 tags: [WebGPU, WGSL, shaders, canvas]
-excerpt: A loading surface that leaves by being swept off, with a turbulent gradient edge that reveals the real page underneath.
+excerpt: Playing around with vgpu, with a tweakable wipe to reveal a page.
 preview: live
 previewCost: heavy
 # Matches the demo's fixed desktop height. previewCost is heavy, so the card
@@ -16,74 +14,12 @@ previewClassName: p-0 items-stretch
 draft: false
 ---
 
-Loading states almost always leave by fading. A fade is a dissolve of the whole
-plane at once, which is why it reads as the spinner giving up rather than the
-page arriving. This one leaves by being swept off — a single edge travelling
-across the surface, with the content already sitting behind it.
+**Hit play to run the wipe. The controls change the angle, duration, colours, noise and grain, so you can push it around while it runs.**
 
-## Revealing, not compositing
+I wanted to take a stab at Vercel's new (vgpu library)[https://vgpu.sh/] and a loading state felt like a small enough excuse to start. Our loader at Tato already used a little gradient, I wanted to build on that by sweeping it away, with the content already sitting behind it.
 
-The canvas writes premultiplied alpha and sits over the page rather than under
-it. Where the sweep has passed, the fragment's alpha is zero and the real DOM
-underneath shows through — no screenshot, no cross-fade between two copies of
-the same layout. The skeleton here was never hidden; it was covered.
+I was also inspired by [glimm.dev](https://glimm.dev/), which creates full screen colour wipes powered by a similar shader, but without actually revealing content behind it. I wanted the edge of the gradient itself to be the mask.
 
-That constraint shapes everything else. There is no "after" state to animate
-towards, so the edge is the entire effect, and it has to be worth looking at.
+The canvas sits on top of the page and writes premultiplied alpha, so where the sweep has passed the alpha is zero and the real DOM shows through. Nothing gets hidden and re-shown. It was just covered.
 
-## The edge
-
-`dot(uv, dir) + bias` gives a signed distance from a line at any angle,
-normalised over the unit square so the sweep runs corner to corner whatever the
-aspect ratio — at 45° it reduces to `(uv.x + uv.y) / 2`. A band of fbm noise
-bends that line as it travels, and a four-stop ramp fills the space behind it,
-its coordinate smeared by a second, independent noise field so the colours
-marble into each other instead of striping.
-
-## What has to be pixels
-
-The edge is turbulent, feathered and grainy, and that shape exists only as
-alpha inside the shader. CSS masks take images and gradients, not live GPU
-output — so anything the sweep is supposed to carry off has to be *in* the
-shader, or it leaves on a visibly different edge from the surface it was
-sitting on. A hard-edged polygon travelling through a soft, noisy one is
-obvious immediately.
-
-That splits the layers by what each one needs. The surface is a bitmap the
-fragment samples as its base colour, so one alpha field governs it. The page
-underneath — the skeleton — is real DOM and never rasterised; it is being
-revealed, not removed. And the loader's text is real DOM too, because it
-leaves by fading and rising rather than by being swept, and anything that
-doesn't need the sweep's alpha has no reason to stop being an element.
-
-Which leaves a rule worth keeping: rasterise only what is about to disappear.
-
-## Grain
-
-Grain offsets the edge distance rather than the finished alpha. Offsetting
-alpha punches holes through the solid surface as well; offsetting the distance
-only breaks up the edge as it passes, which is the part that should look eaten.
-
-The grain needed its own hash. The fract-multiply hash driving the fbm is fine
-there — its inputs are small — but fed the large integer coordinates a
-per-pixel grain needs, its fractional parts cycle with a short period and f32
-precision collapses. Measured over 40,000 cells it produced 971 distinct
-values, and the eye finds that instantly: hard diagonal lattices right across
-the sweep. A 32-bit bit-mixing hash gives 39,204 instead.
-
-## Cost
-
-A WebGPU device costs while it exists, not while it animates, and this sits in
-a feed. So nothing initialises until you ask it to: the surface bitmap is shown
-directly at first, and the device is created on the first play or scrub, then
-destroyed when the card scrolls away.
-
-That same bitmap is what the shader samples once a device does exist. Sharing
-the pixels rather than generating the grain twice is what makes the handover
-invisible — a shader-side grain and a canvas-side grain are the same grain
-statistically, but swapping between them makes the whole plane change texture
-at once.
-
-Where WebGPU is missing the same geometry runs as a `clip-path` polygon — the
-unit square clipped by the sweep's half-plane. Same angle, same duration, hard
-edge, no ribbon.
+The edge itself is `dot(uv, dir) + bias`, which gives a signed distance from a line at any angle. A band of fbm noise bends that line as it travels, and a four stop colour ramp fills in behind it, with its coordinates smeared by a second noise field so the stops marble into each other instead of striping. All of those values are knobs in the panel, which was really the point of building it. I wanted one shader I could tweak to get the perfect look and feel, so I built the controls into the shader.

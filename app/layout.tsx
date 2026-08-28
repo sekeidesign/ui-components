@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 		template: "%s | PG Gonni",
 	},
 	description: "Design Engineer making beautiful software",
-	metadataBase: new URL("https://uikitchen.dev"),
+	metadataBase: new URL("https://www.sekei.xyz"),
 	openGraph: {
 		title: "PG Gonni | Building software in Montréal",
 		description: "Design Engineer making beautiful software",
