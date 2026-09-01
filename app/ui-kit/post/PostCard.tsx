@@ -52,7 +52,11 @@ export function PostCard({
 			/>
 		)
 	) : entry.kind === "launch" && entry.cover ? (
-		<Post.PhoneMedia src={entry.cover} alt={entry.title} priority={eager} />
+		// Too wide for a narrow column — PostHeader's Title shows the app's own
+		// icon there instead, so this only needs room at md and up.
+		<div className="hidden md:block">
+			<Post.PhoneMedia src={entry.cover} alt={entry.title} priority={eager} />
+		</div>
 	) : !isExperiment && entry.kind !== "note" && (entry.cover || entry.icon) ? (
 		<Post.Media
 			src={entry.cover}
