@@ -17,7 +17,7 @@ const LastUpdated = () => {
 		const fetchCommit = async () => {
 			try {
 				const res = await fetch(
-					"https://api.github.com/repos/sekeidesign/ui-components/commits/main",
+					"https://api.github.com/repos/sekeidesign/sekei-xyz/commits/main",
 				);
 				if (!res.ok) throw new Error(`GitHub API returned ${res.status}`);
 				const data = await res.json();

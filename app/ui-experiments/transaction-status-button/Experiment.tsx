@@ -6,7 +6,7 @@ import { FamilyStatusButton } from "@/content/transaction-status-button/FamilySt
 
 export function TransactionStatusButtonExperiment() {
 	return (
-		<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/family-status-button.tsx">
+		<Experiment sourceUrl="https://github.com/sekeidesign/sekei-xyz/blob/main/app/ui-experiments/family-status-button.tsx">
 			<Experiment.Title pageUrl="/ui-experiments/transaction-status-button">
 				Transaction status button
 			</Experiment.Title>
