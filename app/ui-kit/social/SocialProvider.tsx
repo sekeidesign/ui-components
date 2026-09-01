@@ -71,14 +71,16 @@ export function SocialProvider({
 
 	const slugKey = slugs.join(",");
 
-	// Active state is read after mount: touching localStorage during render
-	// would mismatch the server HTML.
+	// Active state is read after mount: touching localStorage during render would
+	// mismatch the server HTML, so the reader's own reactions can only land once
+	// hydration is done. There is no earlier moment to derive this from.
 	useEffect(() => {
 		if (isMemory) return;
 		const stored: CountMap = {};
 		for (const slug of slugKey ? slugKey.split(",") : []) {
 			stored[slug] = readStored(slug);
 		}
+		// react-doctor-disable-next-line no-adjust-state-on-prop-change
 		setMine(stored);
 	}, [slugKey, isMemory]);
 
@@ -97,6 +99,10 @@ export function SocialProvider({
 	}, [isMemory, seed]);
 
 	// One request for the whole feed, not one per post.
+	//
+	// Client-side on purpose: the feed is a static page, so counts fetched on the
+	// server would be frozen into the HTML at build time and never move again.
+	// react-doctor-disable-next-line no-fetch-in-effect
 	useEffect(() => {
 		if (isMemory || !slugKey) return;
 		let cancelled = false;

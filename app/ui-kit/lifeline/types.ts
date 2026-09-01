@@ -1,4 +1,4 @@
-import type { CompanyIconId } from "./company-icon"
+import type { CompanyIconId } from "./company-icon-registry"
 
 export interface LifelineMentor {
   name: string

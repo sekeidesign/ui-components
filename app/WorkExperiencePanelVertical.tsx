@@ -2,7 +2,7 @@
 
 import { LifelineVertical } from "./ui-kit/lifeline/lifeline-vertical";
 import { useHoverGroup } from "./ui-kit/HoverContext";
-import { BIRTH_YEAR, MARKERS_NEWEST_FIRST } from "./WorkExperiencePanel";
+import { BIRTH_YEAR, MARKERS_NEWEST_FIRST } from "./work-experience-markers";
 
 export function WorkExperiencePanelVertical() {
 	const experience = useHoverGroup("experience");

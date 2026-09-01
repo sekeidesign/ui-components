@@ -1,7 +1,7 @@
 "use client";
 
 import {
-	motion,
+	m,
 	type MotionValue,
 	useMotionTemplate,
 	useSpring,
@@ -41,7 +41,7 @@ const SEAL_SHEEN =
 	"linear-gradient(135deg, rgba(255,255,255,0.3) 0%, #fff 25%, rgba(255,255,255,0.35) 50%, #fff 75%, rgba(255,255,255,0.3) 100%)";
 
 /** The whole card is the link, so the tilt has to live on the anchor itself. */
-const MotionLink = motion.create(Link);
+const MotionLink = m.create(Link);
 
 export function ProfileCard({ className }: { className?: string }) {
 	const cardRef = useRef<HTMLAnchorElement>(null);
@@ -105,7 +105,7 @@ export function ProfileCard({ className }: { className?: string }) {
 			className={cn(
 				// bg-gray-100 spelled out rather than the `panel` class: that one is unlayered
 				// CSS, so it outranks every Tailwind utility.
-				"bg-gray-100 p-4 flex flex-col gap-4 relative overflow-hidden will-change-transform",
+				"bg-gray-100 p-4 flex flex-col gap-4 relative overflow-hidden hover:will-change-transform",
 				// The transparent ring at rest declares the box-shadow composite, so both fade
 				// instead of snapping. Don't pair it with `shadow-transparent` — tailwind-merge
 				// reads that as the same group as shadow-skew and drops one.
@@ -122,7 +122,7 @@ export function ProfileCard({ className }: { className?: string }) {
 				className="z-20 from-white/0 via-white/75 to-white/0 from-20% via-35% to-50%"
 			/>
 
-			<motion.div
+			<m.div
 				aria-hidden
 				style={{
 					width: SEAL_SIZE,
@@ -192,7 +192,7 @@ function Sweep({
 	const { x, y } = typeof scale === "number" ? { x: scale, y: scale } : scale;
 
 	return (
-		<motion.div
+		<m.div
 			style={{
 				translateX: offsetX,
 				translateY: offsetY,
@@ -224,7 +224,7 @@ function Portrait({
 				scale={1.25}
 				className="z-20 from-white/0 via-white/90 to-white/0 from-30% via-35% to-40%"
 			/>
-			<motion.div
+			<m.div
 				style={{
 					translateX: offsetX,
 					translateY: offsetY,

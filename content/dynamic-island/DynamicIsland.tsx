@@ -7,7 +7,7 @@ import {
 	PlayIcon,
 } from "@heroicons/react/24/solid";
 import { cn } from "@ui-kit/cn";
-import { AnimatePresence, motion, type Transition } from "motion/react";
+import { AnimatePresence, m, type Transition } from "motion/react";
 import { Ticker } from "motion-plus/react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -56,7 +56,7 @@ function Waveform({ isPlaying }: WaveformProps) {
 	return (
 		<div className="flex gap-0.5 h-3 items-center justify-center flex-shrink-0">
 			{WAVEFORM_BARS.map((bar) => (
-				<motion.div
+				<m.div
 					key={bar.id}
 					className="bg-slate-50 rounded-full w-0.5"
 					animate={
@@ -175,11 +175,11 @@ function MediaContent({
 					type="button"
 					onClick={onTogglePlay}
 					aria-label={isPlaying ? "Pause" : "Play"}
-					className="flex items-center justify-center rounded-2xl relative z-20 w-12 h-12 active:scale-90 hover:bg-zinc-800 transition-all"
+					className="flex items-center justify-center rounded-2xl relative z-20 w-12 h-12 active:scale-90 hover:bg-zinc-800 transition-[transform,background-color]"
 				>
 					<AnimatePresence mode="popLayout" initial={false}>
 						{isPlaying ? (
-							<motion.div
+							<m.div
 								key="pause"
 								initial={{ scale: 0.5, opacity: 0 }}
 								animate={{ scale: 1, opacity: 1 }}
@@ -187,9 +187,9 @@ function MediaContent({
 								transition={springConfig}
 							>
 								<PauseIcon className="w-9 h-9 text-white" />
-							</motion.div>
+							</m.div>
 						) : (
-							<motion.div
+							<m.div
 								key="play"
 								initial={{ scale: 0.5, opacity: 0 }}
 								animate={{ scale: 1, opacity: 1 }}
@@ -197,7 +197,7 @@ function MediaContent({
 								transition={springConfig}
 							>
 								<PlayIcon className="w-9 h-9 text-white" />
-							</motion.div>
+							</m.div>
 						)}
 					</AnimatePresence>
 				</button>
@@ -284,7 +284,7 @@ export default function DynamicIsland({
 	const progress = Math.min(duration / VIDEO_DURATION, 1);
 
 	return (
-		<motion.div
+		<m.div
 			className={cn(
 				"w-fit h-fit mx-auto flex items-start justify-center origin-top group",
 			)}
@@ -310,7 +310,7 @@ export default function DynamicIsland({
 					/>
 				</svg>
 			</div>
-			<motion.div
+			<m.div
 				className="bg-zinc-950 flex flex-col gap-2 items-center overflow-hidden justify-center shadow-2xl relative border-0"
 				animate={{
 					width: isExpanded ? expandedBounds.width : closedBounds.width,
@@ -328,7 +328,7 @@ export default function DynamicIsland({
 				/>
 				<AnimatePresence mode="popLayout">
 					{isExpanded ? (
-						<motion.div
+						<m.div
 							key="expanded"
 							initial={{ opacity: 0, filter: "blur(16px)", y: -24 }}
 							animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
@@ -351,9 +351,9 @@ export default function DynamicIsland({
 									onTogglePlay={togglePlay}
 								/>
 							</div>
-						</motion.div>
+						</m.div>
 					) : (
-						<motion.div
+						<m.div
 							key="closed"
 							initial={{ opacity: 0, filter: "blur(16px)", y: 24 }}
 							animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
@@ -364,10 +364,10 @@ export default function DynamicIsland({
 							<div ref={closedRef} className="w-full">
 								<ClosedState isPlaying={isPlaying} />
 							</div>
-						</motion.div>
+						</m.div>
 					)}
 				</AnimatePresence>
-			</motion.div>
+			</m.div>
 			<div className="w-4 h-4 -ml-[0.5px]">
 				<svg
 					width="16"
@@ -384,6 +384,6 @@ export default function DynamicIsland({
 					/>
 				</svg>
 			</div>
-		</motion.div>
+		</m.div>
 	);
 }

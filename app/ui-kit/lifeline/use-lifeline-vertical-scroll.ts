@@ -51,19 +51,24 @@ export function useLifelineVerticalScroll(
   const onIntroScrollStartRef = useRef(options.onIntroScrollStart)
   const introGetTrackProgressRef = useRef(options.introGetTrackProgress)
   const introStartedRef = useRef(false)
-  const introScrollId = useRef(0)
   const introScrollStart = useRef(0)
   const introWasAnimatingRef = useRef(false)
   const scheduleMeasureRef = useRef<() => void>(() => {})
   const [isLayoutReady, setIsLayoutReady] = useState(false)
 
-  introLockedRef.current = options.introLocked ?? false
-  introAnimatingRef.current = options.introAnimating ?? false
-  introSkippedRef.current = options.introSkipped ?? false
-  isEmbedRef.current = options.isEmbed ?? false
-  onIntroSettleCompleteRef.current = options.onIntroSettleComplete
-  onIntroScrollStartRef.current = options.onIntroScrollStart
-  introGetTrackProgressRef.current = options.introGetTrackProgress
+  // Mirrored in a layout effect rather than assigned during render: a render
+  // React replays or discards would otherwise leak its writes. Layout, not
+  // passive, and declared ahead of every effect that reads these — the initial
+  // measure below runs in the same commit and needs them already set.
+  useLayoutEffect(() => {
+    introLockedRef.current = options.introLocked ?? false
+    introAnimatingRef.current = options.introAnimating ?? false
+    introSkippedRef.current = options.introSkipped ?? false
+    isEmbedRef.current = options.isEmbed ?? false
+    onIntroSettleCompleteRef.current = options.onIntroSettleComplete
+    onIntroScrollStartRef.current = options.onIntroScrollStart
+    introGetTrackProgressRef.current = options.introGetTrackProgress
+  })
 
   const setEntryRef = useCallback((index: number, node: HTMLLIElement | null) => {
     entryRefs.current[index] = node
@@ -124,14 +129,16 @@ export function useLifelineVerticalScroll(
   useEffect(() => {
     if (!isLayoutReady) return
     if (options.introSkipped || !options.introAnimating) {
-      cancelAnimationFrame(introScrollId.current)
-      introScrollId.current = 0
       introStartedRef.current = false
       return
     }
 
     introWasAnimatingRef.current = true
     const railMs = options.introRailMs ?? 3200
+
+    // One local handle for every frame this run schedules, so the cleanup below
+    // cancels whichever one is outstanding.
+    let introFrameId = 0
 
     const step = (now: number) => {
       const max = maxScrollRef.current
@@ -159,20 +166,18 @@ export function useLifelineVerticalScroll(
       }
 
       if (progress < 1) {
-        introScrollId.current = requestAnimationFrame(step)
+        introFrameId = requestAnimationFrame(step)
         return
       }
 
       sectionRef.current?.style.setProperty("--lifeline-intro-progress", "1")
       if (max > 0) applyScroll(max)
-      introScrollId.current = 0
     }
 
-    introScrollId.current = requestAnimationFrame(step)
+    introFrameId = requestAnimationFrame(step)
 
     return () => {
-      cancelAnimationFrame(introScrollId.current)
-      introScrollId.current = 0
+      cancelAnimationFrame(introFrameId)
       introStartedRef.current = false
     }
   }, [

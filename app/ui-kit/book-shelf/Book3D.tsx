@@ -1,14 +1,15 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import Image from "next/image";
 import type { CSSProperties } from "react";
 import { cn } from "../cn";
 import type { Book } from "./types";
-
-const WIDTH = 132;
-const HEIGHT = 188;
-const DEPTH = 26;
+import {
+	BOOK_DEPTH as DEPTH,
+	BOOK_HEIGHT as HEIGHT,
+	BOOK_WIDTH as WIDTH,
+} from "./constants";
 const GUTTER = 6;
 
 // 90 = spine squared to the viewer (shelved). Negative so the open pose isn't
@@ -37,7 +38,7 @@ interface Book3DProps {
 	openMore?: boolean;
 	/** How far to slide over (px) to clear room for another book's popped
 	 * cover — animated with the same spring as the cover/spine rotation so
-	 * both moves read as one motion. */
+	 * both moves read as one m. */
 	shiftX?: number;
 	onClick?: () => void;
 	className?: string;
@@ -57,7 +58,7 @@ export function Book3D({
 	style,
 }: Book3DProps) {
 	return (
-		<motion.button
+		<m.button
 			type="button"
 			aria-pressed={open}
 			aria-label={`${book.title} by ${book.author}`}
@@ -77,7 +78,7 @@ export function Book3D({
 			animate={{ x: shiftX }}
 			transition={SPRING}
 		>
-			<motion.div
+			<m.div
 				className="absolute top-0 left-0 cursor-pointer"
 				style={{
 					width: WIDTH,
@@ -98,7 +99,7 @@ export function Book3D({
 			>
 				{/* cover — hinged at the spine edge on its own, so it can lift
 				    without the spine and page-edge coming along */}
-				<motion.div
+				<m.div
 					className="absolute inset-0"
 					style={{
 						transformOrigin: "0% 50%",
@@ -124,7 +125,7 @@ export function Book3D({
 						/>
 						<span className="absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-black/15" />
 					</div>
-				</motion.div>
+				</m.div>
 
 				{/* spine */}
 				<div
@@ -158,17 +159,7 @@ export function Book3D({
 						boxShadow: "inset -1px 0 1px rgba(0,0,0,0.1)",
 					}}
 				/>
-			</motion.div>
-		</motion.button>
+			</m.div>
+		</m.button>
 	);
 }
-
-// How far an open cover overshoots its spine-width slot — the amount trailing
-// siblings shift right by.
-const OPEN_SHIFT = WIDTH - DEPTH;
-
-export {
-	WIDTH as BOOK_WIDTH,
-	HEIGHT as BOOK_HEIGHT,
-	OPEN_SHIFT as BOOK_OPEN_SHIFT,
-};

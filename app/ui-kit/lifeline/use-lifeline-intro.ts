@@ -7,6 +7,7 @@ import {
   timeAtTrackProgress,
   trackProgressAtTime,
 } from "./lifeline-intro-timing"
+import { usePrefersReducedMotion } from "../use-prefers-reduced-motion"
 
 /** Tweak these */
 export const LIFELINE_LABELS_MS = 400
@@ -43,11 +44,11 @@ function markIntroPlayedToday() {
 export function useLifelineIntro(markerWidths: number[]) {
   // Skip straight to the settled end state for users who prefer reduced
   // motion, or who have already seen the sweep-in today.
-  const [shouldPlay] = useState(() => {
-    if (typeof window === "undefined") return true
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false
-    return !hasPlayedIntroToday()
-  })
+  const prefersReducedMotion = usePrefersReducedMotion()
+  const [playedToday] = useState(
+    () => typeof window !== "undefined" && hasPlayedIntroToday(),
+  )
+  const shouldPlay = !prefersReducedMotion && !playedToday
   const [isPlaying, setIsPlaying] = useState(true)
   const [isComplete, setIsComplete] = useState(false)
   const introTimeoutRef = useRef(0)

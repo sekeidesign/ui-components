@@ -62,7 +62,7 @@ export function AppsPanel() {
 							alt="iPhone bezels"
 							width={56}
 							height={56}
-							className="rounded-[16px] group-hover:scale-103 transition-transform duration-150 will-change-transform"
+							className="rounded-[16px] group-hover:scale-103 transition-transform duration-150 group-hover:will-change-transform"
 						/>
 						Tomokanji
 					</Link>

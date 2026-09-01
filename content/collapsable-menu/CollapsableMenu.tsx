@@ -1,6 +1,6 @@
 import { BellIcon, EnvelopeIcon, HomeIcon } from "@heroicons/react/20/solid";
 import { cn } from "@ui-kit/cn";
-import { motion, useDragControls } from "motion/react";
+import { m, useDragControls } from "motion/react";
 import {
 	createContext,
 	type ReactNode,
@@ -48,9 +48,9 @@ const CollapsableMenuItem = ({
 	const { isDetached } = useCollapsableMenu();
 	const [ref, { width }] = useMeasure();
 	return (
-		<motion.div className="py-1 px-2 bg-gray-100 h-8 min-w-8 overflow-hidden hover:bg-gray-200 rounded-full text-sm text-gray-500 flex items-center justify-center">
+		<m.div className="py-1 px-2 bg-gray-100 h-8 min-w-8 overflow-hidden hover:bg-gray-200 rounded-full text-sm text-gray-500 flex items-center justify-center">
 			{icon}
-			<motion.div
+			<m.div
 				animate={{
 					x: isDetached ? 8 : 0,
 					width: isDetached ? 0 : width,
@@ -60,8 +60,8 @@ const CollapsableMenuItem = ({
 				<span className="font-[500] pl-1" ref={ref}>
 					{label}
 				</span>
-			</motion.div>
-		</motion.div>
+			</m.div>
+		</m.div>
 	);
 };
 
@@ -138,7 +138,7 @@ const CollapsableMenu = () => {
 					Release to snap back
 				</span>
 			</div>
-			<motion.div
+			<m.div
 				drag
 				dragControls={dragControls}
 				dragConstraints={
@@ -193,7 +193,7 @@ const CollapsableMenu = () => {
 					icon={<EnvelopeIcon className="w-4 h-4" />}
 					label="Messages"
 				/>
-			</motion.div>
+			</m.div>
 			<button
 				type="button"
 				className="bg-gray-100 hover:bg-gray-200 hover:text-gray-500 cursor-pointer rounded-md px-2 py-1 text-xs font-[500] text-gray-400 absolute bottom-2 right-2"

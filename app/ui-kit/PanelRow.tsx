@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import type {
 	MouseEventHandler,
 	PointerEventHandler,
@@ -29,7 +29,7 @@ export function PanelRow({
 		// which is the keyboard and screen-reader path — so this box carries no
 		// semantics of its own and needs no key handler of its own.
 		// react-doctor-disable-next-line click-events-have-key-events
-		<motion.div
+		<m.div
 			id={id}
 			role={onClick ? "presentation" : undefined}
 			onClick={onClick}
@@ -42,6 +42,6 @@ export function PanelRow({
 			transition={{ duration: 0.2, ease: "easeInOut" }}
 		>
 			{children}
-		</motion.div>
+		</m.div>
 	);
 }

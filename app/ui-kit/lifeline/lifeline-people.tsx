@@ -1,36 +1,5 @@
 import Image from "next/image"
-import type { LifelineMarker } from "./types"
-
-export interface AggregatedLifelinePerson {
-  name: string
-  mentor: boolean
-  met: boolean
-  photo?: string
-}
-
-export function aggregateLifelinePeople(
-  marker: LifelineMarker,
-): AggregatedLifelinePerson[] {
-  const map = new Map<string, AggregatedLifelinePerson>()
-
-  const add = (
-    name: string,
-    type: "mentor" | "met",
-    photo?: string,
-  ) => {
-    const person = map.get(name) ?? { name, mentor: false, met: false }
-    person[type] = true
-    person.photo = person.photo ?? photo
-    map.set(name, person)
-  }
-
-  marker.mentors?.forEach((person) =>
-    add(person.name, "mentor", person.photo),
-  )
-  marker.met?.forEach((person) => add(person.name, "met", person.photo))
-
-  return [...map.values()]
-}
+import type { AggregatedLifelinePerson } from "./lifeline-people-utils"
 
 function getInitials(name: string) {
   return name

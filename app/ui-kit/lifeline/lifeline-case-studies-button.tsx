@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import Link from "next/link";
 import { cn } from "../cn";
 import type { LifelinePhoto } from "./types";
@@ -64,7 +64,7 @@ export function LifelineCaseStudiesButton({
 				aria-hidden="true"
 			>
 				<AnimatePresence>
-					<motion.img
+					<m.img
 						key={`${active.src}-${index}`}
 						src={active.src}
 						alt=""

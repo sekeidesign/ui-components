@@ -76,7 +76,9 @@ export function LoadingWipePlayground() {
 	const rafRef = useRef(0);
 	// Read every frame, so they must not be state.
 	const paramsRef = useRef(params);
-	paramsRef.current = params;
+	useEffect(() => {
+		paramsRef.current = params;
+	}, [params]);
 	const readyRef = useRef<boolean | null>(null);
 	const progressRef = useRef(0);
 	const preparingRef = useRef<Promise<boolean> | null>(null);

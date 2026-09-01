@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { useEffect, useState } from "react";
 
 const statuses = {
@@ -49,14 +49,14 @@ const FamilyStatusButton = () => {
 	}, []);
 
 	return (
-		<motion.button
+		<m.button
 			layout
 			transition={{ duration: 0.2 }}
 			className={`rounded-full font-[550] cursor-pointer text-lg flex items-center justify-center pr-6 pl-4 gap-2 py-3 overflow-hidden relative ${statuses[status].color}`}
 		>
 			<AnimatePresence mode="popLayout" initial={false}>
-				<Icon status={status} />
-				<motion.span
+				<Icon key={`${status}-icon`} status={status} />
+				<m.span
 					layoutId={status}
 					initial={{ opacity: 0, x: -24 }}
 					animate={{
@@ -73,9 +73,9 @@ const FamilyStatusButton = () => {
 					className="text-nowrap"
 				>
 					{statuses[status].label}
-				</motion.span>
+				</m.span>
 			</AnimatePresence>
-		</motion.button>
+		</m.button>
 	);
 };
 
@@ -89,7 +89,7 @@ const Icon = ({ status }: { status: keyof typeof statuses }) => {
 	return (
 		<div className="flex items-center justify-center size-6">
 			<AnimatePresence mode="popLayout" initial={true}>
-				<motion.div
+				<m.div
 					key={status}
 					variants={iconVariants}
 					initial="initial"
@@ -108,13 +108,13 @@ const Icon = ({ status }: { status: keyof typeof statuses }) => {
 						>
 							<path
 								fillRule="evenodd"
-								d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+								d="M2.25 12c0-5.38 4.37-9.75 9.75-9.75s9.75 4.37 9.75 9.75-4.37 9.75-9.75 9.75S2.25 17.39 2.25 12Zm13.36-1.81a0.75 0.75 0 1 0-1.22-0.87l-3.24 4.53L9.53 12.22a0.75 0.75 0 0 0-1.06 1.06l2.25 2.25a0.75 0.75 0 0 0 1.14-0.09l3.75-5.25Z"
 								clipRule="evenodd"
 							/>
 						</svg>
 					)}
 					{status === "analyzing" && (
-						<motion.svg
+						<m.svg
 							width="20"
 							height="20"
 							viewBox="0 0 20 20"
@@ -132,11 +132,11 @@ const Icon = ({ status }: { status: keyof typeof statuses }) => {
 							role="img"
 							aria-label="Analyzing icon"
 						>
-							<motion.path
+							<m.path
 								initial={{ rotate: 0 }}
 								animate={{ rotate: 360 }}
 								transition={{ duration: 0.5, repeat: Infinity, ease: "linear" }}
-								d="M10 1.5C14.6944 1.5 18.5 5.30558 18.5 10C18.5 14.6944 14.6944 18.5 10 18.5C5.30558 18.5 1.5 14.6944 1.5 10C1.5 5.30558 5.30558 1.5 10 1.5Z"
+								d="M10 1.5C14.69 1.5 18.5 5.31 18.5 10C18.5 14.69 14.69 18.5 10 18.5C5.31 18.5 1.5 14.69 1.5 10C1.5 5.31 5.31 1.5 10 1.5Z"
 								stroke="currentColor"
 								strokeWidth="3"
 								strokeDasharray={0.5}
@@ -145,15 +145,15 @@ const Icon = ({ status }: { status: keyof typeof statuses }) => {
 								pathLength={0.75}
 							/>
 							<path
-								d="M10 1.5C14.6944 1.5 18.5 5.30558 18.5 10C18.5 14.6944 14.6944 18.5 10 18.5C5.30558 18.5 1.5 14.6944 1.5 10C1.5 5.30558 5.30558 1.5 10 1.5Z"
+								d="M10 1.5C14.69 1.5 18.5 5.31 18.5 10C18.5 14.69 14.69 18.5 10 18.5C5.31 18.5 1.5 14.69 1.5 10C1.5 5.31 5.31 1.5 10 1.5Z"
 								stroke="currentColor"
 								opacity={0.2}
 								strokeWidth="3"
 							/>
-						</motion.svg>
+						</m.svg>
 					)}
 					{status === "warning" && (
-						<motion.svg
+						<m.svg
 							xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 24 24"
 							fill="currentColor"
@@ -170,12 +170,12 @@ const Icon = ({ status }: { status: keyof typeof statuses }) => {
 						>
 							<path
 								fillRule="evenodd"
-								d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+								d="M9.4 3c1.16-2 4.04-2 5.2 0l7.36 12.75c1.15 2-0.29 4.5-2.6 4.5H4.64c-2.31 0-3.75-2.5-2.6-4.5L9.4 3ZM12 8.25a0.75 0.75 0 0 1 0.75 0.75v3.75a0.75 0.75 0 0 1-1.5 0V9a0.75 0.75 0 0 1 0.75-0.75Zm0 8.25a0.75 0.75 0 1 0 0-1.5 0.75 0.75 0 0 0 0 1.5Z"
 								clipRule="evenodd"
 							/>
-						</motion.svg>
+						</m.svg>
 					)}
-				</motion.div>
+				</m.div>
 			</AnimatePresence>
 		</div>
 	);

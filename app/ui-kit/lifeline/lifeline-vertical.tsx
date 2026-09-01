@@ -12,20 +12,21 @@ import {
 import { Film, Image as ImageIcon } from "lucide-react";
 import Link from "next/link";
 import { cn } from "../cn";
+import { LifelineEventText } from "./lifeline-event";
 import {
 	getLifelineEventEffect,
 	getLifelineEventImage,
 	getLifelineEventKey,
 	getLifelineEventTitle,
-	LifelineEventText,
-} from "./lifeline-event";
+} from "./lifeline-event-utils";
 import { useLifelineFireworks } from "./lifeline-fireworks";
 import {
 	LifelineLightbox,
 	type LifelineLightboxStart,
 } from "./lifeline-lightbox";
 import { LifelineCaseStudiesButton } from "./lifeline-case-studies-button";
-import { aggregateLifelinePeople, LifelinePeople } from "./lifeline-people";
+import { LifelinePeople } from "./lifeline-people";
+import { aggregateLifelinePeople } from "./lifeline-people-utils";
 import type { LifelineEvent, LifelineMarker, LifelineProps } from "./types";
 import { getMarkerHeight, hasMarkerContent } from "./lifeline-utils";
 import { useLifelineIntro } from "./use-lifeline-intro";
@@ -237,7 +238,7 @@ const LifelineVerticalEntry = forwardRef<
 							<div className="mb-3 flex items-center justify-start gap-2">
 								{marker.badges.map((badge) => (
 									// eslint-disable-next-line @next/next/no-img-element
-									<img
+									<img // react-doctor-disable-line nextjs-no-img-element -- arbitrary media, with no intrinsic size for next/image to work from
 										key={badge.src}
 										src={badge.src}
 										alt={badge.alt}

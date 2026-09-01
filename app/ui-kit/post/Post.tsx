@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ComponentType, PointerEventHandler, ReactNode } from "react";
@@ -443,7 +443,7 @@ function BookCover({ book }: { book: Book }) {
 			className="relative shrink-0"
 		>
 			{/* Positioned so BOOK_PIVOT sits at the box's center, then scaled and tilted
-			    around that point. The travel lives on the inner motion.div so Motion's
+			    around that point. The travel lives on the inner m.div so Motion's
 			    transform doesn't fight the static one. pointer-events-none because Book3D
 			    is a <button> and would otherwise swallow the card's hover and click. */}
 			<div
@@ -456,14 +456,14 @@ function BookCover({ book }: { book: Book }) {
 					filter: BOOK_SHADOW,
 				}}
 			>
-				<motion.div
+				<m.div
 					initial={{ y: 40, opacity: 0 }}
 					whileInView={{ y: 0, opacity: 1 }}
 					viewport={{ once: true, amount: 0.4 }}
 					transition={{ type: "spring", duration: 0.6, bounce: 0.25 }}
 				>
 					<Book3D book={book} open />
-				</motion.div>
+				</m.div>
 			</div>
 		</div>
 	);

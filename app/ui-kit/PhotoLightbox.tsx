@@ -3,6 +3,7 @@
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "./cn";
+import { usePrefersReducedMotion } from "./use-prefers-reduced-motion";
 
 const OPEN_MS = 420;
 const EASE = "cubic-bezier(0.32, 0.72, 0, 1)";
@@ -49,14 +50,10 @@ export function PhotoLightbox({
 	onClosed: () => void;
 }) {
 	const aspect = photo.height / photo.width;
-	const target = useRef<LightboxRect | null>(null);
-	if (target.current === null) target.current = computeTarget(aspect);
-	const { left, top, width, height } = target.current;
+	// Measured once, at mount: the FLIP's destination must not move under it.
+	const [{ left, top, width, height }] = useState(() => computeTarget(aspect));
 
-	const reduceMotion = useRef(
-		typeof window !== "undefined" &&
-			window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-	).current;
+	const reduceMotion = usePrefersReducedMotion();
 
 	const toTransform = useCallback(
 		(home: LightboxRect) =>
@@ -65,6 +62,10 @@ export function PhotoLightbox({
 	);
 
 	const [entered, setEntered] = useState(reduceMotion);
+	// Drives the will-change hint below: promoted for the flight, released once
+	// the transform lands. Starts settled under reduced motion, where there is
+	// no transition and so no transitionend.
+	const [settled, setSettled] = useState(reduceMotion);
 	const [transform, setTransform] = useState(() =>
 		reduceMotion ? "none" : toTransform(start),
 	);
@@ -93,6 +94,7 @@ export function PhotoLightbox({
 			onClosed();
 			return;
 		}
+		setSettled(false);
 		setEntered(false);
 		setTransform(toTransform(getHome() ?? start));
 		// transitionend is the primary signal; this is the safety net.
@@ -142,11 +144,12 @@ export function PhotoLightbox({
 					transition: reduceMotion
 						? undefined
 						: `transform ${OPEN_MS}ms ${EASE}`,
-					willChange: "transform",
+					willChange: settled ? undefined : "transform",
 				}}
 				onTransitionEnd={(event) => {
 					if (event.propertyName !== "transform") return;
 					if (closing.current) onClosed();
+					else setSettled(true);
 				}}
 			>
 				<button
@@ -156,7 +159,7 @@ export function PhotoLightbox({
 					className="block h-full w-full cursor-zoom-out"
 				>
 					{/* eslint-disable-next-line @next/next/no-img-element */}
-					<img
+					<img // react-doctor-disable-line nextjs-no-img-element -- arbitrary media, with no intrinsic size for next/image to work from
 						src={photo.src}
 						alt={photo.alt}
 						className="block h-full w-full object-cover"

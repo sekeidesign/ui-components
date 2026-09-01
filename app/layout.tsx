@@ -8,6 +8,7 @@ import { SocialProvider } from "./ui-kit/social/SocialProvider";
 import { TooltipProvider, TooltipSurface } from "./ui-kit/Tooltip";
 import { getTimeline } from "@/lib/timeline";
 import { Footer } from "./Footer";
+import { MotionProvider } from "./ui-kit/motion/MotionProvider";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -54,6 +55,7 @@ export default function RootLayout({
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 				style={{ backgroundColor: "var(--color-gray-200)" }}
 			>
+				<MotionProvider>
 				<TooltipProvider delay={200} closeDelay={0} timeout={400}>
 					<TooltipSurface />
 					<FilterProvider>
@@ -77,6 +79,7 @@ export default function RootLayout({
 				</div>
 					</FilterProvider>
 				</TooltipProvider>
+				</MotionProvider>
 			</body>
 		</html>
 	);

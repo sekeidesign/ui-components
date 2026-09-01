@@ -2,3 +2,12 @@ allowBuilds:
   '@tailwindcss/oxide': set this to true or false
   sharp: set this to true or false
   unrs-resolver: set this to true or false
+
+# Installs wait for a release to have been public this long (7 days), so a
+# compromised version that gets caught and unpublished within hours never
+# reaches this lockfile.
+minimumReleaseAge: 10080
+
+# Refuse a package whose trust signals (provenance, signatures) are weaker than
+# the version it replaces.
+trustPolicy: no-downgrade

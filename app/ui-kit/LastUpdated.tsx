@@ -1,59 +1,49 @@
-"use client";
+const COMMIT_URL =
+	"https://api.github.com/repos/sekeidesign/sekei-xyz/commits/main";
 
-import { useEffect, useState } from "react";
+/** Long enough that the footer never costs a request per visitor. */
+const REVALIDATE_SECONDS = 3600;
 
-const LastUpdated = () => {
-	const [commit, setCommit] = useState<{
-		message: string;
-		url: string;
-		sha: string;
-		date: string;
-	} | null>(null);
-	const [status, setStatus] = useState<"loading" | "loaded" | "error">(
-		"loading",
-	);
+interface Commit {
+	url: string;
+	sha: string;
+	date: string;
+}
 
-	useEffect(() => {
-		const fetchCommit = async () => {
-			try {
-				const res = await fetch(
-					"https://api.github.com/repos/sekeidesign/sekei-xyz/commits/main",
-				);
-				if (!res.ok) throw new Error(`GitHub API returned ${res.status}`);
-				const data = await res.json();
-				setCommit({
-					message: data.commit.message,
-					url: data.html_url,
-					sha: data.sha.slice(0, 7),
-					date: new Date(data.commit.author.date).toLocaleDateString(
-						"en-US",
-						{
-							month: "short",
-							day: "numeric",
-							year: "numeric",
-						},
-					),
-				});
-				setStatus("loaded");
-			} catch {
-				setStatus("error");
-			}
+/**
+ * Fetched on the server rather than in an effect: the sha is the same for every
+ * reader, so a client fetch spent a round trip per visit and showed a loading
+ * line first. Revalidated hourly, so a deploy isn't needed to move it on.
+ */
+async function readCommit(): Promise<Commit | null> {
+	try {
+		const res = await fetch(COMMIT_URL, {
+			next: { revalidate: REVALIDATE_SECONDS },
+		});
+		if (!res.ok) return null;
+
+		const data = await res.json();
+		return {
+			url: data.html_url,
+			sha: data.sha.slice(0, 7),
+			date: new Date(data.commit.author.date).toLocaleDateString("en-US", {
+				month: "short",
+				day: "numeric",
+				year: "numeric",
+			}),
 		};
+	} catch {
+		return null;
+	}
+}
 
-		fetchCommit();
-	}, []);
-
-	if (status === "error")
-		return (
-			<p className="text-xs font-[500] text-gray-400 py-2">
-				Latest commit unavailable
-			</p>
-		);
+const LastUpdated = async () => {
+	const commit = await readCommit();
 
 	if (!commit)
 		return (
-			<p className="text-xs font-[500] text-gray-600 py-2">
-				Loading latest commit…
+			<p className="text-xs font-[500] text-gray-400 py-2">
+				Latest commit unavailable
 			</p>
 		);
 
@@ -66,7 +56,7 @@ const LastUpdated = () => {
 			style={{ fontFamily: "var(--font-geist-mono)" }}
 		>
 			<span>{commit.sha}</span>
-			<br/>
+			<br />
 			<span className="text-gray-400">on </span>
 			<span>{commit.date}</span>
 		</a>

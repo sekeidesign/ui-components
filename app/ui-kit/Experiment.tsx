@@ -2,7 +2,7 @@
 
 import { Tooltip } from "@ark-ui/react/tooltip";
 import { CommandLineIcon } from "@heroicons/react/16/solid";
-import { AnimatePresence, motion, useInView } from "motion/react";
+import { AnimatePresence, m, useInView } from "motion/react";
 import Link from "next/link";
 import {
 	createContext,
@@ -41,7 +41,7 @@ const ExperimentRoot = ({
 
 	return (
 		<ExperimentContext.Provider value={context}>
-			<motion.div
+			<m.div
 				ref={ref}
 				className="flex gap-px w-full"
 				initial={{ opacity: 0 }}
@@ -59,7 +59,7 @@ const ExperimentRoot = ({
 					{children}
 				</div>
 				<div className="panel flex-1 shrink xl:block hidden stripes" />
-			</motion.div>
+			</m.div>
 		</ExperimentContext.Provider>
 	);
 };
@@ -84,7 +84,7 @@ const ExperimentTitle = ({ children, pageUrl }: ExperimentTitleProps) => {
 			</h2>
 			<AnimatePresence mode="popLayout" initial={false}>
 				{hovering && (
-					<motion.svg
+					<m.svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
 						viewBox="0 0 24 24"
@@ -102,7 +102,7 @@ const ExperimentTitle = ({ children, pageUrl }: ExperimentTitleProps) => {
 							strokeLinejoin="round"
 							d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"
 						/>
-					</motion.svg>
+					</m.svg>
 				)}
 			</AnimatePresence>
 		</Link>
@@ -197,7 +197,7 @@ const ExperimentDescription = ({ children }: ExperimentDescriptionProps) => {
 
 export function ExperimentDivider({ inline = false }: { inline?: boolean }) {
 	return (
-		<motion.div
+		<m.div
 			className="flex gap-px w-full"
 			initial={{ opacity: 0 }}
 			animate={{ opacity: 1 }}
@@ -224,7 +224,7 @@ export function ExperimentDivider({ inline = false }: { inline?: boolean }) {
 					className="size-4 text-gray-200 shrink-0"
 				>
 					<path
-						d="M6.59028 0.326456C6.75136 -0.108853 7.36705 -0.108852 7.52813 0.326457L9.14014 4.68286C9.19079 4.81972 9.29869 4.92762 9.43555 4.97826L13.792 6.59028C14.2273 6.75136 14.2273 7.36705 13.792 7.52813L9.43555 9.14014C9.29869 9.19079 9.19079 9.29869 9.14014 9.43555L7.52813 13.792C7.36705 14.2273 6.75136 14.2273 6.59028 13.792L4.97826 9.43555C4.92762 9.29869 4.81972 9.19079 4.68286 9.14014L0.326456 7.52813C-0.108853 7.36705 -0.108852 6.75136 0.326457 6.59028L4.68286 4.97826C4.81972 4.92762 4.92762 4.81972 4.97826 4.68286L6.59028 0.326456Z"
+						d="M6.59 0.33C6.75-0.11 7.37-0.11 7.53 0.33L9.14 4.68C9.19 4.82 9.3 4.93 9.44 4.98L13.79 6.59C14.23 6.75 14.23 7.37 13.79 7.53L9.44 9.14C9.3 9.19 9.19 9.3 9.14 9.44L7.53 13.79C7.37 14.23 6.75 14.23 6.59 13.79L4.98 9.44C4.93 9.3 4.82 9.19 4.68 9.14L0.33 7.53C-0.11 7.37-0.11 6.75 0.33 6.59L4.68 4.98C4.82 4.93 4.93 4.82 4.98 4.68L6.59 0.33Z"
 						fill="currentColor"
 					/>
 				</svg>
@@ -236,7 +236,7 @@ export function ExperimentDivider({ inline = false }: { inline?: boolean }) {
 					inline ? "hidden" : "xl:block hidden",
 				)}
 			/>
-		</motion.div>
+		</m.div>
 	);
 }
 

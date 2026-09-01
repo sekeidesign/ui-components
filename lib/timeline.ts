@@ -237,20 +237,24 @@ function parseEntry(slug: string): TimelineEntry {
 function readTimeline(): TimelineEntry[] {
 	if (!fs.existsSync(CONTENT_ROOT)) return [];
 
-	return fs
-		.readdirSync(CONTENT_ROOT, { withFileTypes: true })
-		.filter((dirent) => dirent.isDirectory())
-		.map((dirent) => dirent.name)
-		.filter((slug) =>
-			fs.existsSync(path.join(CONTENT_ROOT, slug, "index.mdx")),
-		)
-		.map(parseEntry)
-		.filter((entry) => !entry.draft || process.env.NODE_ENV === "development")
-		// Slug breaks ties so posts sharing a date keep a stable order across
-		// builds instead of following directory read order.
-		.sort(
-			(a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug),
-		);
+	const isDev = process.env.NODE_ENV === "development";
+	const entries: TimelineEntry[] = [];
+
+	for (const dirent of fs.readdirSync(CONTENT_ROOT, { withFileTypes: true })) {
+		if (!dirent.isDirectory()) continue;
+		if (!fs.existsSync(path.join(CONTENT_ROOT, dirent.name, "index.mdx"))) {
+			continue;
+		}
+		const entry = parseEntry(dirent.name);
+		if (entry.draft && !isDev) continue;
+		entries.push(entry);
+	}
+
+	// Slug breaks ties so posts sharing a date keep a stable order across
+	// builds instead of following directory read order.
+	return entries.sort(
+		(a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug),
+	);
 }
 
 let cached: TimelineEntry[] | null = null;

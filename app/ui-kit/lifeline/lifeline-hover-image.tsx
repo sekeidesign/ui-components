@@ -163,6 +163,8 @@ export function LifelineHoverImageProvider({
 
           s.visible = true
           container.style.opacity = "1"
+          // Promoted only while the card is up — see the hide path below.
+          container.style.willChange = "transform"
           video.style.transform = "scale(1)"
 
           cancelAnimationFrame(s.frame)
@@ -211,6 +213,7 @@ export function LifelineHoverImageProvider({
 
         s.visible = true
         container.style.opacity = "1"
+        container.style.willChange = "transform"
         img.style.transform = "scale(1)"
 
         cancelAnimationFrame(s.frame)
@@ -225,6 +228,7 @@ export function LifelineHoverImageProvider({
 
         s.visible = false
         container.style.opacity = "0"
+        container.style.willChange = ""
         img.style.transform = "scale(0.94)"
         if (video) {
           video.pause()
@@ -241,7 +245,7 @@ export function LifelineHoverImageProvider({
       <div
         ref={containerRef}
         aria-hidden="true"
-        className="pointer-events-none fixed left-0 top-0 z-[60] opacity-0 transition-opacity duration-200 ease-out will-change-transform"
+        className="pointer-events-none fixed left-0 top-0 z-[60] opacity-0 transition-opacity duration-200 ease-out"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img

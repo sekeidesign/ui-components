@@ -36,7 +36,7 @@ export const BookLink = ({
 				className="text-gray-900 group font-[500] relative no-underline inline-flex items-center px-0.5 gap-1.5 pl-5 ml-px"
 				target={target}
 			>
-				<span className="group-hover:opacity-50 group-hover:scale-100 absolute w-[calc(100%+4px)] h-full -left-0.5 top-0 bg-gray-200 rounded-md -z-10 opacity-0 scale-50 transition-all duration-200" />
+				<span className="group-hover:opacity-50 group-hover:scale-100 absolute w-[calc(100%+4px)] h-full -left-0.5 top-0 bg-gray-200 rounded-md -z-10 opacity-0 scale-50 transition-[opacity,transform] duration-200" />
 
 				<span
 					className="absolute left-0 w-3.5 h-4 shrink-0"

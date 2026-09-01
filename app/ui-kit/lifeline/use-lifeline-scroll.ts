@@ -36,6 +36,9 @@ const PAGE_MODE_SCROLL_SLOP = 4
 /** How long a resolved mode is trusted before it is measured again. */
 const MODE_RESOLVE_STALE_MS = 250
 
+/** How long after the last transform the track keeps its compositor hint. */
+const WILL_CHANGE_RELEASE_MS = 250
+
 /** A gap this long in the wheel stream ends one gesture and starts the next. */
 const WHEEL_GESTURE_QUIET_MS = 120
 /**
@@ -157,7 +160,6 @@ export function useLifelineScroll(
   const onIntroScrollStartRef = useRef(options.onIntroScrollStart)
   const settlingRef = useRef(false)
   const introWasAnimatingRef = useRef(false)
-  const introScrollId = useRef(0)
   const introScrollStart = useRef(0)
   const introStartedRef = useRef(false)
   const introGetTrackProgressRef = useRef(options.introGetTrackProgress)
@@ -172,18 +174,25 @@ export function useLifelineScroll(
   const gestureStartedHere = useRef(false)
   const gestureReleased = useRef(false)
   const boundaryHitAt = useRef(0)
+  const willChangeRelease = useRef(0)
   const [isLayoutReady, setIsLayoutReady] = useState(false)
   const [isEmbed, setIsEmbed] = useState(false)
   const [introArmed, setIntroArmed] = useState(false)
 
-  modeRef.current = options.mode ?? "auto"
-  isCoarsePointerRef.current = options.isCoarsePointer ?? false
-  introLockedRef.current = options.introLocked ?? false
-  introAnimatingRef.current = options.introAnimating ?? false
-  introSkippedRef.current = options.introSkipped ?? false
-  onIntroSettleCompleteRef.current = options.onIntroSettleComplete
-  onIntroScrollStartRef.current = options.onIntroScrollStart
-  introGetTrackProgressRef.current = options.introGetTrackProgress
+  // Mirrored in a layout effect rather than assigned during render: a render
+  // React replays or discards would otherwise leak its writes. Layout, not
+  // passive, and declared ahead of every effect that reads these — the initial
+  // measure below runs in the same commit and needs them already set.
+  useLayoutEffect(() => {
+    modeRef.current = options.mode ?? "auto"
+    isCoarsePointerRef.current = options.isCoarsePointer ?? false
+    introLockedRef.current = options.introLocked ?? false
+    introAnimatingRef.current = options.introAnimating ?? false
+    introSkippedRef.current = options.introSkipped ?? false
+    onIntroSettleCompleteRef.current = options.onIntroSettleComplete
+    onIntroScrollStartRef.current = options.onIntroScrollStart
+    introGetTrackProgressRef.current = options.introGetTrackProgress
+  })
 
   const setMarkerRef = useCallback(
     (index: number, node: HTMLDivElement | null) => {
@@ -302,11 +311,32 @@ export function useLifelineScroll(
     })
   }, [])
 
+  /**
+   * Promotes the track and its pinned labels for as long as they are moving,
+   * then lets them go. A permanent `will-change` holds a compositor layer for
+   * a timeline that spends most of its life sitting still.
+   */
+  const promoteWhileMoving = useCallback(() => {
+    const track = trackRef.current
+    const labels = labelsRef.current
+    if (track) track.style.willChange = "transform"
+    if (labels) labels.style.willChange = "transform"
+
+    clearTimeout(willChangeRelease.current)
+    willChangeRelease.current = window.setTimeout(() => {
+      if (track) track.style.willChange = ""
+      if (labels) labels.style.willChange = ""
+    }, WILL_CHANGE_RELEASE_MS)
+  }, [])
+
+  useEffect(() => () => clearTimeout(willChangeRelease.current), [])
+
   const applyTranslate = useCallback(
     (value: number) => {
       const max = maxTranslate.current
       const next = clamp(value, 0, max)
       translatePx.current = next
+      promoteWhileMoving()
 
       if (trackRef.current) {
         // Snapped only at the DOM boundary — translatePx stays float so
@@ -319,10 +349,13 @@ export function useLifelineScroll(
       applyLabelSticky(next)
       updateFades()
     },
-    [applyLabelSticky, updateFades],
+    [applyLabelSticky, updateFades, promoteWhileMoving],
   )
 
-  applyTranslateRef.current = applyTranslate
+  // Only the intro rAF loop reads this, and that starts after commit.
+  useLayoutEffect(() => {
+    applyTranslateRef.current = applyTranslate
+  }, [applyTranslate])
 
   /**
    * Page mode or embedded? `"auto"` measures: page mode only when the timeline
@@ -477,14 +510,16 @@ export function useLifelineScroll(
     // instance can't slip through and start early.
     if (isEmbed && !introArmed) return
     if (options.introSkipped || !options.introAnimating) {
-      cancelAnimationFrame(introScrollId.current)
-      introScrollId.current = 0
       introStartedRef.current = false
       return
     }
 
     introWasAnimatingRef.current = true
     const railMs = options.introRailMs ?? 3200
+
+    // One local handle for every frame this run schedules, so the cleanup below
+    // cancels whichever one is outstanding.
+    let frameId = 0
 
     const step = (now: number) => {
       const max = maxTranslate.current
@@ -498,7 +533,7 @@ export function useLifelineScroll(
           onIntroScrollStartRef.current?.()
         }
         sectionRef.current?.style.setProperty("--lifeline-intro-progress", "1")
-        introScrollId.current = 0
+        frameId = 0
         return
       }
 
@@ -524,20 +559,18 @@ export function useLifelineScroll(
       applyTranslateRef.current((1 - progress) * max)
 
       if (progress < 1) {
-        introScrollId.current = requestAnimationFrame(step)
+        frameId = requestAnimationFrame(step)
         return
       }
 
       sectionRef.current?.style.setProperty("--lifeline-intro-progress", "1")
       applyTranslateRef.current(0)
-      introScrollId.current = 0
     }
 
-    introScrollId.current = requestAnimationFrame(step)
+    frameId = requestAnimationFrame(step)
 
     return () => {
-      cancelAnimationFrame(introScrollId.current)
-      introScrollId.current = 0
+      cancelAnimationFrame(frameId)
       introStartedRef.current = false
     }
   }, [

@@ -5,7 +5,7 @@ import { cn } from "../cn"
 import { LIFELINE_STICKY_SHIELD_WIDTH } from "./lifeline-labels"
 import { LifelineMarkerColumn } from "./lifeline-marker"
 import type { LifelineEventImage, LifelineProps } from "./types"
-import { getLifelineEventImage } from "./lifeline-event"
+import { getLifelineEventImage } from "./lifeline-event-utils"
 import { LifelineHoverImageProvider } from "./lifeline-hover-image"
 import { useLifelineIntro } from "./use-lifeline-intro"
 import { useLifelineScroll } from "./use-lifeline-scroll"
@@ -99,14 +99,14 @@ export function LifelineDesktop({
       >
         <div
           ref={trackRef}
-          className="relative flex w-max items-start will-change-transform [--lifeline-people-top:calc(12rem+40px)] [--lifeline-rail:2.5rem]"
+          className="relative flex w-max items-start [--lifeline-people-top:calc(12rem+40px)] [--lifeline-rail:2.5rem]"
           style={{ width: trackWidth }}
         >
           {/* Paints nothing — reserves LIFELINE_STICKY_SHIELD_WIDTH for the scroll
               math in use-lifeline-scroll.ts, which still keys off this node. */}
           <div
             ref={labelsRef}
-            className="lifeline-labels shrink-0 will-change-transform"
+            className="lifeline-labels shrink-0"
             style={{ width: LIFELINE_STICKY_SHIELD_WIDTH }}
           />
 

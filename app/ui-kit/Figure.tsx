@@ -24,7 +24,12 @@ export function Figure({ src, alt, caption }: FigureProps) {
 		const el = imgRef.current;
 		if (!el) return null;
 		const rect = el.getBoundingClientRect();
-		return { left: rect.left, top: rect.top, width: rect.width, height: rect.height };
+		return {
+			left: rect.left,
+			top: rect.top,
+			width: rect.width,
+			height: rect.height,
+		};
 	}, []);
 
 	const openLightbox = () => {
@@ -44,7 +49,7 @@ export function Figure({ src, alt, caption }: FigureProps) {
 			>
 				{/* eslint-disable-next-line @next/next/no-img-element -- arbitrary
 				case-study screenshots without known dimensions. */}
-				<img
+				<img // react-doctor-disable-line nextjs-no-img-element -- arbitrary media, with no intrinsic size for next/image to work from
 					ref={imgRef}
 					src={src}
 					alt={alt}

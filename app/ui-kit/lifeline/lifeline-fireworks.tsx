@@ -126,10 +126,14 @@ function FireworksCanvas({
   onDone: () => void
 }) {
   const paletteRef = useRef(palette)
-  paletteRef.current = palette
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const onDoneRef = useRef(onDone)
-  onDoneRef.current = onDone
+
+  // Both are only read from the render loop below, which runs after commit.
+  useEffect(() => {
+    paletteRef.current = palette
+    onDoneRef.current = onDone
+  }, [palette, onDone])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -241,7 +245,11 @@ export function LifelineFireworksProvider({
   const [playing, setPlaying] = useState(false)
   const [effect, setEffect] = useState<LifelineEventEffect>("fireworks")
   const playingRef = useRef(false)
-  playingRef.current = playing
+
+  // Read from `launch`, an event callback, so a post-commit write is in time.
+  useEffect(() => {
+    playingRef.current = playing
+  }, [playing])
 
   const launch = useCallback((nextEffect: LifelineEventEffect) => {
     if (playingRef.current) return

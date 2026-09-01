@@ -86,6 +86,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 		// eslint-disable-next-line @next/next/no-img-element -- MDX authors
 		// pass arbitrary images without known dimensions.
 		img: ({ alt, ...props }) => (
+			// react-doctor-disable-next-line nextjs-no-img-element -- MDX authors pass arbitrary images without known dimensions
 			<img
 				alt={alt}
 				className="w-full h-auto rounded-md border border-gray-200 shadow-skew bg-white my-6"
