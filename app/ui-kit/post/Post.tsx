@@ -46,11 +46,7 @@ const CHIP = "bg-white ring-1 ring-gray-500/10 shadow-skew";
 
 const MEDIA_SIZE = 179;
 
-/**
- * The nested-bezel surface from Problems: a gray-100 frame with a ring, holding
- * a white card with its own ring. Reused here so a post's artwork sits on the
- * same surface as the figures inside a case study.
- */
+/** The nested-bezel surface from Problems: a gray-100 ringed frame holding a white ringed card. */
 const SURFACE_OUTER =
 	"ring ring-gray-500/10 bg-gray-100 shadow-skew overflow-hidden p-1";
 const SURFACE_INNER =
@@ -82,18 +78,13 @@ const COLUMN_INNER = 768 - 64;
 
 /**
  * Phone geometry from the design. Taller than the square on purpose: the device
- * runs off the bottom and a gradient dissolves it into the surface, so it reads
- * as a screen you're looking down at rather than a cropped rectangle.
+ * runs off the bottom and a gradient dissolves it into the surface.
  */
 const PHONE = { width: 120, height: 257, top: 1, fade: 79 };
 
-
 /**
- * A book has no frame or background — unlike Media and PhoneMedia, it's meant
- * to read as the lightest-weight artwork in the feed. Its box keeps
- * MEDIA_SIZE's width, so every card's media still lines up in the same
- * column, but a shorter height — a square left tall, empty margins above and
- * below the shrunk cover for no reason other than matching a square.
+ * A book has no frame or background. Keeps MEDIA_SIZE's width so every card's
+ * media lines up in the same column, but a shorter height.
  */
 const BOOK_BOX_WIDTH = MEDIA_SIZE;
 const BOOK_BOX_HEIGHT = 130;
@@ -102,10 +93,8 @@ const BOOK_BOX_HEIGHT = 130;
  * Projected width of Book3D's open cover at scale 1, in px.
  *
  * Not simply its 132px width: the cover rotates -16° about its own left edge,
- * which foreshortens it to 132·cos(16°) ≈ 127, and then the parent's 900px
- * perspective magnifies the near (right) edge by ~1.04 because the rotation
- * pushes it 36px toward the viewer. That magnification is why an inset derived
- * from cos alone left less room on the right than on the left.
+ * foreshortening it to 132·cos(16°) ≈ 127, and the parent's 900px perspective
+ * then magnifies the near edge by ~1.04.
  */
 const BOOK_PROJECTED_WIDTH = 130.5;
 
@@ -113,22 +102,14 @@ const BOOK_PROJECTED_WIDTH = 130.5;
 const BOOK_OPEN_DEPTH = BOOK_WIDTH - BOOK_OPEN_SHIFT;
 
 /**
- * Center of the open cover's visual footprint, in Book3D's own local
- * coordinates (before any scale) — x spans [-BOOK_OPEN_DEPTH,
- * -BOOK_OPEN_DEPTH + BOOK_PROJECTED_WIDTH], y spans [0, BOOK_HEIGHT]. Used
- * as the wrapper's transform-origin below: scaling and rotating around the
- * cover's own center, rather than its corner, keeps the cover centered in
- * the box at any scale or angle — the wrapper only has to place this one
- * point at the box's center.
+ * Center of the open cover's footprint, in Book3D's local coordinates. Used as
+ * the wrapper's transform-origin, so scaling and rotating around the cover's
+ * own center keeps it centered in the box at any scale or angle.
  */
 const BOOK_PIVOT_X = -BOOK_OPEN_DEPTH + BOOK_PROJECTED_WIDTH / 2;
 const BOOK_PIVOT_Y = BOOK_HEIGHT / 2;
 
-/**
- * Margin the cover's height leaves inside BOOK_BOX_HEIGHT top-to-bottom.
- * Well past what fitting it requires — unlike Media or PhoneMedia, a book is
- * meant to look small and light, not to fill the box.
- */
+/** Margin the cover leaves inside BOOK_BOX_HEIGHT. Well past what fitting requires — a book is meant to look small. */
 const BOOK_MARGIN = 24;
 
 /** Derived, so BOOK_MARGIN is the only number to tune. */
@@ -138,12 +119,9 @@ const BOOK_SCALE = (BOOK_BOX_HEIGHT - BOOK_MARGIN) / BOOK_HEIGHT;
 const BOOK_TILT = 7;
 
 /**
- * drop-shadow, not box-shadow: the book is scaled and rotated, and a
- * box-shadow follows the untransformed element's own rectangle, so it'd sit
- * skewed and axis-aligned under a tilted cover. drop-shadow follows the
- * rendered cover+spine silhouette instead. Values are in this wrapper's own
- * pre-scale space, so they end up BOOK_SCALE× smaller in the card — sized up
- * from a normal elevation shadow to still read as soft once shrunk.
+ * drop-shadow, not box-shadow: a box-shadow follows the untransformed element's
+ * rectangle and would sit skewed under a tilted cover. Values are in this
+ * wrapper's pre-scale space, so they end up BOOK_SCALE× smaller in the card.
  */
 const BOOK_SHADOW =
 	"drop-shadow(0 26px 24px rgba(15,23,42,0.22)) drop-shadow(0 10px 10px rgba(15,23,42,0.16))";
@@ -151,12 +129,9 @@ const BOOK_SHADOW =
 /**
  * How a card arranges its copy and its artwork.
  *
- * `aside` — artwork beside the copy at every width. For a book cover or a phone:
- * both read as objects sitting next to the text, and one blown up to the full
- * card width would be a poster.
- * `column` — one column at every width. A case study's screenshot runs full
- * width inside it, in the slot a live demo occupies on an experiment, which is
- * what makes those two kinds the big cards in the feed.
+ * `aside` — artwork beside the copy at every width, for a book cover or phone.
+ * `column` — one column at every width; a screenshot runs full width inside
+ *   it, in the slot a live demo occupies on an experiment.
  */
 export type PostLayout = "aside" | "column";
 
@@ -229,10 +204,8 @@ function Meta({
 			>
 				{DATE_FORMAT.format(new Date(`${date}T00:00:00Z`))}
 			</time>
-			{/* Drafts never reach production, so this only ever shows in dev — but
-			    without it there's no way to tell a draft from a published post while
-			    working, which makes `draft: true` look like it does nothing. Pushed
-			    right so it doesn't break up the category · date reading. */}
+			{/* Dev only, since drafts never reach production — but without it there's no
+			    way to tell a draft from a published post while working. */}
 			{draft && (
 				<span className="ml-auto shrink-0 text-[12px] leading-[1.33] font-mono font-[450] text-[#FF5500]">
 					Draft
@@ -243,10 +216,9 @@ function Meta({
 }
 
 /**
- * Short month name rather than dateStyle: "short" — all-numeric dates (8/6/26,
- * 8/7/26) are hard to tell apart in a list. UTC because a post's date is a
- * plain yyyy-mm-dd with no time, so parsing it locally would shift it a day
- * west of Greenwich.
+ * Short month name rather than dateStyle: "short" — all-numeric dates are hard
+ * to tell apart in a list. UTC, since a post's date is a plain yyyy-mm-dd and
+ * parsing it locally would shift it a day west of Greenwich.
  */
 const DATE_FORMAT = new Intl.DateTimeFormat("en-US", {
 	month: "short",
@@ -343,11 +315,7 @@ function Description({
 	);
 }
 
-/**
- * A cover or screenshot, with an optional corner mark: full width at its own
- * ratio, so nothing about it is cropped. Sits in the body above the social bar,
- * the slot an experiment fills with its live demo.
- */
+/** A cover or screenshot at its own ratio, full width — the slot an experiment fills with its live demo. */
 function Media({
 	src,
 	alt,
@@ -392,11 +360,7 @@ function Media({
 	);
 }
 
-/**
- * A screenshot in a phone, for app launches. The device is just a rounded rect
- * with a hairline outline and a layered shadow — no bezel artwork — so any
- * screenshot drops straight in.
- */
+/** A screenshot in a phone: a rounded rect with a hairline outline and a layered shadow, no bezel artwork. */
 function PhoneMedia({
 	src,
 	alt,
@@ -434,10 +398,9 @@ function PhoneMedia({
 					/>
 				</div>
 
-				{/* A layer over the top, not a mask on the device: a mask applies to
-				    the element's whole rendering — box-shadow included — so it took
-				    the shadow with it. The cost is being colour-coupled to what's
-				    behind, which is now the card itself, hence gray-100. */}
+				{/* A layer over the top, not a mask on the device: a mask applies to the
+				    element's whole rendering, box-shadow included. The cost is being
+				    colour-coupled to the card behind, hence gray-100. */}
 				<div
 					style={{
 						height: PHONE.fade,
@@ -456,12 +419,9 @@ function PhoneMedia({
 }
 
 /**
- * An app's own icon, as Title's trailingIcon on a launch post — PhoneMedia's
- * full mockup is too wide for a narrow column, crowding the copy down to a
- * couple of words per line, so mobile drops it for the icon inline with the
- * title instead. Round-rect and a blue-tinted shadow, matching the icon's
- * own treatment on tomokanji.app, rather than FramedIcon's white chip — the
- * icon is already a finished piece of artwork, not a flat mark to frame.
+ * An app's own icon, as Title's trailingIcon on a launch post: PhoneMedia's
+ * mockup is too wide for a narrow column, so mobile drops it for the icon
+ * inline with the title.
  */
 function AppIcon({ src, alt }: { src: string; alt: string }) {
 	return (
@@ -472,14 +432,9 @@ function AppIcon({ src, alt }: { src: string; alt: string }) {
 }
 
 /**
- * The shelf's 3D book, pulled open and shrunk to sit — fully visible, tilted
- * slightly, dead center — inside a plain box with no surface, ring or
- * background, so a book reads as lighter-weight artwork than a cover or
- * screenshot sitting in the nested-bezel frame.
- *
- * No hover-triggered openMore: the page-edge face is a flat, untextured
- * strip, and swinging the cover further open exposes just how thin an
- * illusion it is.
+ * The shelf's 3D book, pulled open and shrunk into a plain box with no surface,
+ * ring or background. No hover openMore — the page-edge face is a flat,
+ * untextured strip.
  */
 function BookCover({ book }: { book: Book }) {
 	return (
@@ -487,13 +442,10 @@ function BookCover({ book }: { book: Book }) {
 			style={{ width: BOOK_BOX_WIDTH, height: BOOK_BOX_HEIGHT }}
 			className="relative shrink-0"
 		>
-			{/* Positioned so BOOK_PIVOT sits at the box's center, then scaled and
-			    tilted around that same point — see BOOK_PIVOT's comment. The
-			    travel (y, opacity) lives on the inner motion.div rather than
-			    here, so Motion's own transform doesn't fight the static one.
-
-			    pointer-events-none because Book3D is a <button>: without it, the
-			    cover takes the cursor and swallows the card's hover and click. */}
+			{/* Positioned so BOOK_PIVOT sits at the box's center, then scaled and tilted
+			    around that point. The travel lives on the inner motion.div so Motion's
+			    transform doesn't fight the static one. pointer-events-none because Book3D
+			    is a <button> and would otherwise swallow the card's hover and click. */}
 			<div
 				className="absolute pointer-events-none"
 				style={{

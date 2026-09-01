@@ -8,9 +8,6 @@ const BATTERY_LEVEL = 82;
 export function AppsPanel() {
 	return (
 		<div className="flex-1 panel p-4 md:p-6 overflow-hidden max-h-80 flex flex-col gap-6">
-			{/* <p className="text-gray-500 text-sm font-[500] leading-tight cursor-default">
-				Building apps for the web and mobile.
-			</p> */}
 			<div className="relative z-10 flex flex-col">
 				<p className="text-sm text-gray-400 tracking-tight">
 					Currently building

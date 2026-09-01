@@ -1,7 +1,6 @@
 /**
- * One icon per post kind, in two poses taken from the Paper design: an outline
- * for resting tabs, a solid fill for the selected tab and the card eyebrow.
- * Both draw with currentColor so the caller controls the tint.
+ * One icon per post kind, in an outline and a solid pose. Both draw with
+ * currentColor so the caller controls the tint.
  */
 import type { ComponentType } from "react";
 

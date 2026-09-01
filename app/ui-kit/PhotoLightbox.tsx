@@ -31,12 +31,6 @@ function computeTarget(aspect: number): LightboxRect {
 	return { left: (vw - width) / 2, top: (vh - height) / 2, width, height };
 }
 
-/**
- * Expands a clicked thumbnail into a centered, near-fullscreen view and
- * back — a FLIP animation on a fixed clone portaled to <body>. The
- * original thumbnail stays in the grid and is re-measured on dismiss so
- * the photo returns wherever it now is, even if the page scrolled.
- */
 export function PhotoLightbox({
 	photo,
 	start,

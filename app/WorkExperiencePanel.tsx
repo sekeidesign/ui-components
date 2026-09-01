@@ -6,14 +6,9 @@ import { useHoverGroup } from "./ui-kit/HoverContext";
 
 export const BIRTH_YEAR = 1994;
 
-// `year` doubles as sort/spacing position on the axis — it doesn't have to
-// be a whole calendar year, so each role gets its own marker (fractional,
-// by start month) instead of multiple roles piling into one year's slot.
-// `label` overrides the displayed value with the real month/year, and
-// `age` is set explicitly since the default (year - birthYear) would
-// otherwise inherit the fractional year and show e.g. "23.75". The "Years"
-// row already carries the date, so event text is the role description,
-// not a repeated date range.
+// `year` is fractional (by start month) so each role gets its own marker instead
+// of piling into one year's slot. `label` shows the real month/year, and `age`
+// is explicit so it doesn't inherit the fractional year.
 export const MARKERS: LifelineMarker[] = [
 	{
 		id: "metalab",
@@ -28,9 +23,8 @@ export const MARKERS: LifelineMarker[] = [
 		],
 		companies: [{ id: "metalab", name: "Metalab" }],
 		photos: [
-			// Mobile-shaped screenshots are much taller (and narrower) than the
-			// landscape ones elsewhere, so they get a smaller width than the
-			// 140/160 default to avoid dominating the row.
+			// Mobile-shaped screenshots are much taller than the landscape ones, so they
+			// get a narrower width than the 140/160 default.
 			{
 				src: "/casestudies/metalab-sorare-1.webp",
 				alt: "Sorare mobile app screen",
@@ -121,9 +115,8 @@ export const MARKERS: LifelineMarker[] = [
 	},
 ];
 
-// The timeline reads newest-first, left to right — the current role is the
-// first thing visible. MARKERS stays chronological above so the data is
-// natural to edit.
+// The timeline reads newest-first; MARKERS stays chronological above so the
+// data is natural to edit.
 export const MARKERS_NEWEST_FIRST = [...MARKERS].reverse();
 
 export function WorkExperiencePanel() {

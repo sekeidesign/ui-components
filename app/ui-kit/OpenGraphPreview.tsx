@@ -1,4 +1,3 @@
-// components/OpenGraphPreview.tsx
 "use client";
 
 import { HoverCard } from "@ark-ui/react/hover-card";
@@ -12,7 +11,6 @@ type OGData = {
 	description?: string;
 };
 
-// Helper function to decode HTML entities
 const decodeHtmlEntities = (text: string): string => {
 	const textarea = document.createElement("textarea");
 	textarea.innerHTML = text;

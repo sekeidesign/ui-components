@@ -12,24 +12,17 @@ import {
 /**
  * The canvas the sweep is drawn into, and nothing else.
  *
- * Deliberately clockless: it draws whatever progress it is handed. The caller
- * runs the animation, which is what keeps the canvas and the DOM sitting above
- * it (a label the shader cannot erase) on one clock instead of two that drift.
- *
- * The device is created on the first `prepare()`, not on mount. An idle GPU
- * context costs even when nothing is animating, and this sits in a feed.
+ * Clockless: it draws whatever progress it is handed, so the canvas and the DOM
+ * above it stay on one clock. The device is created on the first `prepare()`,
+ * not on mount — an idle GPU context costs, and this sits in a feed.
  */
 export interface ShaderWipeHandle {
 	/**
-	 * Creates the device if it does not exist yet. Resolves false when WebGPU
-	 * is unavailable or initialisation fails, so the caller can fall back.
+	 * Creates the device if it does not exist yet. Resolves false when WebGPU is
+	 * unavailable, so the caller can fall back.
 	 */
 	prepare(): Promise<boolean>;
-	/**
-	 * Hands over the loading page bitmap the fragment samples as its base.
-	 * Call again whenever it is repainted; uploading is not free, so not
-	 * per frame.
-	 */
+	/** Hands over the page bitmap the fragment samples. Call again on repaint — uploading isn't free, so not per frame. */
 	setPage(page: HTMLCanvasElement): void;
 	/** Draws a single frame. Cheap — call it from your own animation loop. */
 	draw(params: WipeParams, progress: number): void;
@@ -91,10 +84,8 @@ async function createRenderer(
 			usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
 		});
 		// Nearest, not linear. The page bitmap is built at exactly the drawing
-		// surface's device size, so every texel maps to one fragment — and at
-		// 1:1 a linear filter can only soften, never improve. Canvas text is
-		// already grayscale-antialiased rather than subpixel; resampling it on
-		// top is what makes rasterised UI look washed out.
+		// surface's device size, so a linear filter can only soften canvas text that
+		// is already antialiased.
 		const sampler = device.createSampler({
 			magFilter: "nearest",
 			minFilter: "nearest",
@@ -150,9 +141,9 @@ export const ShaderWipe = forwardRef<
 	useImperativeHandle(ref, () => ({
 		prepare() {
 			if (rendererRef.current) return Promise.resolve(true);
-			// Share one in-flight attempt: React invokes effects twice in dev, and
-			// two devices configuring the same canvas would leave the survivor
-			// drawing into a context the loser unconfigured.
+			// Share one in-flight attempt: React invokes effects twice in dev, and two
+			// devices configuring the same canvas leave the survivor drawing into a
+			// context the loser unconfigured.
 			pendingRef.current ??= (async () => {
 				const canvas = canvasRef.current;
 				if (!canvas) return false;

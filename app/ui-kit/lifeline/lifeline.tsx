@@ -9,11 +9,9 @@ import { LIFELINE_MOBILE_BREAKPOINT } from "./lifeline-layout"
 import type { LifelineProps } from "./types"
 
 /**
- * `lifeline-typeset` carries the timeline's own font stack (Geist, falling
- * back to the system sans) rather than inheriting the host's `font-sans`.
- * A shadcn init writes a self-referential `--font-sans` into the theme
- * block, which resolves to the browser serif, and the timeline is dense
- * enough that the wrong face is the first thing you notice. Override
+ * `lifeline-typeset` carries the timeline's own font stack rather than
+ * inheriting the host's `font-sans`, which a shadcn init can leave
+ * self-referential and resolving to the browser serif. Override
  * `--lifeline-font` to typeset it in something else.
  */
 export function Lifeline(props: LifelineProps) {
@@ -38,12 +36,8 @@ export function Lifeline(props: LifelineProps) {
   if (isMobile) {
     return (
       <LifelineFireworksProvider>
-        {/*
-          The vertical timeline never scrolls inside its own box — it
-          renders at natural height in both modes and the page's scroller
-          owns all scrolling. The vertical hook falls back to the nearest
-          scrollable ancestor (ultimately the document) on its own.
-        */}
+        {/* The vertical timeline renders at natural height in both modes; the page's
+            scroller owns all scrolling. */}
         <div className="lifeline-typeset pt-5">
           <LifelineVertical {...props} />
         </div>

@@ -10,13 +10,10 @@ interface FigureProps {
 	caption?: string;
 }
 
-// Drop screenshots into case studies with this instead of raw markdown
-// images — edit src/alt/caption directly, no need to touch mdx-components.tsx.
 export function Figure({ src, alt, caption }: FigureProps) {
 	const imgRef = useRef<HTMLImageElement>(null);
-	// Case-study screenshots have no known dimensions up front (unlike the
-	// photography grid's data array), so the lightbox's aspect ratio is
-	// read off the loaded <img>'s natural size at click time instead.
+	// Case-study screenshots have no known dimensions, so the lightbox ratio is
+	// read off the loaded <img> at click time.
 	const [open, setOpen] = useState<{
 		start: LightboxRect;
 		width: number;

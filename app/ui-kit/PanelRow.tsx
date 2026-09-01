@@ -8,12 +8,6 @@ import type {
 } from "react";
 import { cn } from "./cn";
 
-/**
- * One row inside the feed's continuous column. The column itself (in the root
- * layout) owns the panel background and the striped gutters, so a row is just
- * padding — that's what lets consecutive posts read as one surface separated by
- * dividers rather than as separate blocks.
- */
 export function PanelRow({
 	children,
 	className,

@@ -91,9 +91,7 @@ function MediaContent({
 }: MediaContentProps) {
 	return (
 		<div className="flex flex-col gap-2 pt-7 pb-4 px-4 w-full items-center justify-center">
-			{/* Media info section */}
 			<div className="flex gap-1 items-center justify-center relative w-full pointer-events-none">
-				{/* Thumbnail */}
 				<div className="h-7 relative aspect-video overflow-hidden rounded-md w-12 flex-shrink-0 bg-zinc-800 flex items-center justify-center">
 					<Image
 						src="https://i.ytimg.com/vi/LEdYbuwn7DE/maxresdefault.jpg"
@@ -104,7 +102,6 @@ function MediaContent({
 					/>
 				</div>
 
-				{/* Text content */}
 				<div className="flex flex-col gap-px grow overflow-hidden items-start px-3 min-w-0">
 					<div className="relative overflow-hidden w-full">
 						<Ticker
@@ -132,11 +129,9 @@ function MediaContent({
 					</p>
 				</div>
 
-				{/* Waveform */}
 				<Waveform isPlaying={isPlaying} />
 			</div>
 
-			{/* Progress bar section */}
 			<div className="flex gap-2 items-center justify-center relative w-full">
 				<p className="font-semibold leading-4 opacity-50 text-xs text-white whitespace-nowrap tabular-nums">
 					{formatTime(duration)}
@@ -152,7 +147,6 @@ function MediaContent({
 				</p>
 			</div>
 
-			{/* Control buttons */}
 			<div className="flex gap-2 items-center w-full justify-center">
 				<button
 					type="button"
@@ -206,7 +200,6 @@ function ClosedState({ isPlaying }: { isPlaying: boolean }) {
 	return (
 		<div className="p-3 w-full">
 			<div className="flex items-center justify-between relative w-full">
-				{/* Small thumbnail */}
 				<div className="h-3 relative rounded-xs aspect-video overflow-hidden w-5 flex-shrink-0 bg-zinc-800 flex items-center justify-center">
 					<Image
 						src="https://i.ytimg.com/vi/LEdYbuwn7DE/maxresdefault.jpg"
@@ -217,7 +210,6 @@ function ClosedState({ isPlaying }: { isPlaying: boolean }) {
 					/>
 				</div>
 
-				{/* Waveform */}
 				<Waveform isPlaying={isPlaying} />
 			</div>
 		</div>
@@ -243,11 +235,8 @@ export default function DynamicIsland({
 		setIsPlaying(!isPlaying);
 	};
 
-	// Two-finger wheel gesture handler
 	const handleWheel = (e: React.WheelEvent) => {
-		// Check if it's a two-finger scroll (deltaY is typically larger for trackpad gestures)
 		if (e.deltaY < -4) {
-			// Scrolling down with two fingers
 			setIsExpanded(true);
 		}
 	};
@@ -257,7 +246,6 @@ export default function DynamicIsland({
 			intervalRef.current = setInterval(() => {
 				setDuration((prev) => {
 					const newDuration = prev + 1;
-					// Loop back to 0 when reaching the end
 					return newDuration >= VIDEO_DURATION ? 0 : newDuration;
 				});
 			}, 1000);
@@ -276,14 +264,12 @@ export default function DynamicIsland({
 		};
 	}, [isPlaying]);
 
-	// Format duration as MM:SS
 	const formatTime = (seconds: number) => {
 		const mins = Math.floor(seconds / 60);
 		const secs = seconds % 60;
 		return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 	};
 
-	// Calculate progress (0-1) based on duration
 	const progress = Math.min(duration / VIDEO_DURATION, 1);
 
 	return (
@@ -297,7 +283,6 @@ export default function DynamicIsland({
 			onMouseLeave={() => setIsExpanded(false)}
 			transition={bigSpringConfig}
 		>
-			{/* Corner decorations */}
 			<div className="w-4 h-4 -mr-[0.5px]">
 				<svg
 					width="16"

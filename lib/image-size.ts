@@ -3,11 +3,7 @@ import path from "node:path";
 
 const PUBLIC_ROOT = path.join(process.cwd(), "public");
 
-/**
- * Enough for a WebP or PNG header, and for the SOF marker of any JPEG that
- * isn't carrying a huge EXIF payload. Reading the head rather than the file
- * keeps a 2000px screenshot from being pulled into memory at build time.
- */
+/** Enough for a WebP or PNG header, and a JPEG's SOF marker without a huge EXIF payload. */
 const HEAD_BYTES = 65536;
 
 export interface ImageSize {
@@ -18,11 +14,9 @@ export interface ImageSize {
 /**
  * Intrinsic pixel size of an image in public/, read straight from its header.
  *
- * Deliberately dependency-free: `sharp` ships inside Next's own tree rather
- * than this project's, so importing it would work until it didn't. Handles the
- * formats the repo actually stores — WebP and JPEG, plus PNG for free — and
- * returns undefined for anything else, which callers treat as "unknown" rather
- * than an error.
+ * Dependency-free on purpose: `sharp` ships inside Next's own tree rather than
+ * this project's. Handles WebP and JPEG, plus PNG for free, and returns
+ * undefined for anything else.
  */
 export function readPublicImageSize(src: string): ImageSize | undefined {
 	// Only public/ paths, and never out of it — a cover is author-controlled

@@ -20,7 +20,6 @@ interface ExperimentContextValue {
 
 const ExperimentContext = createContext<ExperimentContextValue>({});
 
-// Root component
 interface ExperimentRootProps {
 	children: ReactNode;
 	sourceUrl?: string;
@@ -60,7 +59,6 @@ const ExperimentRoot = ({
 	);
 };
 
-// Title component
 interface ExperimentTitleProps {
 	children: ReactNode;
 	pageUrl: string;
@@ -106,7 +104,6 @@ const ExperimentTitle = ({ children, pageUrl }: ExperimentTitleProps) => {
 	);
 };
 
-// Tags container component
 interface ExperimentTagsProps {
 	children: ReactNode;
 }
@@ -125,7 +122,6 @@ const ExperimentTags = ({ children }: ExperimentTagsProps) => {
 	);
 };
 
-// Individual tag component
 interface ExperimentTagProps {
 	children: ReactNode;
 }
@@ -138,7 +134,6 @@ const ExperimentTag = ({ children }: ExperimentTagProps) => {
 	);
 };
 
-// Example container component
 interface ExperimentExampleProps {
 	children: ReactNode;
 	className?: string;
@@ -181,7 +176,6 @@ const ExperimentExample = ({ children, className }: ExperimentExampleProps) => {
 	);
 };
 
-// Description component
 interface ExperimentDescriptionProps {
 	children: ReactNode;
 }
@@ -241,7 +235,6 @@ export function ExperimentDivider({ inline = false }: { inline?: boolean }) {
 	);
 }
 
-// Compose the component with subcomponents
 export const Experiment = Object.assign(ExperimentRoot, {
 	Title: ExperimentTitle,
 	Tags: ExperimentTags,

@@ -14,17 +14,15 @@ function getScrollParent(element: HTMLElement | null): HTMLElement | null {
     node = node.parentElement
   }
 
-  // Nothing on the way up scrolls, so the document does — which is the
-  // ordinary case for a page-mode timeline in a page that just scrolls.
-  // Returning null here left the whole rail `invisible` with no error.
+  // Nothing on the way up scrolls, so the document does — the ordinary case for
+  // a page-mode timeline. Returning null here left the whole rail `invisible`.
   return (document.scrollingElement as HTMLElement | null) ?? null
 }
 
 interface LifelineVerticalScrollOptions {
   /**
-   * Embedded, the timeline opens at its start rather than where a skipped
-   * intro would have settled it — the reader is arriving at a module in a
-   * page, not returning to a timeline that already played.
+   * Embedded, the timeline opens at its start rather than where a skipped intro
+   * would have settled it.
    */
   isEmbed?: boolean
   introLocked?: boolean

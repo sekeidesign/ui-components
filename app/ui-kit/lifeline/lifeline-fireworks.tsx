@@ -39,10 +39,6 @@ void main() {
 }
 `
 
-/**
- * Additive point-glow fireworks in Old Glory red, white, and blue,
- * composited over a night-sky scrim via premultiplied canvas alpha.
- */
 const FRAGMENT_SHADER = `
 precision highp float;
 
@@ -246,9 +242,6 @@ export function LifelineFireworksProvider({
   const playingRef = useRef(false)
   playingRef.current = playing
 
-  // The original also cross-fades a light page to dark for the show via
-  // next-themes, restoring after — dropped here since this site has no
-  // dark-mode toggle infrastructure. The canvas show itself is unaffected.
   const launch = useCallback((nextEffect: LifelineEventEffect) => {
     if (playingRef.current) return
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return

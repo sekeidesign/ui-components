@@ -25,9 +25,8 @@ interface LifelineMarkerColumnProps {
   introDuration?: number
 }
 
-// Renders the whole marker body as a single link when a company has an
-// href, instead of just the company name — anchors can't nest, so this
-// replaces the old per-company link rather than wrapping around it.
+// Renders the whole marker body as one link when a company has an href —
+// anchors can't nest, so this replaces the per-company link.
 function LinkOrDiv({
   href,
   className,
@@ -97,12 +96,8 @@ export const LifelineMarkerColumn = forwardRef<
           </p>
 
           <div className="relative w-full pb-10 text-zinc-500 transition-colors duration-300 group-hover:text-black">
-            {/* When this column carries people, the content block reserves
-                the band's height as a floor: short and average columns put
-                their portraits on the same line as every other column, and
-                a column whose events run past the floor pushes its own
-                portraits below them instead of under them. pb-6 is the gap
-                in the overflow case — absorbed by the floor otherwise. */}
+            {/* A column carrying people reserves the band's height as a floor, so
+                portraits line up across columns; pb-6 is the gap in the overflow case. */}
             <LinkOrDiv
               href={primaryHref}
               className={cn(
@@ -197,10 +192,8 @@ export const LifelineMarkerColumn = forwardRef<
 
               {photos.length > 0 && (
                 <div className="mt-6">
-                  {/* The whole column above is already `primaryHref`'s
-                      anchor (via LinkOrDiv) when it's set — a nested
-                      anchor here would be invalid HTML, so this always
-                      renders as a plain chip, never its own link. */}
+                  {/* The column above is already primaryHref's anchor, so this is always a
+                      plain chip — a nested anchor would be invalid HTML. */}
                   <LifelineCaseStudiesButton
                     photos={photos}
                     href={primaryHref}

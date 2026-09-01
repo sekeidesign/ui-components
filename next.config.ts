@@ -51,12 +51,9 @@ const nextConfig: NextConfig = {
 const withMDX = createMDX({
   options: {
     // Parses the YAML block in content/*/index.mdx so it stops rendering as
-    // literal text, and re-exports it as `frontmatter` for anything that
-    // needs it at the module level. lib/timeline.ts reads the same block with
-    // gray-matter instead, since listing posts must not compile their bodies.
-    // Plugins named as strings, not imported references: Turbopack serializes
-    // these options to hand them to its Rust MDX loader, which turns a
-    // function into null and fails with "Cannot use 'in' operator ... in null".
+    // literal text, and re-exports it as `frontmatter`. Plugins named as strings,
+    // not imported references: Turbopack serializes these options for its Rust MDX
+    // loader, which turns a function into null.
     remarkPlugins: [
       ["remark-frontmatter"],
       ["remark-mdx-frontmatter", { name: "frontmatter" }],

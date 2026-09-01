@@ -1,7 +1,5 @@
 import { cn } from "./cn";
 
-// Same divider as the kitchen page's ExperimentDivider, without the
-// panel-grid wrapper so it can sit inside article prose.
 export function SparkleDivider({ className }: { className?: string }) {
 	return (
 		<div className={cn("flex items-center gap-4 w-full", className)}>

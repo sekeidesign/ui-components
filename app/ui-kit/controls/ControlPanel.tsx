@@ -1,14 +1,6 @@
 import type { ReactNode } from "react";
 import { cn } from "../cn";
 
-/**
- * Container for a set of controls: rows divided rather than spaced, so a long
- * list of knobs reads as one instrument instead of a stack of form fields.
- *
- * Deliberately unopinionated about its edges — the default gives it a rounded,
- * ringed surface, and a caller that wants it flush against a container passes
- * its own radius and borders.
- */
 export function ControlPanel({
 	title,
 	children,

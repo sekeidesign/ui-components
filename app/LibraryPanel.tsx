@@ -9,9 +9,7 @@ import { cn } from "./ui-kit/cn";
 import { useHoverGroup } from "./ui-kit/HoverContext";
 import { StarIcon } from "./ui-kit/icons/StarIcon";
 
-// Spine colors are picked per book (cloth-bound library, not literal
-// brand/cover colors) — muted so the shelf reads as one set. Ratings are
-// placeholders until the real ones come in.
+// Spine colors are picked per book, not taken from real covers. Ratings are placeholders.
 const BOOKS: Book[] = [
 	{
 		id: "competing-against-luck",
@@ -140,8 +138,7 @@ function StarRating({ rating }: { rating: number }) {
 
 export function LibraryPanel() {
 	const reading = useHoverGroup("reading");
-	// Only one book is ever open — Competing Against Luck (the one I'm currently
-	// reading) by default, then whichever the user picks by click or chevron.
+	// Only one book is open at a time; this one by default.
 	const [activeIndex, setActiveIndex] = useState(0);
 	const active = BOOKS[activeIndex];
 

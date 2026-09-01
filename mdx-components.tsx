@@ -3,9 +3,6 @@ import Link from "next/link";
 import { SparkleDivider } from "@ui-kit/SparkleDivider";
 import { TextLink } from "@ui-kit/TextLink";
 
-// Matches the site's existing type scale/palette (see AboutPanel,
-// WorkExperiencePanel) so case study prose reads as part of the same
-// system instead of default browser typography.
 export function useMDXComponents(components: MDXComponents): MDXComponents {
 	return {
 		h1: (props) => (

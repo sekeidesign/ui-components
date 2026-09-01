@@ -1,15 +1,12 @@
 /**
  * A loading surface that leaves by being swept off, rather than by fading.
  *
- * The sweep is one fullscreen fragment shader: a turbulent edge trailed by a
- * gradient ribbon, writing premultiplied alpha into a transparent canvas so
- * whatever sits behind it shows through where the edge has passed. No
- * screenshotting, no compositing — the page underneath is simply revealed.
+ * One fullscreen fragment shader: a turbulent edge trailed by a gradient
+ * ribbon, writing premultiplied alpha into a transparent canvas so whatever
+ * sits behind it shows through where the edge has passed.
  *
- * Raw WebGPU rather than a wrapper. There is one pipeline and one uniform
- * buffer here; a resource framework would be more code than it saves, and
- * owning `configure`/`destroy` outright avoids the context being pulled out
- * from under a second device in React's double-invoked effects.
+ * Raw WebGPU: owning `configure`/`destroy` outright avoids the context being
+ * pulled out from under a second device in React's double-invoked effects.
  */
 
 export interface WipeParams {
@@ -93,11 +90,8 @@ export function easeInOutCubic(t: number): number {
 
 /**
  * The sweep axis in uv space: `dot(uv, dir) + bias` runs 0 to 1 as uv crosses
- * the unit square along `angleDeg`.
- *
- * Dividing by `|dx| + |dy|` — the square's extent along that axis — is what
- * keeps the sweep corner-to-corner at every angle instead of finishing early
- * on the diagonals.
+ * the unit square along `angleDeg`. Dividing by `|dx| + |dy|` is what keeps the
+ * sweep corner-to-corner at every angle instead of finishing early diagonally.
  */
 export function sweepAxis(angleDeg: number): {
 	dir: readonly [number, number];
@@ -112,13 +106,10 @@ export function sweepAxis(angleDeg: number): {
 }
 
 /**
- * Where the shader's edge sits, in sweep units, at a given eased progress —
- * the JS mirror of the `edge` expression in `wipeDistance`.
- *
- * The edge starts a full ribbon-width off-screen and ends past the far
- * corner, so it is *not* the same number as progress. Anything in the DOM
- * that has to travel with the sweep — the play label, which a shader cannot
- * erase — must clip against this, not against progress.
+ * Where the shader's edge sits, in sweep units, at a given eased progress — the
+ * JS mirror of `edge` in `wipeDistance`. Not the same number as progress: the
+ * edge starts a full ribbon-width off-screen. Anything in the DOM travelling
+ * with the sweep must clip against this.
  */
 export function wipeEdgeAt(progress: number, params: WipeParams): number {
 	const from = -(params.band + params.turbulence);
@@ -127,10 +118,9 @@ export function wipeEdgeAt(progress: number, params: WipeParams): number {
 }
 
 /**
- * The un-swept region as a `clip-path` polygon: the unit square clipped by
- * the sweep's half-plane (Sutherland–Hodgman), so the result honours any
- * angle. Used for the DOM label, and for the whole surface when WebGPU is
- * unavailable — a hard edge, since clip-path has no feather or turbulence.
+ * The un-swept region as a `clip-path` polygon: the unit square clipped by the
+ * sweep's half-plane (Sutherland–Hodgman), so it honours any angle. Used for
+ * the DOM label, and for the whole surface when WebGPU is unavailable.
  */
 export function wipeClipPath(edge: number, angleDeg: number): string {
 	const { dir, bias } = sweepAxis(angleDeg);
@@ -170,13 +160,7 @@ export function hexToRgb(hex: string): [number, number, number] {
 	return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
 }
 
-/**
- * The shader.
- *
- * `wipeDistance` is the swappable core: replace it for a radial or
- * noise-dissolve variant and the ribbon, grain and entry points all still
- * apply.
- */
+/** `wipeDistance` is the swappable core: replace it for a radial or dissolve variant. */
 export const WIPE_WGSL = /* wgsl */ `
 struct Params {
   // Sweep axis: dot(uv, dir) + bias runs 0 -> 1 across the square.
@@ -199,9 +183,8 @@ struct Params {
 }
 
 @group(0) @binding(0) var<uniform> params: Params;
-// The loading page — surface, grain, label and button — as pixels. Sampling
-// it here rather than layering DOM over the canvas is what lets one alpha
-// field carry the whole plane off on the same edge.
+// The loading page as pixels. Sampling it here rather than layering DOM over
+// the canvas is what lets one alpha field carry the whole plane off.
 @group(0) @binding(1) var pageSampler: sampler;
 @group(0) @binding(2) var pageTexture: texture_2d<f32>;
 
@@ -252,11 +235,9 @@ fn fbm(p: vec2f) -> f32 {
   return value / 0.875;
 }
 
-// 32-bit bit-mixing hash (lowbias32). hash21 above is a fract-multiply hash:
-// fine for fbm, whose inputs are small, but fed the large integer
-// coordinates a per-pixel grain needs, its fractional parts cycle with a
-// short period and f32 precision collapses — visible as diagonal lattices
-// across the grain. This one avalanches properly.
+// lowbias32. hash21 above is a fract-multiply hash: fine for fbm, but at the
+// large integer coordinates a per-pixel grain needs its fractional parts cycle
+// with a short period and f32 precision collapses into diagonal lattices.
 fn hashU32(value: u32) -> u32 {
   var h = value;
   h ^= h >> 16u;
@@ -301,9 +282,8 @@ fn rampColor(t: f32) -> vec3f {
 @fragment fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
   let grain = grainAt(uv) * params.grainAmount;
   let s = wipeDistance(uv, params.progress);
-  // Grain the edge distance, not the finished alpha. Offsetting alpha would
-  // punch holes through the untouched page too; offsetting the distance only
-  // breaks up the edge as it travels.
+  // Grain the edge distance, not the finished alpha: offsetting alpha would
+  // punch holes through the untouched page too.
   let alpha = smoothstep(0.0, params.feather, s + grain * params.feather * 2.0);
   // Swirl the ramp coordinate with an independent noise field, so the
   // colours smear into each other instead of striping.
@@ -311,9 +291,8 @@ fn rampColor(t: f32) -> vec3f {
   let bandT = clamp(s / params.band + swirl, 0.0, 1.0);
   let bandWeight = 1.0 - smoothstep(params.band * params.bleed, params.band, s);
   let page = textureSample(pageTexture, pageSampler, uv).rgb;
-  // Grain rides on the ribbon only. The page bitmap already carries its own,
-  // painted with the same hash — graining it twice here would make the
-  // untouched area differ from the identical bitmap shown before play.
+  // Grain rides on the ribbon only — the page bitmap already carries its own,
+  // painted with the same hash.
   let ribbon = clamp(rampColor(bandT) * (1.0 + grain * 0.5), vec3f(0.0), vec3f(1.0));
   let rgb = mix(page, ribbon, bandWeight);
   // Premultiplied: the canvas is transparent where the sweep has passed.
@@ -325,11 +304,9 @@ fn rampColor(t: f32) -> vec3f {
 export const UNIFORM_FLOATS = 32;
 
 /**
- * Packs the params into the uniform struct.
- *
- * Offsets are hand-maintained against the WGSL above. Every vector lands on
- * its natural boundary — `dir` at byte 0, `resolution` at 48, `stops` at 64
- * — so there is no implicit padding to reason about.
+ * Packs the params into the uniform struct. Offsets are hand-maintained against
+ * the WGSL above: `dir` at byte 0, `resolution` at 48, `stops` at 64, so there
+ * is no implicit padding to reason about.
  */
 export function packParams(
 	// Pinned to ArrayBuffer, not ArrayBufferLike: `writeBuffer` will not accept

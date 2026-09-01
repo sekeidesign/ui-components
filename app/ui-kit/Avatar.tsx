@@ -1,10 +1,6 @@
 import Image from "next/image";
 import { cn } from "./cn";
 
-/**
- * The portrait treatment from the old home panel: a white bezel and a hairline
- * ring, so it reads as a physical object rather than a cropped circle.
- */
 export function Avatar({
 	size = 64,
 	className,

@@ -12,10 +12,7 @@ interface PostCardProps {
 	entry: TimelineEntry;
 	/** First item is above the fold; skip the scroll gate to avoid a blank box. */
 	eager?: boolean;
-	/**
-	 * Links the card to its post. Off on the post's own page, where the same
-	 * card is the header — linking to where you already are is noise.
-	 */
+	/** Links the card to its post. Off on the post's own page, where the same card is the header. */
 	linked?: boolean;
 	/** Rendered MDX body, for entries that show in full in the feed. */
 	children?: ReactNode;
@@ -32,9 +29,6 @@ export function PostCard({
 	const isExperiment = entry.kind === "experiment";
 	const hasDemo = entry.preview === "live";
 
-	// A book's cover is portrait and overflows its box, and a launch gets a
-	// phone; a case study gets its screenshot full width. Experiments trade
-	// artwork for a live demo, and work posts carry their mark beside the title.
 	const media = isBook ? (
 		entry.cover && (
 			<Post.BookCover
@@ -65,10 +59,6 @@ export function PostCard({
 		/>
 	) : null;
 
-	// A book cover and a phone are objects beside the copy. A case study's
-	// screenshot instead runs full width in the body, above the social bar —
-	// the same slot and the same weight as an experiment's live demo, which is
-	// what makes those the big cards in the feed.
 	const aside = isBook || entry.kind === "launch";
 	const layout = media && aside ? "aside" : "column";
 
@@ -106,8 +96,6 @@ export function PostCard({
 				{layout === "column" && media}
 
 				<Post.Footer>
-					{/* One cluster on the left so the launch button reads as part of the
-					    same row of controls as the social chips. */}
 					<div className="flex items-center gap-2">
 						<SocialBar
 							slug={entry.slug}

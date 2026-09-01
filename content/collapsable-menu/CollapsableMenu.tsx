@@ -12,7 +12,6 @@ import useMeasure from "react-use-measure";
 
 const DRAG_THRESHOLD = 88;
 
-// Context for collapsible menu state
 interface CollapsableMenuContextValue {
 	isDetached: boolean;
 	setIsDetached: (detached: boolean) => void;
@@ -21,7 +20,6 @@ interface CollapsableMenuContextValue {
 const CollapsableMenuContext =
 	createContext<CollapsableMenuContextValue | null>(null);
 
-// Provider component
 interface CollapsableMenuProviderProps {
 	children: ReactNode;
 }
@@ -65,7 +63,6 @@ const CollapsableMenuItem = ({
 	);
 };
 
-// Hook to use the context
 const useCollapsableMenu = () => {
 	const context = useContext(CollapsableMenuContext);
 	if (!context) {
@@ -111,7 +108,6 @@ const CollapsableMenu = () => {
 			setIsDetached(false);
 		}
 
-		// Reset the over home state when drag ends
 		setIsOverHome(false);
 	};
 
@@ -156,7 +152,6 @@ const CollapsableMenu = () => {
 						setIsDetached(true);
 					}
 
-					// Check if we're dragging over the island home area
 					if (isDetached && islandHome.current) {
 						const isWithinBounds = isWithinIslandHome(event);
 
@@ -207,6 +202,5 @@ const CollapsableMenu = () => {
 	);
 };
 
-// Export the provider and component
 export { CollapsableMenuProvider, useCollapsableMenu };
 export default CollapsableMenu;

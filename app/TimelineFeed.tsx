@@ -7,11 +7,6 @@ import { PostCard } from "@ui-kit/post/PostCard";
 import type { TimelineEntry } from "@/lib/timeline";
 import { KIND_FILTER } from "@/lib/timeline-filters";
 
-/**
- * Filtering happens here rather than on the server: the selection lives in a
- * query param, and narrowing a list the client already has is instant and keeps
- * the page static.
- */
 export function TimelineFeed({
 	entries,
 	bodies,

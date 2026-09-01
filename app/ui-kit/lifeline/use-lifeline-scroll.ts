@@ -39,23 +39,15 @@ const MODE_RESOLVE_STALE_MS = 250
 /** A gap this long in the wheel stream ends one gesture and starts the next. */
 const WHEEL_GESTURE_QUIET_MS = 120
 /**
- * Embedded: once the rail bottoms out, the wheel keeps being swallowed
- * until the stream has been quiet this long. Trackpad inertia arrives as
- * one unbroken stream, so a fast flick that eats the last of the rail
- * dies here instead of spilling into the page behind it.
+ * Embedded: once the rail bottoms out the wheel keeps being swallowed until the
+ * stream has been quiet this long. Trackpad inertia arrives as one unbroken
+ * stream, so a fast flick doesn't spill into the page behind.
  */
 const EMBED_BOUNDARY_QUIET_MS = 260
-/**
- * …but never hold longer than this. Inertia decays; a finger or a wheel
- * that is still going does not, so a sustained scroll gets through.
- */
+/** …but never hold longer than this, so a sustained scroll gets through. */
 const EMBED_BOUNDARY_MAX_HOLD_MS = 900
 
-/**
- * How early the sweep is armed, relative to the module entering view. A
- * couple of hundred pixels means it is already moving by the time it is
- * properly on screen, rather than starting cold under the reader's eyes.
- */
+/** How early the sweep is armed, relative to the module entering view. */
 const EMBED_INTRO_ARM_MARGIN = "0px 0px 200px 0px"
 
 function normalizeWheelDelta(event: WheelEvent) {
@@ -98,9 +90,8 @@ function getViewportCoverage(element: HTMLElement) {
 }
 
 /**
- * Is there a vertical scroll behind this element for a released wheel to
- * drive? Walks out to the document, stopping at the first ancestor that
- * clips — a `LifelineShell` is `overflow-hidden`, so nothing escapes it.
+ * Is there a vertical scroll behind this element for a released wheel to drive?
+ * Walks out to the document, stopping at the first ancestor that clips.
  */
 function hasReleasableScroll(section: HTMLElement) {
   let node = section.parentElement
@@ -228,9 +219,8 @@ export function useLifelineScroll(
       if (!labels) return { isSticky, labelLeft }
 
       if (isSticky) {
-        // Derived from the track's snapped offset so the two transforms
-        // cancel to exactly LIFELINE_STICKY_LEFT — the pinned labels
-        // must not drift a fraction against the snapped track.
+        // Derived from the track's snapped offset so the two transforms cancel exactly
+        // and the pinned labels don't drift against the track.
         const labelExtra =
           LIFELINE_STICKY_LEFT -
           snapToDevicePixel(startInset.current - translate)
@@ -277,9 +267,9 @@ export function useLifelineScroll(
 
       let opacity = 1
 
-      // Fade a marker out only as scrubbing carries it left of where
-      // it rests at translate 0 — the first markers naturally live
-      // inside the fade zone and must not open dimmed.
+      // Fade a marker out only as scrubbing carries it left of where it rests at
+      // translate 0 — the first markers live inside the fade zone and must not open
+      // dimmed.
       const naturalLeft = markerLeft + translatePx.current
       const restLeft = Math.min(naturalLeft, leftFadeZone)
       if (markerLeft < restLeft) {
@@ -335,15 +325,11 @@ export function useLifelineScroll(
   applyTranslateRef.current = applyTranslate
 
   /**
-   * Page mode or embedded? An explicit `mode` decides it outright.
-   * `"auto"` measures: the timeline is the page only when it covers most
-   * of the viewport *and* there is nothing behind it left to scroll.
-   * Both halves matter — a full-bleed hero section on a long landing page
-   * covers the viewport but must still hand the wheel back at the ends.
+   * Page mode or embedded? `"auto"` measures: page mode only when the timeline
+   * covers most of the viewport *and* nothing behind it is left to scroll.
    *
-   * Cached for MODE_RESOLVE_STALE_MS because this reads layout and the
-   * wheel path calls it. `force` is for measure passes, which are already
-   * doing layout work.
+   * Cached for MODE_RESOLVE_STALE_MS because this reads layout and the wheel path
+   * calls it. `force` is for measure passes, already doing layout work.
    */
   const resolveMode = useCallback((force = false) => {
     const section = sectionRef.current
@@ -398,12 +384,9 @@ export function useLifelineScroll(
       : null
 
     /**
-     * A full-page lifeline always follows the host chrome. An embedded one
-     * follows it only when the module actually spans it — a full-bleed
-     * module lines its rail up with the logo and the container's right edge,
-     * exactly as the full-page version does, while a timeline in a narrow
-     * card has nothing to align to a nav sitting outside its own box and
-     * measures itself instead.
+     * Follow the host chrome in page mode, and when an embedded module actually
+     * spans it. A timeline in a narrow card has nothing to align to a nav outside
+     * its own box, so it measures itself instead.
      */
     const followChrome =
       !embed ||
@@ -448,15 +431,13 @@ export function useLifelineScroll(
   }, [markerCount])
 
   useLayoutEffect(() => {
-    // A timeline short enough to fit its stage measures max = 0. It still has
-    // to be shown — gating readiness on a scrollable track left any small
-    // timeline permanently `invisible`.
+    // A timeline short enough to fit its stage measures max = 0 and still has to
+    // be shown — gating readiness on a scrollable track left it `invisible`.
     const max = measureLayout()
 
     if (!initialized.current) {
-      // A skipped intro parks the rail where the intro would have settled
-      // it — translate 0, the newest markers. A playing intro opens at the
-      // far end so the sweep can travel right-to-left into the present.
+      // A skipped intro parks the rail at translate 0, the newest markers. A playing
+      // one opens at the far end and sweeps right-to-left into the present.
       translatePx.current = introSkippedRef.current ? 0 : max
       initialized.current = true
     }
@@ -468,10 +449,8 @@ export function useLifelineScroll(
   }, [])
 
   /**
-   * A full-page lifeline opens as the page opens, so its intro needs no
-   * cue. An embedded one can be anywhere, including far below the fold —
-   * playing there would spend the sweep on nobody. So it waits until the
-   * module is about to come into view.
+   * A full-page lifeline opens as the page opens. An embedded one can be far
+   * below the fold, so it waits until the module is about to come into view.
    */
   useEffect(() => {
     if (!isEmbed) return
@@ -494,10 +473,8 @@ export function useLifelineScroll(
 
   useEffect(() => {
     if (!isLayoutReady) return
-    // Embedded, hold the sweep until the module is in view. `isLayoutReady`
-    // and `isEmbed` are set in the same commit, so by the time this runs for
-    // real the mode is already known and an embedded instance cannot slip
-    // through and start early.
+    // `isLayoutReady` and `isEmbed` are set in the same commit, so an embedded
+    // instance can't slip through and start early.
     if (isEmbed && !introArmed) return
     if (options.introSkipped || !options.introAnimating) {
       cancelAnimationFrame(introScrollId.current)
@@ -513,10 +490,8 @@ export function useLifelineScroll(
       const max = maxTranslate.current
 
       if (max <= 0) {
-        // Nothing to travel: a timeline that fits its stage has no rail to
-        // sweep. Waiting for one spun this loop forever and left the intro
-        // lock on, so run the intro out where it already is — the markers
-        // and labels still get their fade, there is just no journey.
+        // A timeline that fits its stage has no rail to sweep. Waiting for one spun
+        // this loop forever and left the intro lock on, so run it out where it is.
         if (!introStartedRef.current) {
           introStartedRef.current = true
           introScrollStart.current = now
@@ -644,9 +619,8 @@ export function useLifelineScroll(
         }
 
         if (next <= 0 || next >= max) {
-          // Coasting into an end counts as hitting it, so the next wheel
-          // event starts its hold from the moment of contact rather than
-          // restarting the clock.
+          // Coasting into an end counts as hitting it, so the next wheel event starts
+          // its hold from the moment of contact.
           if (isEmbedRef.current && boundaryHitAt.current === 0) {
             boundaryHitAt.current = performance.now()
           }
@@ -704,9 +678,8 @@ export function useLifelineScroll(
         dragVelocity.current * (1 - WHEEL_MOMENTUM_BLEND) +
         impulse * WHEEL_MOMENTUM_BLEND
 
-      // Embedded under reduced motion, skip the coast: inertia is what the
-      // preference asks you to drop, and it is also the one thing that
-      // makes the release decision non-deterministic.
+      // Reduced motion drops the coast: inertia is what the preference asks you to
+      // drop, and it's what makes the release decision non-deterministic.
       if (isEmbedRef.current && prefersReducedMotionRef.current) return
 
       if (momentumId.current === 0) {
@@ -721,11 +694,9 @@ export function useLifelineScroll(
     }
 
     /**
-     * Segments the wheel stream into gestures, before the section's own
-     * handler sees the event — a capture listener on the window runs ahead
-     * of the target. The section alone cannot tell a gesture that started
-     * on it from a page-scroll gesture that merely arrived on it, because
-     * it only sees events once it is under the pointer.
+     * Segments the wheel stream into gestures. A window capture listener runs ahead
+     * of the section, which can't tell a gesture that started on it from one that
+     * merely arrived on it.
      */
     const onWheelStream = (event: WheelEvent) => {
       const now = performance.now()
@@ -754,17 +725,9 @@ export function useLifelineScroll(
 
       const delta = normalizeWheelDelta(event)
       /**
-       * The two axes are not the same gesture and do not share a sign.
-       *
-       * Vertical is page scrolling: the intro leaves the rail at the
-       * present, and scrolling down walks back through it — the same in both
-       * modes. Embedding changes where the wheel *goes* at the ends of the
-       * rail, not which way the rail travels.
-       *
-       * Horizontal is a drag by another name, so it has to match the pointer
-       * drag below: the rail follows the fingers. Swiping left (deltaX > 0)
-       * carries the timeline left, into the future, exactly as grabbing it
-       * and pulling left does.
+       * Vertical is page scrolling: scrolling down walks back through the rail, in
+       * both modes. Horizontal is a drag by another name, so the rail follows the
+       * fingers — swiping left carries the timeline left, into the future.
        */
       const movement = (horizontalIntent ? delta : -delta) * WHEEL_SPEED
 
@@ -814,9 +777,8 @@ export function useLifelineScroll(
       scrub(movement, target)
     }
 
-    // The rail moves by transform; any native scroll on the section is the
-    // browser chasing a focused link deep in the track, and would leave the
-    // transform and the layout disagreeing about where the rail is.
+    // The rail moves by transform, so any native scroll on the section (the
+    // browser chasing a focused link) would desync it from the layout.
     const onSectionScroll = () => {
       if (section.scrollLeft !== 0) section.scrollLeft = 0
       if (section.scrollTop !== 0) section.scrollTop = 0
@@ -934,9 +896,8 @@ export function useLifelineScroll(
       }
     }
 
-    // Arrow keys scrub only when the lifeline effectively is the page, or
-    // when focus is inside it. An embedded instance must not capture host
-    // keyboard scrolling until the reader has tabbed into it.
+    // Arrow keys scrub only in page mode, or when focus is inside — an embedded
+    // instance must not capture host keyboard scrolling.
     const ownsKeyboard = () => {
       const active = document.activeElement
       if (active && section.contains(active)) return true
@@ -1013,9 +974,8 @@ export function useLifelineScroll(
     isLayoutReady,
     isEmbed,
     /**
-     * Embedded only: whether the module has come into view and the intro is
-     * cleared to play. Page mode never waits, so this stays false there and
-     * callers should read it as `!isEmbed || introArmed`.
+     * Embedded only: whether the module has come into view and the intro may play.
+     * Page mode never waits, so callers read this as `!isEmbed || introArmed`.
      */
     introArmed,
   }

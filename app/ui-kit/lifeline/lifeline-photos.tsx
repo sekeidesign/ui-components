@@ -14,15 +14,11 @@ const CARD_WIDTH = 180;
 /** Matches the events column's pt-6 — cards align with the first event's text. */
 const EVENT_TOP = 24;
 const MAX_TILT_DEG = 6;
-/**
- * How far along a card the next one in the stack starts — 0.6 leaves
- * a solid margin of every card visible under its neighbor.
- */
+/** How far along a card the next one in the stack starts. */
 const STACK_OVERLAP = 0.6;
 /**
- * Stacks cascade diagonally: the last card sits level with the event
- * text and each one before it hangs this much lower, so neighbors
- * overlap corner-to-corner instead of side-by-side.
+ * Each card in a stack hangs this much lower than the one after it, so
+ * neighbors overlap corner-to-corner instead of side-by-side.
  */
 const CASCADE_Y = 170;
 /** Event text column: max-w-[18rem] plus breathing room. */
@@ -105,9 +101,7 @@ export function LifelinePhotoCard({
 		setOffset({ x: drag.current.baseX + dx, y: drag.current.baseY + dy });
 	};
 
-	// The card's real geometry: bounding-box center (rotation preserves
-	// it) plus untransformed layout size — never the rotated hull, which
-	// is what made the lightbox clone jump on open.
+	// Bounding-box center plus untransformed layout size — never the rotated hull.
 	const measureCard = (): LifelineLightboxStart | null => {
 		const el = cardRef.current;
 		if (!el) return null;
@@ -183,9 +177,8 @@ export function LifelinePhotoCard({
 				ref={cardRef}
 				data-lifeline-interactive=""
 				className={cn(
-					// pan-y keeps page scrolling alive on touch: a vertical swipe
-					// starting on a card scrolls the timeline (the browser claims
-					// the gesture and fires pointercancel); horizontal drags move
+					// pan-y keeps page scrolling alive on touch: a vertical swipe scrolls (the
+					// browser claims the gesture and fires pointercancel); horizontal drags move
 					// the card.
 					"group/photo pointer-events-auto cursor-grab touch-pan-y",
 					active ? "z-50 cursor-grabbing" : "z-20 hover:z-40",
@@ -264,9 +257,7 @@ function FloatingCard({
 	introDuration: number;
 }) {
 	const y = photo.y ?? defaultY;
-	// Rolled once per mount: solo cards flip a coin for direction;
-	// neighbors in a stack lean away from each other so the pile reads
-	// as scattered.
+	// Rolled once per mount. Neighbors in a stack lean away from each other.
 	const [mountTilt] = useState(() => {
 		const sign =
 			stackCount > 1
@@ -294,10 +285,8 @@ function FloatingCard({
 }
 
 /**
- * Always-visible media scattered over the timeline — anchored to their
- * marker's slot, tilted and overlapping like photos in a notebook.
- * Rendered inside the transformed track, so they ride the scroll;
- * dragging repositions a card for the session.
+ * Always-visible media anchored to their marker's slot, tilted and overlapping.
+ * Rendered inside the transformed track, so they ride the scroll.
  */
 export function LifelineFloatingPhotos({
 	markers,
@@ -319,9 +308,8 @@ export function LifelineFloatingPhotos({
 			? offsets[offsets.length - 1] + widths[widths.length - 1]
 			: 0;
 
-	// Intro sync: a card fades in when the rail tip reaches it, i.e. on
-	// the schedule of the marker whose slot its center sits over — which
-	// is usually days past its anchor.
+	// A card fades in on the schedule of the marker whose slot its center sits
+	// over, which is usually days past its anchor.
 	const markerIndexAt = (x: number) => {
 		for (let index = offsets.length - 1; index >= 0; index--) {
 			if (offsets[index] <= x) return index;
@@ -345,9 +333,8 @@ export function LifelineFloatingPhotos({
 				const zoneEnd =
 					nextTextIndex === -1 ? trackEnd : offsets[nextTextIndex];
 
-				// Stacks center as a group so a lone card sits in the middle
-				// of the gap and a pile spreads evenly around it. Each card
-				// starts STACK_OVERLAP of the way along the one beneath it.
+				// Stacks center as a group; each card starts STACK_OVERLAP of the way along
+				// the one beneath it.
 				const steps: number[] = [];
 				let fan = 0;
 				for (const stacked of marker.photos) {
@@ -361,9 +348,8 @@ export function LifelineFloatingPhotos({
 
 				return marker.photos.map((photo, photoIndex) => {
 					const width = photo.width ?? CARD_WIDTH;
-					// Default home: centered in the text-free run between this
-					// day's events and the next day that has text — comfortably
-					// away from both columns.
+					// Default home: centered in the text-free run between this day's events and
+					// the next day that has text.
 					const x =
 						photo.x !== undefined
 							? offsets[index] + photo.x * widths[index]

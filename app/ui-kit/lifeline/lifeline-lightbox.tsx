@@ -12,10 +12,7 @@ import { cn } from "../cn"
 import type { LifelinePhoto } from "./types"
 
 const OPEN_MS = 520
-/**
- * Gentle start, soft landing — the quint curve front-loaded nearly all
- * of the travel into the first 120ms, which read as a jump.
- */
+/** Gentle start, soft landing — quint front-loaded the travel and read as a jump. */
 const EASE = "cubic-bezier(0.32, 0.72, 0, 1)"
 /** Fraction of the viewport the expanded media may occupy. */
 const FIT = 0.85
@@ -28,11 +25,9 @@ interface Target {
 }
 
 /**
- * The card's true geometry at handoff time. Center comes from the
- * bounding box (rotation about center preserves it); width/height are
- * the untransformed layout size (offsetWidth/offsetHeight) — the
- * bounding box of a tilted card is its axis-aligned hull, which is
- * larger than the card and lands the clone visibly off.
+ * The card's geometry at handoff: center from the bounding box (rotation about
+ * center preserves it), size untransformed — a tilted card's axis-aligned hull
+ * is larger than the card and lands the clone off.
  */
 export interface LifelineLightboxStart {
   cx: number
@@ -44,10 +39,8 @@ export interface LifelineLightboxStart {
 }
 
 /**
- * The clone's media. Videos mount paused, pre-seeked to the card's
- * playback position — a static frame the compositor can scale without
- * decoding — and only play once `playing` flips after the open
- * transition settles. Dismissing pauses again for the return flight.
+ * The clone's media. Videos mount paused, pre-seeked to the card's position,
+ * and only play once the open transition settles.
  */
 function LightboxMedia({
   photo,
@@ -115,12 +108,10 @@ function computeTarget(start: LifelineLightboxStart): Target {
 }
 
 /**
- * Expands a floating card's media from its spot on the timeline to the
- * center of the screen and back — a FLIP animation on a fixed clone
- * portaled to <body> (the track is transformed, so fixed positioning
- * inside it would break). The original card stays in layout, hidden,
- * and is re-measured on dismiss so the media returns wherever the card
- * now is, even if the timeline moved.
+ * Expands a card's media to the center of the screen and back — a FLIP
+ * animation on a fixed clone portaled to <body>, since the track is transformed
+ * and fixed positioning inside it would break. The original stays hidden in
+ * layout and is re-measured on dismiss.
  */
 export function LifelineLightbox({
   photo,
@@ -149,9 +140,8 @@ export function LifelineLightbox({
       window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   ).current
 
-  // Center-anchored FLIP: rotation and scale about the center match
-  // how the card itself is transformed, so the first frame is
-  // pixel-identical to the card underneath.
+  // Center-anchored FLIP: rotation and scale about the center match how the card
+  // is transformed, so the first frame lands on it exactly.
   const toTransform = useCallback(
     (home: LifelineLightboxStart) =>
       `translate(${home.cx - (left + width / 2)}px, ${
@@ -165,10 +155,8 @@ export function LifelineLightbox({
     reduceMotion ? "none" : toTransform(start),
   )
   const closing = useRef(false)
-  // Playback waits for the open transition to finish — a playing
-  // video decodes frames while the transform animates and drops
-  // transition frames on mobile; a paused, pre-seeked frame is a
-  // static layer and animates cheaply.
+  // Playback waits for the open transition: a playing video decodes frames while
+  // the transform animates and drops frames on mobile.
   const [settled, setSettled] = useState(reduceMotion)
 
   // Safety net if transitionend never fires for the open.
@@ -196,10 +184,9 @@ export function LifelineLightbox({
     }
   }, [reduceMotion])
 
-  // No gesture may pan while the lightbox is up — iOS otherwise
-  // rubber-bands the body behind the fixed overlay and can leave the
-  // whole page stuck offset after dismiss. React's root touch
-  // listeners are passive, so this needs a native non-passive one.
+  // No gesture may pan while the lightbox is up — iOS rubber-bands the body
+  // behind a fixed overlay and can leave the page stuck offset. React's root
+  // touch listeners are passive, so this needs a native non-passive one.
   const rootRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const root = rootRef.current
@@ -209,10 +196,8 @@ export function LifelineLightbox({
     return () => root.removeEventListener("touchmove", block)
   }, [])
 
-  // The press that opens the card dispatches one more click right
-  // after pointerup — by then the clone is mounted underneath the
-  // pointer and would dismiss itself. Swallow exactly that click;
-  // every later click dismisses normally.
+  // The press that opens the card dispatches one more click right after
+  // pointerup, which would dismiss the clone. Swallow exactly that one.
   useEffect(() => {
     const swallow = (event: MouseEvent) => {
       event.stopPropagation()
@@ -257,9 +242,8 @@ export function LifelineLightbox({
       role="dialog"
       aria-modal="true"
       aria-label={photo.alt}
-      // The portal lives under <body>, but React events still bubble up
-      // the component tree — without this, a backdrop press would reach
-      // the card's drag handlers and the track's scrubber.
+      // React events bubble the component tree even from a portal — without this a
+      // backdrop press would reach the card's drag handlers and the track's scrubber.
       onPointerDown={(event) => event.stopPropagation()}
       onPointerMove={(event) => event.stopPropagation()}
       onPointerUp={(event) => event.stopPropagation()}

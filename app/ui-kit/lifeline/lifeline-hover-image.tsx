@@ -40,9 +40,9 @@ export function useLifelineHoverImage() {
 }
 
 /**
- * A cursor-following image reveal. The floating element lives at the
- * provider level — it must stay outside the transformed track, since
- * position: fixed resolves against the nearest transformed ancestor.
+ * A cursor-following image reveal. The floating element lives at the provider
+ * level: `position: fixed` resolves against the nearest transformed ancestor,
+ * and the track is transformed.
  */
 export function LifelineHoverImageProvider({
   children,
@@ -110,9 +110,8 @@ export function LifelineHoverImageProvider({
     const targetTilt = clamp(dx * TILT_FACTOR, -TILT_MAX_DEG, TILT_MAX_DEG)
     s.tilt += (targetTilt - s.tilt) * TILT_EASE
 
-    // The ease is asymptotic — it never actually arrives, so the card
-    // rests on a fractional offset with a residual tilt and the browser
-    // resamples it soft. Land it: snap sub-threshold deltas to done.
+    // The ease is asymptotic, so the card rests on a fractional offset with a
+    // residual tilt and the browser resamples it soft. Snap sub-threshold deltas.
     if (
       Math.abs(s.targetX - s.x) < 0.1 &&
       Math.abs(s.targetY - s.y) < 0.1 &&
@@ -257,9 +256,8 @@ export function LifelineHoverImageProvider({
           loop
           playsInline
           preload="none"
-          // Landscape fills the same 280px card as images; portrait is
-          // capped by height instead, matching the floating cards'
-          // scale (180x320) so tall clips don't tower over the cursor.
+          // Portrait is capped by height instead, matching the floating cards' 180x320
+          // scale so tall clips don't tower over the cursor.
           className="max-h-[320px] w-auto max-w-[280px] scale-95 rounded-xl shadow-2xl ring-1 ring-black/10 transition-[transform,box-shadow] duration-200 ease-out"
           style={{ display: "none" }}
         />

@@ -43,8 +43,7 @@ const TEXT_TRAVEL = 16;
 
 type Stops = readonly [string, string, string, string];
 
-/** Whole-ribbon presets: four pickers is a lot of dialling to land on a
- * combination that reads. */
+/** Whole-ribbon presets, so landing on a combination that reads isn't four pickers of dialling. */
 const PRESETS: readonly { name: string; colors: Stops }[] = [
 	{ name: "Sky", colors: ["#6366f1", "#38bdf8", "#67e8f9", "#e0f2fe"] },
 	{ name: "Ember", colors: ["#7c2d12", "#f54a00", "#fbbf24", "#fef3c7"] },
@@ -56,9 +55,8 @@ const PRESETS: readonly { name: string; colors: Stops }[] = [
 /**
  * The sweep, the skeleton it uncovers, and the knobs behind both.
  *
- * Nothing runs until you ask it to. A WebGPU device costs while it exists,
- * not while it animates, and this sits in a feed — so the surface starts as
- * plain DOM, and the device is created on the first play or scrub.
+ * The surface starts as plain DOM and the WebGPU device is created on the first
+ * play or scrub — a device costs while it exists, and this sits in a feed.
  */
 export function LoadingWipePlayground() {
 	const [params, setParams] = useState<WipeParams>(DEFAULT_WIPE_PARAMS);
@@ -69,9 +67,8 @@ export function LoadingWipePlayground() {
 	const [ready, setReady] = useState<boolean | null>(null);
 
 	const wipeRef = useRef<ShaderWipeHandle>(null);
-	// The loading page as pixels: shown directly while idle, and uploaded as
-	// the texture the shader samples once a device exists. One bitmap for
-	// both, so the handover changes nothing on screen.
+	// The loading page as pixels: shown directly while idle, and uploaded as the
+	// shader's texture once a device exists. One bitmap for both.
 	const pageRef = useRef<HTMLCanvasElement>(null);
 	const stageRef = useRef<HTMLDivElement>(null);
 	const textRef = useRef<HTMLDivElement>(null);
@@ -91,20 +88,12 @@ export function LoadingWipePlayground() {
 		const current = paramsRef.current;
 		progressRef.current = progress;
 
-		// The text leaves under its own power — fading and rising, the way a
-		// loader's content does — rather than being carried by the sweep. It
-		// clears well before the surface does, so the sweep is never eating
-		// something the eye is still reading.
+		// The text leaves under its own power — fading and rising — and clears well
+		// before the surface does, rather than being carried by the sweep.
 		if (textRef.current) {
 			const out = Math.min(progress / TEXT_EXIT, 1);
-			// Along the sweep, not simply upward: the text is being carried off
-			// by the same motion as the surface, and a rise while the edge
-			// travels sideways reads as two unrelated exits.
-			//
-			// A unit vector rather than sweepAxis's, which is normalised by
-			// |dx| + |dy| so the edge reaches the far corner at every angle —
-			// that makes it shorter on the diagonals, and the text would drift
-			// less on those than on the axes.
+			// Along the sweep, not simply upward. A unit vector rather than sweepAxis's,
+			// which is normalised by |dx| + |dy| and so would drift less on the diagonals.
 			const rad = (current.angleDeg * Math.PI) / 180;
 			const dx = Math.cos(rad) * TEXT_TRAVEL * out;
 			const dy = Math.sin(rad) * TEXT_TRAVEL * out;
@@ -215,17 +204,15 @@ export function LoadingWipePlayground() {
 		});
 	}, []);
 
-	// A knob moved: redraw the held frame, so the change shows without having
-	// to replay the whole sweep. `params` has to be in the deps — `render` is
-	// stable, so depending on it alone means this runs once on mount and never
-	// again, and every knob silently stops doing anything until the next play.
+	// A knob moved: redraw the held frame. `params` has to be in the deps —
+	// `render` is stable, so depending on it alone runs this once on mount and
+	// every knob silently stops working.
 	useEffect(() => {
 		if (readyRef.current !== null) render(progressRef.current);
 	}, [render, params]);
 
-	// Repaint the page bitmap and hand it to the shader. Runs on mount, on a
-	// resize, and whenever a knob that the bitmap depends on moves — never per
-	// frame.
+	// Repaint the page bitmap and hand it to the shader. On mount, resize, and
+	// bitmap-affecting knobs — never per frame.
 	const paintPage = useCallback(() => {
 		const page = pageRef.current;
 		const stage = stageRef.current;
@@ -235,9 +222,8 @@ export function LoadingWipePlayground() {
 		const height = stage.clientHeight;
 		if (width === 0 || height === 0) return;
 
-		// Rounded the same way ShaderWipe rounds its own backing store. A single
-		// pixel of disagreement would put the texture off a 1:1 mapping, and the
-		// whole page would sample soft.
+		// Rounded the same way ShaderWipe rounds its own backing store: a single pixel
+		// of disagreement takes the texture off a 1:1 mapping and the page samples soft.
 		page.width = Math.round(width * dpr);
 		page.height = Math.round(height * dpr);
 		drawLoaderSurface(page, {
@@ -268,16 +254,12 @@ export function LoadingWipePlayground() {
 	const atRest = scrub <= 0 && !playing;
 
 	return (
-		// Fixed height side by side, rather than letting the panel's own length
-		// set it: fifteen rows of controls made a stage tall enough to fill a
-		// screen, and the skeleton has nothing to do with that space.
 		<div className="flex w-full flex-col items-stretch self-stretch md:h-[420px] md:flex-row">
 			<div ref={stageRef} className="relative flex-1 overflow-hidden">
 				<Skeleton />
 
-				{/* The loading surface. Visible until a device exists; after that the
-				    same bitmap is the shader's texture and the canvas below paints it,
-				    so this one steps aside. */}
+				{/* Visible until a device exists; after that the canvas below paints the same
+				    bitmap, so this steps aside. */}
 				<canvas
 					ref={pageRef}
 					aria-hidden
@@ -285,16 +267,12 @@ export function LoadingWipePlayground() {
 					style={{ display: ready === true ? "none" : undefined }}
 				/>
 
-				{/* Mounted from the start: an undrawn canvas is transparent and
-				    costs nothing without a device, and one inside a display:none
-				    wrapper would measure 0x0 on its first draw. */}
+				{/* Mounted from the start: an undrawn canvas is transparent and costs nothing,
+				    and one inside a display:none wrapper would measure 0x0 on its first draw. */}
 				<div className="absolute inset-0">
 					<ShaderWipe ref={wipeRef} />
 				</div>
 
-				{/* Real DOM, not pixels. It leaves by fading and rising, so it never
-				    needs the sweep's alpha — and anything that doesn't need that has
-				    no reason to stop being an element. */}
 				<div
 					ref={textRef}
 					className="pointer-events-none absolute inset-0 flex items-center justify-center"
@@ -304,9 +282,6 @@ export function LoadingWipePlayground() {
 					</span>
 				</div>
 
-				{/* One button for both states, and outside the surface: a control
-				    that the sweep carries off cannot be the control that brings it
-				    back. */}
 				<button
 					type="button"
 					onClick={atRest ? play : reset}
@@ -316,9 +291,6 @@ export function LoadingWipePlayground() {
 					<span className="shrink-0">
 						{atRest ? <PlayIcon size={14} /> : <ResetIcon size={14} />}
 					</span>
-					{/* Rolled rather than swapped: the label changes under the
-					    pointer as the sweep starts and ends, and a hard cut there
-					    reads as the button being replaced. */}
 					<SlotText
 						text={playing ? "Sweeping…" : atRest ? "Play wipe" : "Reset"}
 						options={{
@@ -332,8 +304,6 @@ export function LoadingWipePlayground() {
 				</button>
 			</div>
 
-			{/* Scrolls inside its own column, so the knobs can outgrow the stage
-			    without dragging its height along with them. */}
 			<ControlPanel className="max-h-[320px] w-full shrink-0 overflow-y-auto rounded-none border-t border-gray-200 shadow-none ring-0 md:max-h-none md:w-2/5 md:border-t-0 md:border-l">
 				<ControlSection label="Colour" />
 				<div className="flex flex-wrap gap-1.5 px-3 py-2">
@@ -382,8 +352,6 @@ export function LoadingWipePlayground() {
 					</div>
 				</ControlRow>
 				<ControlSection label="Sweep" />
-				{/* No label: the glyphs say what they are, and the label column
-				    would squeeze eight buttons into half a row. */}
 				<div className="px-3 py-2">
 					<div className="grid grid-cols-8 gap-1">
 						{WIPE_DIRECTIONS.map((direction) => {
@@ -403,9 +371,8 @@ export function LoadingWipePlayground() {
 											: "flex h-6 cursor-pointer items-center justify-center rounded-md bg-white text-gray-500 shadow-skew ring-1 ring-gray-500/10 hover:bg-gray-50"
 									}
 								>
-									{/* One glyph, turned. The sweep angle is measured from
-									    "left to right"; the icon is drawn pointing up, hence
-									    the quarter turn. */}
+									{/* One glyph, turned: the icon is drawn pointing up, and the sweep angle is
+									    measured from left-to-right. */}
 									<ArrowIcon size={14} rotate={direction.angleDeg + 90} />
 								</button>
 							);

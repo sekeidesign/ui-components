@@ -1,22 +1,16 @@
 /**
- * The tools, as wordless marks, from the sekei.xyz Paper file.
+ * The tools, as wordless marks.
  *
  * Each keeps the size it was drawn at rather than being normalised to a common
- * box — they were balanced against each other by eye, and a shared square would
- * undo that: Motion's wordmark is nearly three times as wide as it is tall, and
- * Figma's is the reverse. Fills are currentColor so the row is coloured once by
- * its container.
+ * box — they were balanced by eye, and Motion's wordmark is nearly three times
+ * as wide as it is tall. Fills are currentColor.
  */
 
 interface MarkProps {
 	className?: string;
 }
 
-/**
- * How much of the drawn size to render at. One number for the whole row: the
- * marks were balanced against each other at full size, so scaling belongs here
- * rather than in six pairs of dimensions that could drift out of proportion.
- */
+/** How much of the drawn size to render at. One number for the whole row. */
 const SCALE = 0.6;
 
 /** Shared chrome, so each mark below is only its own geometry and paths. */

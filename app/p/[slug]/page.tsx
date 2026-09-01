@@ -23,19 +23,15 @@ export async function generateMetadata({
 
 	const title = `${entry.title} | PG Gonni`;
 	return {
-		// The root layout's template appends "| PG Gonni" to the tab title, so
-		// this passes the bare entry title and keeps the full string for OG,
-		// which isn't templated.
+		// The root layout templates the tab title, so this passes the bare entry
+		// title and keeps the full string for OG, which isn't templated.
 		title: entry.title,
 		description: entry.excerpt,
 		openGraph: {
 			title,
 			description: entry.excerpt,
-			// The site card, not the post's cover. A cover is drawn for a feed
-			// card at its own ratio — cropped to a 1.91:1 preview it lands
-			// somewhere arbitrary, and half of them are WebP, which LinkedIn in
-			// particular won't render. Per-post images want to be made for the
-			// slot rather than borrowed from one.
+			// The site card, not the post's cover: a cover is drawn at its own ratio,
+			// and half of them are WebP, which LinkedIn won't render.
 			images: "/og-image.jpg",
 		},
 	};
@@ -58,8 +54,6 @@ export default async function PostPage({
 
 	return (
 		<>
-			{/* The identical card from the feed, unlinked because this is where it
-			    would link to. Everything below is the post's own content. */}
 			<PostCard entry={entry} eager linked={false} />
 
 			<ExperimentDivider inline />

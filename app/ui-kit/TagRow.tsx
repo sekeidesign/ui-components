@@ -3,9 +3,8 @@
 import { Experiment } from "./Experiment";
 
 /**
- * Client wrapper so server components can render tags. Reaching for
- * `Experiment.Tags` directly from the server fails: those subcomponents are
- * Object.assign'd onto a client component, and the RSC boundary only forwards
+ * Client wrapper so server components can render tags: `Experiment.Tags` is
+ * Object.assign'd onto a client component, and the RSC boundary forwards only
  * the reference itself, not properties hung off it.
  */
 export function TagRow({ tags }: { tags: string[] }) {

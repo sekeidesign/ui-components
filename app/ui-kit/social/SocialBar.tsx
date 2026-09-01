@@ -11,9 +11,9 @@ import { CheckCircleIcon } from "../icons/CheckCircleIcon";
 import { FireIcon } from "../icons/FireIcon";
 import { useSocial } from "./SocialProvider";
 
-// Stable object: SlotText stashes options in a ref on every change, so a fresh
-// literal each render is pointless churn. Rolls upward because the count only
-// ever goes up, and skipUnchanged keeps 132 -> 133 to just the last digit.
+// Stable object: SlotText stashes options in a ref on every change. Rolls
+// upward since the count only goes up, and skipUnchanged keeps 132 -> 133 to
+// just the last digit.
 const COUNT_ROLL = {
 	direction: "up",
 	duration: 220,
@@ -23,19 +23,16 @@ const COUNT_ROLL = {
 } as const;
 
 /**
- * slot-text has no locale or formatting option — `text` is just a string — so
- * grouping separators are ours to add. Pinned to en-US like the date formatters
- * elsewhere, rather than the visitor's locale: the counts also appear in the
- * buttons' aria-labels, which ARE server-rendered, and a server/client locale
- * mismatch there would be a hydration error.
+ * slot-text has no locale option, so grouping separators are ours to add.
+ * Pinned to en-US: the counts also appear in server-rendered aria-labels, and a
+ * locale mismatch there would be a hydration error.
  */
 const COUNT_FORMAT = new Intl.NumberFormat("en-US");
 
 /**
- * Reaction orange, and Tailwind's sky-400 for the link action. Written as a
- * literal rather than var(--color-sky-400): Tailwind only emits theme variables
- * that a utility actually uses, and nothing here uses a sky utility, so the var
- * would resolve to nothing in an inline style.
+ * Written as a literal rather than var(--color-sky-400): Tailwind only emits
+ * theme variables a utility actually uses, so the var would resolve to nothing
+ * in an inline style.
  */
 const FIRE_COLOR = "#ff5500";
 const LINK_COLOR = "oklch(74.6% 0.16 232.661)";

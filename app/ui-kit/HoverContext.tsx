@@ -29,9 +29,7 @@ export function HoverProvider({ children }: { children: ReactNode }) {
 	);
 }
 
-// Pairs any number of elements under the same id — hovering one marks all
-// of them active, so e.g. a panel and its related sentence can highlight
-// each other regardless of which one triggered the hover.
+// Pairs any number of elements under one id: hovering one marks all active.
 export function useHoverGroup(id: string) {
 	const { hoveredId, setHoveredId } = useContext(HoverContext);
 

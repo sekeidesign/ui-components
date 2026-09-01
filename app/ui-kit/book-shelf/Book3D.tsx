@@ -11,15 +11,13 @@ const HEIGHT = 188;
 const DEPTH = 26;
 const GUTTER = 6;
 
-// 90 = spine squared to the viewer (shelved). Past 0 into negative territory
-// so the open pose isn't perfectly flat — the fore-edge (pages) catches a
-// sliver of light, matching how a pulled book actually sits.
+// 90 = spine squared to the viewer (shelved). Negative so the open pose isn't
+// perfectly flat and the fore-edge catches a sliver of light.
 const SPINE_ANGLE = 90;
 const COVER_ANGLE = -16;
 /**
- * Extra swing for the cover alone when `openMore` is set. Applied to a nested
- * rotation on the cover face rather than to the assembly: the cover, spine and
- * page-edge are siblings, so turning the assembly turns all three.
+ * Extra swing for the cover alone when `openMore` is set. Nested on the cover
+ * face rather than the assembly, which would turn spine and page-edge too.
  */
 const COVER_EXTRA_ANGLE = -10;
 
@@ -46,14 +44,9 @@ interface Book3DProps {
 	style?: CSSProperties;
 }
 
-// A real box, not a flattened card: cover, spine, and page-edge are three
-// separate faces hinged together in 3D space (`preserve-3d`), so rotating
-// the whole assembly around the spine's edge swings the cover into view
-// the way an actual book would — rather than faking depth with a 2D skew.
-//
-// Every book only reserves its spine's thickness in layout — the parent
-// shifts the trailing siblings over (BOOK_OPEN_SHIFT) to clear room for the
-// active book's popped cover instead of letting it overlap them.
+// Three faces hinged together in 3D (`preserve-3d`) rather than a 2D skew.
+// Each book reserves only its spine's thickness in layout; the parent shifts
+// trailing siblings by BOOK_OPEN_SHIFT to clear the open cover.
 export function Book3D({
 	book,
 	open,
@@ -137,7 +130,6 @@ export function Book3D({
 				<div
 					className="absolute inset-y-0 left-0 flex flex-col rounded-[2px] items-center justify-between overflow-hidden py-3 gap-2"
 					style={{
-						// left: WIDTH,
 						width: DEPTH,
 						transformOrigin: "0% 50%",
 						transform: "rotateY(90deg)",
@@ -171,9 +163,8 @@ export function Book3D({
 	);
 }
 
-// How far a shelved book's cover overshoots its reserved (spine-width) slot
-// when open — the amount trailing siblings need to shift right by so the
-// popped cover doesn't overlap them.
+// How far an open cover overshoots its spine-width slot — the amount trailing
+// siblings shift right by.
 const OPEN_SHIFT = WIDTH - DEPTH;
 
 export {

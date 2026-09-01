@@ -50,11 +50,7 @@ function writeStored(slug: string, counts: SocialCounts) {
 export function SocialProvider({
 	slugs,
 	children,
-	/**
-	 * "memory" keeps everything local: no counts fetched, nothing written to
-	 * Redis, and localStorage left alone. For working on the interaction
-	 * without spending commands or leaving state behind on real posts.
-	 */
+	/** "memory" keeps everything local: no counts fetched, nothing written to Redis or localStorage. */
 	transport = "api",
 	/** Starting counts, for the memory transport. */
 	seed,
