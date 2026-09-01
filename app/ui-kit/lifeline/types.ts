@@ -1,4 +1,8 @@
-import type { CompanyIconId } from "./company-icon-registry"
+/**
+ * Organization id on a lifeline marker. Free-form: the timeline reads cleanly
+ * whether or not a logo has been drawn for it.
+ */
+export type CompanyIconId = string
 
 export interface LifelineMentor {
   name: string

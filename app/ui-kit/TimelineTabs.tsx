@@ -2,7 +2,7 @@
 
 import { cn } from "./cn";
 import { useFilters } from "./filters/FilterContext";
-import { KIND_META } from "./post/Post";
+import { KIND_META } from "./post/kind-meta";
 import type { EntryKind } from "@/lib/timeline";
 import {
 	FILTER_KINDS,

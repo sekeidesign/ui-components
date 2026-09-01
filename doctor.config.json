@@ -1,0 +1,10 @@
+{
+  "$schema": "https://react.doctor/schema/config.json",
+  // next.config.ts lets a production build write to its own dist dir via
+  // NEXT_DIST_DIR (see the distDir comment there). React Doctor skips the
+  // default .next, but not a custom name, so it lints minified vendor
+  // bundles. Scope the scan to source.
+  "ignore": {
+    "files": [".next-build/**", ".next/**", "out/**"]
+  }
+}

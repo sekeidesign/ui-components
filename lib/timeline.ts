@@ -270,6 +270,3 @@ export function getTimeline(): TimelineEntry[] {
 	return cached;
 }
 
-export function getAllTags(): string[] {
-	return [...new Set(getTimeline().flatMap((entry) => entry.tags))].sort();
-}

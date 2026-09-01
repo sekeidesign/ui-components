@@ -27,11 +27,11 @@ interface ExperimentRootProps {
 	className?: string;
 }
 
-const ExperimentRoot = ({
+export function Experiment({
 	children,
 	sourceUrl,
 	className,
-}: ExperimentRootProps) => {
+}: ExperimentRootProps) {
 	const ref = useRef<HTMLDivElement>(null);
 	const isRootInView = useInView(ref, { once: false, amount: "some" });
 	const context = useMemo(
@@ -62,7 +62,7 @@ const ExperimentRoot = ({
 			</m.div>
 		</ExperimentContext.Provider>
 	);
-};
+}
 
 interface ExperimentTitleProps {
 	children: ReactNode;
@@ -240,19 +240,20 @@ export function ExperimentDivider({ inline = false }: { inline?: boolean }) {
 	);
 }
 
-export const Experiment = Object.assign(ExperimentRoot, {
-	Title: ExperimentTitle,
-	Tags: ExperimentTags,
-	Tag: ExperimentTag,
-	Example: ExperimentExample,
-	Description: ExperimentDescription,
-});
+// Statics, not exports: `export const Experiment = Object.assign(...)` exports a
+// plain object, which breaks the Fast Refresh component boundary for the whole
+// file. Attaching to the declared component keeps the `<Experiment.Title>` API.
+Experiment.Title = ExperimentTitle;
+Experiment.Tags = ExperimentTags;
+Experiment.Tag = ExperimentTag;
+Experiment.Example = ExperimentExample;
+Experiment.Description = ExperimentDescription;
 
 export type {
-	ExperimentRootProps,
-	ExperimentTitleProps,
-	ExperimentTagsProps,
-	ExperimentTagProps,
-	ExperimentExampleProps,
 	ExperimentDescriptionProps,
+	ExperimentExampleProps,
+	ExperimentRootProps,
+	ExperimentTagProps,
+	ExperimentTagsProps,
+	ExperimentTitleProps,
 };

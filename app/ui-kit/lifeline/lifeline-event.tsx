@@ -1,4 +1,4 @@
-import type { LifelineEvent, LifelineEventImage } from "./types";
+import type { LifelineEvent } from "./types";
 import { getEventContent } from "./lifeline-event-utils";
 
 export function LifelineEventText({
@@ -44,37 +44,3 @@ export function LifelineEventText({
 	);
 }
 
-/** Always-visible media embedded in the timeline (image.inline). */
-export function LifelineEventMedia({
-	media,
-	className,
-}: {
-	media: LifelineEventImage;
-	className?: string;
-}) {
-	if (media.video) {
-		return (
-			<video
-				src={media.video}
-				poster={media.src}
-				autoPlay
-				muted
-				loop
-				playsInline
-				preload="metadata"
-				aria-label={media.alt}
-				className={className}
-			/>
-		);
-	}
-
-	return (
-		// eslint-disable-next-line @next/next/no-img-element
-		<img // react-doctor-disable-line nextjs-no-img-element -- arbitrary media, with no intrinsic size for next/image to work from
-			src={media.src}
-			alt={media.alt}
-			loading="lazy"
-			className={className}
-		/>
-	);
-}
