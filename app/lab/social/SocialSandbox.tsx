@@ -160,7 +160,7 @@ export function SocialSandbox() {
 							<Post.Footer>
 								<SocialBar slug={slug} sharePath={`/lab/social#${slug}`} />
 								{slug === "lab-code" && (
-									<Post.CodeLink href="https://github.com/sekeidesign/ui-components" />
+									<Post.CodeLink href="https://github.com/sekeidesign/sekei-xyz" />
 								)}
 							</Post.Footer>
 						</div>

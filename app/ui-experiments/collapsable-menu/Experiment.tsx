@@ -6,7 +6,7 @@ import CollapsableMenu, { CollapsableMenuProvider } from "@/content/collapsable-
 
 export function CollapsableMenuExperiment() {
 	return (
-		<Experiment sourceUrl="https://github.com/sekeidesign/ui-components/blob/main/app/ui-experiments/CollapsableMenu.tsx">
+		<Experiment sourceUrl="https://github.com/sekeidesign/sekei-xyz/blob/main/app/ui-experiments/CollapsableMenu.tsx">
 			<Experiment.Title pageUrl="/ui-experiments/collapsable-menu">
 				Detachable island
 			</Experiment.Title>
