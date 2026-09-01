@@ -12,8 +12,14 @@ import {
 
 // Both states share size, radius and padding; only fill, border and text
 // colour change. Icons stay gray-400 in both, per the design.
+//
+// The OFF state already sets its own 1px hairline via `outline`, which
+// swallows the browser's default focus ring — without an explicit
+// focus-visible outline here, tabbing through the row shows no indication
+// of which tab is focused. focus-visible (not focus) so a mouse click
+// doesn't leave the ring lit.
 const TAB_BASE =
-	"flex items-center gap-1 h-[26px] rounded-full text-[14px] leading-[1.43] font-[500] whitespace-nowrap cursor-pointer";
+	"flex items-center gap-1 h-[26px] rounded-full text-[14px] leading-[1.43] font-[500] whitespace-nowrap cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900/40";
 const TAB_ON = "bg-white ring-1 ring-gray-500/10 shadow-skew text-gray-900/75";
 const TAB_OFF =
 	"bg-gray-500/5 outline outline-1 outline-gray-500/10 text-gray-500/75 hover:bg-gray-500/15 hover:text-gray-700";

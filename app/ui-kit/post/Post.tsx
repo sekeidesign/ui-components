@@ -15,7 +15,13 @@ import {
 	WorkKindIcon,
 	WritingKindIcon,
 } from "../icons/KindIcons";
-import { Book3D, type Book } from "../book-shelf";
+import {
+	Book3D,
+	BOOK_HEIGHT,
+	BOOK_OPEN_SHIFT,
+	BOOK_WIDTH,
+	type Book,
+} from "../book-shelf";
 import { TooltipTrigger } from "../Tooltip";
 import { ICON_PRESS } from "../press";
 import { PostRow } from "./PostRow";
@@ -71,9 +77,6 @@ function FramedIcon({
 	);
 }
 
-/** Inner width after the frame's padding, for image sizing. */
-const MEDIA_INNER = MEDIA_SIZE - 8;
-
 /** The screen-md column minus the card's md:p-8, for full-width image sizing. */
 const COLUMN_INNER = 768 - 64;
 
@@ -86,11 +89,14 @@ const PHONE = { width: 120, height: 257, top: 1, fade: 79 };
 
 
 /**
- * Breathing room on the left, top and right of a book cover, measured inside
- * the surface's white card — the frame's own p-1 adds 4px on top, so this reads
- * as 20px from the card's outer edge.
+ * A book has no frame or background — unlike Media and PhoneMedia, it's meant
+ * to read as the lightest-weight artwork in the feed. Its box keeps
+ * MEDIA_SIZE's width, so every card's media still lines up in the same
+ * column, but a shorter height — a square left tall, empty margins above and
+ * below the shrunk cover for no reason other than matching a square.
  */
-const BOOK_INSET = 16;
+const BOOK_BOX_WIDTH = MEDIA_SIZE;
+const BOOK_BOX_HEIGHT = 130;
 
 /**
  * Projected width of Book3D's open cover at scale 1, in px.
@@ -103,13 +109,44 @@ const BOOK_INSET = 16;
  */
 const BOOK_PROJECTED_WIDTH = 130.5;
 
+/** How far Book3D shifts its open cover left of its own layout box. */
+const BOOK_OPEN_DEPTH = BOOK_WIDTH - BOOK_OPEN_SHIFT;
+
 /**
- * Derived, so BOOK_INSET is the only number to tune. Measured against
- * MEDIA_INNER, not MEDIA_SIZE: the book sits inside the surface's white card,
- * and scaling to the outer box overhangs it by the frame's padding — which
- * lands entirely on the right, since the cover is pinned to the left edge.
+ * Center of the open cover's visual footprint, in Book3D's own local
+ * coordinates (before any scale) — x spans [-BOOK_OPEN_DEPTH,
+ * -BOOK_OPEN_DEPTH + BOOK_PROJECTED_WIDTH], y spans [0, BOOK_HEIGHT]. Used
+ * as the wrapper's transform-origin below: scaling and rotating around the
+ * cover's own center, rather than its corner, keeps the cover centered in
+ * the box at any scale or angle — the wrapper only has to place this one
+ * point at the box's center.
  */
-const BOOK_SCALE = (MEDIA_INNER - BOOK_INSET * 2) / BOOK_PROJECTED_WIDTH;
+const BOOK_PIVOT_X = -BOOK_OPEN_DEPTH + BOOK_PROJECTED_WIDTH / 2;
+const BOOK_PIVOT_Y = BOOK_HEIGHT / 2;
+
+/**
+ * Margin the cover's height leaves inside BOOK_BOX_HEIGHT top-to-bottom.
+ * Well past what fitting it requires — unlike Media or PhoneMedia, a book is
+ * meant to look small and light, not to fill the box.
+ */
+const BOOK_MARGIN = 24;
+
+/** Derived, so BOOK_MARGIN is the only number to tune. */
+const BOOK_SCALE = (BOOK_BOX_HEIGHT - BOOK_MARGIN) / BOOK_HEIGHT;
+
+/** A few degrees off vertical, like a book set down rather than shelved. */
+const BOOK_TILT = 7;
+
+/**
+ * drop-shadow, not box-shadow: the book is scaled and rotated, and a
+ * box-shadow follows the untransformed element's own rectangle, so it'd sit
+ * skewed and axis-aligned under a tilted cover. drop-shadow follows the
+ * rendered cover+spine silhouette instead. Values are in this wrapper's own
+ * pre-scale space, so they end up BOOK_SCALE× smaller in the card — sized up
+ * from a normal elevation shadow to still read as soft once shrunk.
+ */
+const BOOK_SHADOW =
+	"drop-shadow(0 26px 24px rgba(15,23,42,0.22)) drop-shadow(0 10px 10px rgba(15,23,42,0.16))";
 
 /**
  * How a card arranges its copy and its artwork.
@@ -419,48 +456,62 @@ function PhoneMedia({
 }
 
 /**
- * The shelf's 3D book, pulled open inside the square. Book3D reserves only its
- * spine's thickness and lets the open cover overhang — fine on a shelf, but a
- * lone book needs the offset and scale applied here to sit in the box the way
- * the design's cover did. The cover is taller than the square, so it clips at
- * the bottom, which is also what the design shows.
+ * An app's own icon, as Title's trailingIcon on a launch post — PhoneMedia's
+ * full mockup is too wide for a narrow column, crowding the copy down to a
+ * couple of words per line, so mobile drops it for the icon inline with the
+ * title instead. Round-rect and a blue-tinted shadow, matching the icon's
+ * own treatment on tomokanji.app, rather than FramedIcon's white chip — the
+ * icon is already a finished piece of artwork, not a flat mark to frame.
  */
-function BookCover({ book, hovered }: { book: Book; hovered?: boolean }) {
+function AppIcon({ src, alt }: { src: string; alt: string }) {
+	return (
+		<div className="relative shrink-0 size-12 overflow-hidden rounded-[14px] shadow-xl shadow-blue-600/25 ring ring-slate-500/15">
+			<Image src={src} alt={alt} fill sizes="48px" className="object-cover" />
+		</div>
+	);
+}
+
+/**
+ * The shelf's 3D book, pulled open and shrunk to sit — fully visible, tilted
+ * slightly, dead center — inside a plain box with no surface, ring or
+ * background, so a book reads as lighter-weight artwork than a cover or
+ * screenshot sitting in the nested-bezel frame.
+ *
+ * No hover-triggered openMore: the page-edge face is a flat, untextured
+ * strip, and swinging the cover further open exposes just how thin an
+ * illusion it is.
+ */
+function BookCover({ book }: { book: Book }) {
 	return (
 		<div
-			style={{ width: MEDIA_SIZE, height: MEDIA_SIZE }}
-			className={cn("shrink-0 rounded-xl", SURFACE_OUTER)}
+			style={{ width: BOOK_BOX_WIDTH, height: BOOK_BOX_HEIGHT }}
+			className="relative shrink-0"
 		>
-			<div className={cn("relative size-full rounded-lg", SURFACE_INNER)}>
-				{/* Rises into the square from below, clipped by the surface on the way
-				    up. The scale lives on this wrapper and the travel on the inner one,
-				    so Motion's transform doesn't overwrite the scale.
+			{/* Positioned so BOOK_PIVOT sits at the box's center, then scaled and
+			    tilted around that same point — see BOOK_PIVOT's comment. The
+			    travel (y, opacity) lives on the inner motion.div rather than
+			    here, so Motion's own transform doesn't fight the static one.
 
-				    pointer-events-none because Book3D is a <button>: without it, the
-				    cover takes the cursor and swallows the card's hover and click. */}
-				<div
-					className="absolute origin-top-left pointer-events-none"
-					// Book3D shifts its open cover left by its own 26px depth, and this
-					// paddingLeft cancels that exactly — so the cover's left edge lands
-					// on the wrapper origin at any scale, and BOOK_INSET reads the same
-					// on the left as on the right. Height still overruns the square, so
-					// it clips at the bottom by design.
-					style={{
-						top: BOOK_INSET,
-						left: BOOK_INSET,
-						paddingLeft: 26,
-						transform: `scale(${BOOK_SCALE})`,
-					}}
+			    pointer-events-none because Book3D is a <button>: without it, the
+			    cover takes the cursor and swallows the card's hover and click. */}
+			<div
+				className="absolute pointer-events-none"
+				style={{
+					left: BOOK_BOX_WIDTH / 2 - BOOK_PIVOT_X,
+					top: BOOK_BOX_HEIGHT / 2 - BOOK_PIVOT_Y,
+					transformOrigin: `${BOOK_PIVOT_X}px ${BOOK_PIVOT_Y}px`,
+					transform: `scale(${BOOK_SCALE}) rotate(${BOOK_TILT}deg)`,
+					filter: BOOK_SHADOW,
+				}}
+			>
+				<motion.div
+					initial={{ y: 40, opacity: 0 }}
+					whileInView={{ y: 0, opacity: 1 }}
+					viewport={{ once: true, amount: 0.4 }}
+					transition={{ type: "spring", duration: 0.6, bounce: 0.25 }}
 				>
-					<motion.div
-						initial={{ y: 40, opacity: 0 }}
-						whileInView={{ y: 0, opacity: 1 }}
-						viewport={{ once: true, amount: 0.4 }}
-						transition={{ type: "spring", duration: 0.6, bounce: 0.25 }}
-					>
-						<Book3D book={book} open openMore={hovered} />
-					</motion.div>
-				</div>
+					<Book3D book={book} open />
+				</motion.div>
 			</div>
 		</div>
 	);
@@ -506,6 +557,7 @@ export const Post = Object.assign(Root, {
 	Description,
 	Media,
 	PhoneMedia,
+	AppIcon,
 	BookCover,
 	Footer,
 	CodeLink,

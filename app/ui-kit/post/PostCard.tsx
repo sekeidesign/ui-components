@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useState } from "react";
+import type { ReactNode } from "react";
 import { LivePreview } from "../LivePreview";
 import { OutboundLink } from "../OutboundLink";
 import { SocialBar } from "../social/SocialBar";
@@ -28,8 +28,6 @@ export function PostCard({
 	children,
 }: PostCardProps) {
 	const href = linked && entry.hasPage ? `/p/${entry.slug}` : undefined;
-	// Only books react to card hover, so no other kind re-renders on pointer move.
-	const [hovered, setHovered] = useState(false);
 	const isBook = entry.kind === "book";
 	const isExperiment = entry.kind === "experiment";
 	const hasDemo = entry.preview === "live";
@@ -40,7 +38,6 @@ export function PostCard({
 	const media = isBook ? (
 		entry.cover && (
 			<Post.BookCover
-				hovered={hovered}
 				book={{
 					id: entry.slug,
 					title: entry.title,
@@ -52,7 +49,11 @@ export function PostCard({
 			/>
 		)
 	) : entry.kind === "launch" && entry.cover ? (
-		<Post.PhoneMedia src={entry.cover} alt={entry.title} priority={eager} />
+		// Too wide for a narrow column — PostHeader's Title shows the app's own
+		// icon there instead, so this only needs room at md and up.
+		<div className="hidden md:block">
+			<Post.PhoneMedia src={entry.cover} alt={entry.title} priority={eager} />
+		</div>
 	) : !isExperiment && entry.kind !== "note" && (entry.cover || entry.icon) ? (
 		<Post.Media
 			src={entry.cover}
@@ -72,13 +73,7 @@ export function PostCard({
 	const layout = media && aside ? "aside" : "column";
 
 	return (
-		<Post
-			id={entry.slug}
-			href={href}
-			layout={layout}
-			onPointerEnter={isBook ? () => setHovered(true) : undefined}
-			onPointerLeave={isBook ? () => setHovered(false) : undefined}
-		>
+		<Post id={entry.slug} href={href} layout={layout}>
 			<Post.Body>
 				{/* Entries without a page of their own show their whole body in place
 				    of the excerpt, already styled by mdx-components. */}
