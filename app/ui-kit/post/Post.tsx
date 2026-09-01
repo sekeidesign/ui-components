@@ -90,12 +90,13 @@ const PHONE = { width: 120, height: 257, top: 1, fade: 79 };
 
 /**
  * A book has no frame or background — unlike Media and PhoneMedia, it's meant
- * to read as the lightest-weight artwork in the feed. It still sits in the
- * same MEDIA_SIZE square the other kinds use, so every card's media lines up
- * in the same column — the cover itself is just scaled down inside it, which
- * is what actually gives it less visual weight.
+ * to read as the lightest-weight artwork in the feed. Its box keeps
+ * MEDIA_SIZE's width, so every card's media still lines up in the same
+ * column, but a shorter height — a square left tall, empty margins above and
+ * below the shrunk cover for no reason other than matching a square.
  */
-const BOOK_BOX = MEDIA_SIZE;
+const BOOK_BOX_WIDTH = MEDIA_SIZE;
+const BOOK_BOX_HEIGHT = 130;
 
 /**
  * Projected width of Book3D's open cover at scale 1, in px.
@@ -117,24 +118,35 @@ const BOOK_OPEN_DEPTH = BOOK_WIDTH - BOOK_OPEN_SHIFT;
  * -BOOK_OPEN_DEPTH + BOOK_PROJECTED_WIDTH], y spans [0, BOOK_HEIGHT]. Used
  * as the wrapper's transform-origin below: scaling and rotating around the
  * cover's own center, rather than its corner, keeps the cover centered in
- * BOOK_BOX at any scale or angle — the wrapper only has to place this one
+ * the box at any scale or angle — the wrapper only has to place this one
  * point at the box's center.
  */
 const BOOK_PIVOT_X = -BOOK_OPEN_DEPTH + BOOK_PROJECTED_WIDTH / 2;
 const BOOK_PIVOT_Y = BOOK_HEIGHT / 2;
 
 /**
- * Margin the cover's height leaves inside BOOK_BOX top-to-bottom. Well past
- * what fitting it requires — unlike Media or PhoneMedia, a book is meant to
- * look small and light, not to fill the box.
+ * Margin the cover's height leaves inside BOOK_BOX_HEIGHT top-to-bottom.
+ * Well past what fitting it requires — unlike Media or PhoneMedia, a book is
+ * meant to look small and light, not to fill the box.
  */
-const BOOK_MARGIN = 72;
+const BOOK_MARGIN = 24;
 
 /** Derived, so BOOK_MARGIN is the only number to tune. */
-const BOOK_SCALE = (BOOK_BOX - BOOK_MARGIN) / BOOK_HEIGHT;
+const BOOK_SCALE = (BOOK_BOX_HEIGHT - BOOK_MARGIN) / BOOK_HEIGHT;
 
 /** A few degrees off vertical, like a book set down rather than shelved. */
 const BOOK_TILT = 7;
+
+/**
+ * drop-shadow, not box-shadow: the book is scaled and rotated, and a
+ * box-shadow follows the untransformed element's own rectangle, so it'd sit
+ * skewed and axis-aligned under a tilted cover. drop-shadow follows the
+ * rendered cover+spine silhouette instead. Values are in this wrapper's own
+ * pre-scale space, so they end up BOOK_SCALE× smaller in the card — sized up
+ * from a normal elevation shadow to still read as soft once shrunk.
+ */
+const BOOK_SHADOW =
+	"drop-shadow(0 26px 24px rgba(15,23,42,0.22)) drop-shadow(0 10px 10px rgba(15,23,42,0.16))";
 
 /**
  * How a card arranges its copy and its artwork.
@@ -464,11 +476,15 @@ function AppIcon({ src, alt }: { src: string; alt: string }) {
  * slightly, dead center — inside a plain box with no surface, ring or
  * background, so a book reads as lighter-weight artwork than a cover or
  * screenshot sitting in the nested-bezel frame.
+ *
+ * No hover-triggered openMore: the page-edge face is a flat, untextured
+ * strip, and swinging the cover further open exposes just how thin an
+ * illusion it is.
  */
-function BookCover({ book, hovered }: { book: Book; hovered?: boolean }) {
+function BookCover({ book }: { book: Book }) {
 	return (
 		<div
-			style={{ width: BOOK_BOX, height: BOOK_BOX }}
+			style={{ width: BOOK_BOX_WIDTH, height: BOOK_BOX_HEIGHT }}
 			className="relative shrink-0"
 		>
 			{/* Positioned so BOOK_PIVOT sits at the box's center, then scaled and
@@ -481,10 +497,11 @@ function BookCover({ book, hovered }: { book: Book; hovered?: boolean }) {
 			<div
 				className="absolute pointer-events-none"
 				style={{
-					left: BOOK_BOX / 2 - BOOK_PIVOT_X,
-					top: BOOK_BOX / 2 - BOOK_PIVOT_Y,
+					left: BOOK_BOX_WIDTH / 2 - BOOK_PIVOT_X,
+					top: BOOK_BOX_HEIGHT / 2 - BOOK_PIVOT_Y,
 					transformOrigin: `${BOOK_PIVOT_X}px ${BOOK_PIVOT_Y}px`,
 					transform: `scale(${BOOK_SCALE}) rotate(${BOOK_TILT}deg)`,
+					filter: BOOK_SHADOW,
 				}}
 			>
 				<motion.div
@@ -493,7 +510,7 @@ function BookCover({ book, hovered }: { book: Book; hovered?: boolean }) {
 					viewport={{ once: true, amount: 0.4 }}
 					transition={{ type: "spring", duration: 0.6, bounce: 0.25 }}
 				>
-					<Book3D book={book} open openMore={hovered} />
+					<Book3D book={book} open />
 				</motion.div>
 			</div>
 		</div>
