@@ -5,12 +5,9 @@ import { Tooltip } from "@base-ui/react/tooltip";
 export const TooltipProvider = Tooltip.Provider;
 
 /**
- * One tooltip instance shared by every trigger in the app.
- *
- * With a Tooltip.Root per control, moving between two controls unmounts one
- * popup and mounts another — there is nothing to animate between. A handle lets
- * detached triggers drive a single Root, so moving between them repositions and
- * resizes the same element.
+ * One tooltip instance shared by every trigger. A Root per control unmounts one
+ * popup and mounts another, so there is nothing to animate between; a handle
+ * lets detached triggers drive a single Root.
  */
 const handle = Tooltip.createHandle<string>();
 
@@ -25,28 +22,15 @@ const EASE = "ease-[cubic-bezier(0.22,1,0.36,1)]";
 const DURATION = "duration-[0.35s]";
 
 /**
- * Mounted once, in the root layout. The handle's triggers do nothing while no
- * Root using it is mounted.
+ * Mounted once, in the root layout.
  *
- * Structure follows the detached-triggers example in the Base UI docs, and the
- * division of labour matters:
+ * Positioner holds the size (`--positioner-*`) and animates position only;
+ * Popup animates its own size via `--popup-*`; Viewport clips and slides its
+ * `data-current` / `data-previous` children. Sizing the Popup off the
+ * Positioner (`w-full h-full`) animates nothing.
  *
- * - Positioner holds the size (`--positioner-*`) and animates POSITION only.
- * - Popup animates its own SIZE via `--popup-*`, plus opacity and scale.
- * - Viewport clips, and its `data-current` / `data-previous` children slide
- *   according to `data-activation-direction` — so the new label enters from the
- *   side the pointer came from.
- *
- * Sizing the Popup off the Positioner instead (`w-full h-full`) looks right but
- * animates nothing: the popup's box is what you see, so it has to own the
- * width/height transition.
- *
- * `data-instant` turns every transition off. That's set when the Provider's
- * delay grouping shows an adjacent tooltip immediately, where animating would
- * read as lag.
- *
- * z-50 clears Book3D's open cover (z-20) — a positive z-index paints above
- * z-index:auto regardless of DOM order, so being portaled isn't enough.
+ * `data-instant` turns transitions off, for the Provider's delay grouping.
+ * z-50 clears Book3D's open cover (z-20) — being portaled isn't enough.
  */
 export function TooltipSurface() {
 	return (

@@ -5,7 +5,7 @@ import { cn } from "../cn"
 import { LIFELINE_STICKY_SHIELD_WIDTH } from "./lifeline-labels"
 import { LifelineMarkerColumn } from "./lifeline-marker"
 import type { LifelineEventImage, LifelineProps } from "./types"
-import { getLifelineEventImage } from "./lifeline-event"
+import { getLifelineEventImage } from "./lifeline-event-utils"
 import { LifelineHoverImageProvider } from "./lifeline-hover-image"
 import { useLifelineIntro } from "./use-lifeline-intro"
 import { useLifelineScroll } from "./use-lifeline-scroll"
@@ -52,9 +52,8 @@ export function LifelineDesktop({
     onIntroSettleComplete: intro.completeIntro,
   })
 
-  // Embedded, the open waits for the module to come into view: the marker
-  // fades are CSS animations that start the moment their class lands, so
-  // applying it early would spend them below the fold.
+  // Embedded, wait for the module to come into view: the marker fades are CSS
+  // animations that start the moment their class lands.
   const introWaitingInView = isEmbed && intro.shouldPlay && !introArmed
   const showIntro = isIntroAnimating && isLayoutReady && !introWaitingInView
 
@@ -80,10 +79,8 @@ export function LifelineDesktop({
         // panning stays ours.
         isEmbed &&
           "touch-pan-y focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-        // Hold it blank rather than showing a settled timeline that then
-        // resets itself to play the intro. Below the fold there is nothing
-        // to see anyway, and the arming margin means it fills in before it
-        // reaches the reader.
+        // Hold it blank rather than showing a settled timeline that then resets itself
+        // to play the intro.
         (!isLayoutReady || introWaitingInView) && "invisible",
         className,
       )}
@@ -92,14 +89,9 @@ export function LifelineDesktop({
     >
       <LifelineHoverImageProvider preload={hoverImages}>
       {/*
-        Centered — but `safe center` where the browser understands it, which
-        matters once the height is the consumer's to choose. A track taller
-        than its box would otherwise overflow equally top and bottom, and
-        since the section clips, the first thing lost is the row nearest the
-        top: the Age/Years label column and the year labels. `safe` falls
-        back to start-alignment exactly in that case, so the labels and the
-        rail stay put and only the tail of a long column clips. Declared
-        inline so browsers without it simply keep the `items-center` class.
+        `safe center`: a track taller than its box would otherwise clip the
+        Age/Years label column at the top, and `safe` falls back to start-alignment
+        exactly in that case. Inline so browsers without it keep `items-center`.
       */}
       <div
         className="flex h-full items-center overflow-hidden lifeline-edge-fade-x"
@@ -107,17 +99,14 @@ export function LifelineDesktop({
       >
         <div
           ref={trackRef}
-          className="relative flex w-max items-start will-change-transform [--lifeline-people-top:calc(12rem+40px)] [--lifeline-rail:2.5rem]"
+          className="relative flex w-max items-start [--lifeline-people-top:calc(12rem+40px)] [--lifeline-rail:2.5rem]"
           style={{ width: trackWidth }}
         >
-          {/*
-            No longer paints a label — just reserves LIFELINE_STICKY_SHIELD_WIDTH
-            at the head of the track for the scroll math in use-lifeline-scroll.ts
-            (LIFELINE_STICKY_LEFT, trackWidth) that still keys off this node.
-          */}
+          {/* Paints nothing — reserves LIFELINE_STICKY_SHIELD_WIDTH for the scroll
+              math in use-lifeline-scroll.ts, which still keys off this node. */}
           <div
             ref={labelsRef}
-            className="lifeline-labels shrink-0 will-change-transform"
+            className="lifeline-labels shrink-0"
             style={{ width: LIFELINE_STICKY_SHIELD_WIDTH }}
           />
 

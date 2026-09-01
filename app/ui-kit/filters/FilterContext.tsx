@@ -22,9 +22,8 @@ interface FilterContextValue {
 	toggle: (slug: FilterSlug) => void;
 	clear: () => void;
 	/**
-	 * Whether the filters actually apply to what's on screen. False anywhere but
-	 * the feed — on a post page nothing is being filtered, so every tab reads
-	 * unselected, "All posts" included.
+	 * Whether the filters apply to what's on screen. False anywhere but the feed,
+	 * where nothing is filtered and every tab reads unselected.
 	 */
 	active: boolean;
 }
@@ -37,16 +36,9 @@ const FilterContext = createContext<FilterContextValue | null>(null);
 /**
  * Multi-select filter state, mirrored to the URL.
  *
- * Read from the URL after mount rather than through useSearchParams: the feed
- * is a static page, and reading search params during render would opt the whole
- * route into dynamic rendering for a value only the client can know.
- *
- * pushState rather than router.replace, so toggling a tab is instant and
- * doesn't refetch the route — and back/forward still work, via popstate.
- *
- * Off the feed the tabs stop being state and become navigation: nothing on a
- * post page is filtered, so they show unselected and a click takes you home
- * with that filter applied.
+ * Read from the URL after mount rather than through useSearchParams, which
+ * would opt this static route into dynamic rendering. pushState rather than
+ * router.replace, so toggling a tab doesn't refetch — back/forward via popstate.
  */
 export function FilterProvider({ children }: { children: ReactNode }) {
 	const [selected, setSelected] = useState<Set<FilterSlug>>(new Set());

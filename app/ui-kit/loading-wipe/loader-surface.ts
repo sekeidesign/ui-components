@@ -1,20 +1,12 @@
 import { hexToRgb } from "./wipe-shader";
 
 /**
- * Paints the loading surface — colour and grain, nothing else — into a 2D
- * canvas.
+ * Paints the loading surface — colour and grain — into a 2D canvas.
  *
- * The same bitmap serves twice: it is what you see before a device exists,
- * and it is the texture the shader samples as its base once one does. Sharing
- * the pixels rather than generating them twice is what makes the handover
- * invisible; a shader-side grain and a CSS-side grain are the same grain
- * statistically but not the same pixels, and swapping between them makes the
- * whole plane visibly change texture at once.
- *
- * Only the surface lives here. The loader's text is real DOM above the canvas,
- * because it leaves by fading and rising rather than by being swept — and
- * anything that does not need the sweep's alpha has no reason to stop being
- * a real element.
+ * The same bitmap is shown before a device exists and sampled as the shader's
+ * base texture once one does. A shader-side and a CSS-side grain are the same
+ * grain statistically but not the same pixels, so regenerating it would make
+ * the whole plane change texture at the handover.
  */
 
 export interface LoaderSurfaceOptions {

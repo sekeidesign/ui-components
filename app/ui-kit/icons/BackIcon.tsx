@@ -9,14 +9,14 @@ export const BackIcon = ({ size = 16 }) => {
 		>
 			<title>Back</title>
 			<path
-				d="M7.49049 13.0022C6.12748 11.6392 5.36301 10.8745 4 9.51145C5.36301 8.14844 6.12748 7.38449 7.49049 6.02148"
+				d="M7.49 13C6.13 11.64 5.36 10.87 4 9.51C5.36 8.15 6.13 7.38 7.49 6.02"
 				stroke="currentColor"
 				strokeWidth="1.5"
 				strokeLinecap="round"
 				strokeLinejoin="round"
 			></path>
 			<path
-				d="M4 9.51099H15.7664C18.1046 9.51099 19.9997 11.4061 19.9997 13.7443C19.9997 16.0826 18.1046 17.9784 15.7664 17.9784H12.2824"
+				d="M4 9.51H15.77C18.1 9.51 20 11.41 20 13.74C20 16.08 18.1 17.98 15.77 17.98H12.28"
 				stroke="currentColor"
 				strokeWidth="1.5"
 				strokeLinecap="round"

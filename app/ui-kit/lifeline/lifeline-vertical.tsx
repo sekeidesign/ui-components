@@ -12,20 +12,21 @@ import {
 import { Film, Image as ImageIcon } from "lucide-react";
 import Link from "next/link";
 import { cn } from "../cn";
+import { LifelineEventText } from "./lifeline-event";
 import {
 	getLifelineEventEffect,
 	getLifelineEventImage,
 	getLifelineEventKey,
 	getLifelineEventTitle,
-	LifelineEventText,
-} from "./lifeline-event";
+} from "./lifeline-event-utils";
 import { useLifelineFireworks } from "./lifeline-fireworks";
 import {
 	LifelineLightbox,
 	type LifelineLightboxStart,
 } from "./lifeline-lightbox";
 import { LifelineCaseStudiesButton } from "./lifeline-case-studies-button";
-import { aggregateLifelinePeople, LifelinePeople } from "./lifeline-people";
+import { LifelinePeople } from "./lifeline-people";
+import { aggregateLifelinePeople } from "./lifeline-people-utils";
 import type { LifelineEvent, LifelineMarker, LifelineProps } from "./types";
 import { getMarkerHeight, hasMarkerContent } from "./lifeline-utils";
 import { useLifelineIntro } from "./use-lifeline-intro";
@@ -35,11 +36,9 @@ const GRID_CLASS = "grid grid-cols-[1rem_1fr] gap-x-3";
 const RAIL_LEFT = "0.5rem";
 
 /**
- * Above this many entries the delay-armed intro fades would promote
- * every entry to a compositor layer at once and crash mobile Safari's
- * compositor. Long timelines fade entries in as they enter the
- * viewport during the auto-scroll instead — same look, but only a
- * handful of live animations at any moment.
+ * Above this many entries, the delay-armed intro fades would promote every
+ * entry to a compositor layer at once and crash mobile Safari. Longer
+ * timelines fade entries in as they enter the viewport instead.
  */
 const MAX_ARMED_ENTRIES = 80;
 
@@ -53,12 +52,9 @@ function RailTick() {
 }
 
 /**
- * One event line. Touch layouts have no hover reveal, so an event with
- * attached media becomes tappable: the media expands into the lightbox
- * from the event's text, framed by the poster image's real aspect.
- *
- * `interactive={false}` drops the lightbox/fireworks tap — the media
- * icon still hints at attached photos, but nothing opens.
+ * One event line. Touch layouts have no hover reveal, so an event with media
+ * becomes tappable and expands into the lightbox from its text.
+ * `interactive={false}` drops that — the icon still hints at the photos.
  */
 function LifelineVerticalEvent({
 	event,
@@ -75,9 +71,8 @@ function LifelineVerticalEvent({
 	const [lightboxStart, setLightboxStart] =
 		useState<LifelineLightboxStart | null>(null);
 
-	// The event text has no card geometry — synthesize a small seed
-	// centered on the text, carrying the media's aspect so the lightbox
-	// expands into the right frame.
+	// The event text has no card geometry — synthesize a seed centered on it,
+	// carrying the media's aspect.
 	const measureText = useCallback((): LifelineLightboxStart | null => {
 		const el = textRef.current;
 		if (!el) return null;
@@ -110,22 +105,33 @@ function LifelineVerticalEvent({
 		}
 	};
 
+	const activate = !interactive
+		? undefined
+		: image
+			? openMedia
+			: effect && fireworks
+				? () => fireworks.launch(effect)
+				: undefined;
+
 	return (
 		<>
 			<p
 				ref={textRef}
 				className={cn(
 					"max-w-full text-left text-sm leading-[1.55] tracking-[-0.01em]",
-					interactive && (image || effect) && "cursor-pointer",
+					activate && "cursor-pointer",
 				)}
-				onClick={
-					!interactive
-						? undefined
-						: image
-							? openMedia
-							: effect && fireworks
-								? () => fireworks.launch(effect)
-								: undefined
+				role={activate ? "button" : undefined}
+				tabIndex={activate ? 0 : undefined}
+				onClick={activate}
+				onKeyDown={
+					activate
+						? (event) => {
+								if (event.key !== "Enter" && event.key !== " ") return;
+								event.preventDefault();
+								activate();
+							}
+						: undefined
 				}
 			>
 				<LifelineEventText event={event} />
@@ -172,9 +178,8 @@ const LifelineVerticalEntry = forwardRef<
 		introDuration?: number;
 		revealPending?: boolean;
 		/**
-		 * Drops the lightbox/drag on event and photo media — they're
-		 * illustrative only — and instead makes the whole entry a link to
-		 * the marker's case study, when its company declares one.
+		 * Drops the lightbox/drag and makes the whole entry a link to the marker's
+		 * case study, when its company declares one.
 		 */
 		staticMedia?: boolean;
 	}
@@ -233,7 +238,7 @@ const LifelineVerticalEntry = forwardRef<
 							<div className="mb-3 flex items-center justify-start gap-2">
 								{marker.badges.map((badge) => (
 									// eslint-disable-next-line @next/next/no-img-element
-									<img
+									<img // react-doctor-disable-line nextjs-no-img-element -- arbitrary media, with no intrinsic size for next/image to work from
 										key={badge.src}
 										src={badge.src}
 										alt={badge.alt}
@@ -254,9 +259,7 @@ const LifelineVerticalEntry = forwardRef<
 								{marker.companies.map((company, index) => (
 									<span key={company.id}>
 										{index > 0 && ", "}
-										{/* Linked once by the whole-entry wrapper below in
-										    staticMedia mode — a nested anchor would be invalid
-										    HTML, so the name renders plain there. */}
+										{/* Already linked by the whole-entry wrapper below in staticMedia mode. */}
 										{company.href && !staticMedia ? (
 											<Link
 												href={company.href}
@@ -286,9 +289,7 @@ const LifelineVerticalEntry = forwardRef<
 
 						{photos.length > 0 && (
 							<div className="mt-6">
-								{/* staticMedia entries are already wrapped in `linkHref`'s
-								    anchor below — a nested anchor here would be invalid
-								    HTML, so that case renders as a plain chip. */}
+								{/* Already wrapped in linkHref's anchor below, so this renders plain. */}
 								<LifelineCaseStudiesButton
 									photos={photos}
 									href={primaryHref}
@@ -334,10 +335,9 @@ export function LifelineVertical({
 	/** See `LifelineVerticalEntry`'s `staticMedia` prop. */
 	staticMedia?: boolean;
 }) {
-	// Only an explicit `mode` embeds the vertical layout. `"auto"` measures
-	// scrollability on desktop, but the mobile layout *is* a vertical
-	// scroller inside a scrolling stage, so that test would read every
-	// full-page timeline as embedded and drop its intro.
+	// Only an explicit `mode` embeds the vertical layout: the mobile layout is
+	// itself a vertical scroller inside a scrolling stage, so `auto`'s test would
+	// read every full-page timeline as embedded.
 	const isEmbed = mode === "embed";
 	const heights = useMemo(
 		() =>
@@ -350,9 +350,8 @@ export function LifelineVertical({
 	const intro = useLifelineIntro(heights);
 	const isIntroAnimating = intro.shouldPlay && intro.isPlaying;
 
-	// Warm the event media posters during idle — the tap-to-open
-	// lightbox measures its frame from these, and a cold fetch at tap
-	// time reads as lag.
+	// Warm the event media posters during idle — the lightbox measures its frame
+	// from these, and a cold fetch at tap time reads as lag.
 	useEffect(() => {
 		const sources: string[] = [];
 		for (const marker of markers) {
@@ -398,11 +397,9 @@ export function LifelineVertical({
 	const revealOnScroll = markers.length > MAX_ARMED_ENTRIES;
 	const animateEntries = showIntro && !revealOnScroll;
 
-	// Rail-synced fades for long timelines: entries render hidden and
-	// each one fades in the moment the rail tip (--lifeline-intro-progress,
-	// written every frame by the intro scroll) crosses its position —
-	// desktop's choreography, but each entry drops its animation (and
-	// compositor layer) as soon as its fade finishes.
+	// Rail-synced fades for long timelines: each entry fades in when
+	// --lifeline-intro-progress crosses its position, then drops its animation
+	// (and compositor layer).
 	useEffect(() => {
 		if (!showIntro || !revealOnScroll) return;
 		const section = sectionRef.current;

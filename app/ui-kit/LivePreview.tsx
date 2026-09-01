@@ -26,9 +26,8 @@ export function LivePreview({
 }: LivePreviewProps) {
 	const ref = useRef<HTMLDivElement>(null);
 
-	// Two thresholds, deliberately asymmetric: mount early off a generous
-	// margin, run animation only once genuinely on screen. Stops the
-	// mount/unmount thrash you get from a single boundary.
+	// Asymmetric thresholds: mount early off a generous margin, animate only once
+	// genuinely on screen. Avoids mount/unmount thrash at a single boundary.
 	const nearby = useInView(ref, { margin: "400px" });
 	const visible = useInView(ref, { amount: 0.3 });
 

@@ -8,9 +8,8 @@ export const SOCIAL_KINDS: SocialKind[] = ["fire", "link"];
 export type SocialCounts = Record<SocialKind, number>;
 
 /**
- * A single request can't add more than this. Clicking is deliberately
- * unlimited, but the client batches clicks into a delta — so without a cap,
- * a hand-rolled POST could add a billion in one call.
+ * Per-request cap. Clicking is unlimited, but the client batches clicks into a
+ * delta — so without one, a hand-rolled POST could add a billion in one call.
  */
 export const MAX_DELTA_PER_REQUEST = 50;
 
@@ -22,20 +21,16 @@ const url =
 const token =
 	process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN;
 
-/**
- * Null until the Upstash env vars are set, so the site builds and runs without
- * a database — the bar renders, clicks persist locally, nothing throws.
- */
+/** Null until the Upstash env vars are set, so the site builds and runs without a database. */
 export const redis =
 	url && token ? new Redis({ url, token }) : null;
 
 export const isSocialConfigured = redis !== null;
 
 /**
- * The Upstash free tier allows one database, so local dev, preview deploys and
- * production all talk to the same Redis. Namespacing by environment keeps test
- * clicks from inflating the real counts. VERCEL_ENV is "production" |
- * "preview" | "development" on Vercel, and unset locally.
+ * The free tier allows one database, so dev, preview and production share a
+ * Redis. Namespacing by environment keeps test clicks out of the real counts.
+ * VERCEL_ENV is unset locally.
  */
 const ENV = process.env.VERCEL_ENV ?? "local";
 

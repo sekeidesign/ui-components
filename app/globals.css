@@ -388,6 +388,9 @@ body {
 
 .lifeline-marker-intro {
   opacity: 0;
+  /* Scoped to the intro rather than sitting on every marker for the page's
+     whole life — the animation is the only time the hint pays for itself. */
+  will-change: opacity;
   animation: lifeline-marker-in var(--lifeline-marker-fade-ms, 420ms)
     cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
@@ -587,4 +590,24 @@ body {
 .control-swatch::-moz-color-swatch {
   border: none;
   border-radius: 6px;
+}
+
+/**
+ * Durations shortened rather than animations removed: several reveals here
+ * (.lifeline-marker-intro, .lifeline-labels-intro) start at opacity 0 and rely
+ * on a `forwards` animation to land at 1, so `animation: none` would leave them
+ * invisible. Running them out instantly keeps the end state and drops the motion.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    /* biome-ignore-start lint/complexity/noImportantStyles: a reduced-motion
+       override has to beat utility classes and inline styles alike */
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+    /* biome-ignore-end lint/complexity/noImportantStyles: as above */
+  }
 }

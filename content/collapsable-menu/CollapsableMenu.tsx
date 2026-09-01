@@ -1,10 +1,11 @@
 import { BellIcon, EnvelopeIcon, HomeIcon } from "@heroicons/react/20/solid";
 import { cn } from "@ui-kit/cn";
-import { motion, useDragControls } from "motion/react";
+import { m, useDragControls } from "motion/react";
 import {
 	createContext,
 	type ReactNode,
 	useContext,
+	useMemo,
 	useRef,
 	useState,
 } from "react";
@@ -12,7 +13,6 @@ import useMeasure from "react-use-measure";
 
 const DRAG_THRESHOLD = 88;
 
-// Context for collapsible menu state
 interface CollapsableMenuContextValue {
 	isDetached: boolean;
 	setIsDetached: (detached: boolean) => void;
@@ -21,7 +21,6 @@ interface CollapsableMenuContextValue {
 const CollapsableMenuContext =
 	createContext<CollapsableMenuContextValue | null>(null);
 
-// Provider component
 interface CollapsableMenuProviderProps {
 	children: ReactNode;
 }
@@ -30,9 +29,10 @@ const CollapsableMenuProvider = ({
 	children,
 }: CollapsableMenuProviderProps) => {
 	const [isDetached, setIsDetached] = useState(false);
+	const value = useMemo(() => ({ isDetached, setIsDetached }), [isDetached]);
 
 	return (
-		<CollapsableMenuContext.Provider value={{ isDetached, setIsDetached }}>
+		<CollapsableMenuContext.Provider value={value}>
 			{children}
 		</CollapsableMenuContext.Provider>
 	);
@@ -48,9 +48,9 @@ const CollapsableMenuItem = ({
 	const { isDetached } = useCollapsableMenu();
 	const [ref, { width }] = useMeasure();
 	return (
-		<motion.div className="py-1 px-2 bg-gray-100 h-8 min-w-8 overflow-hidden hover:bg-gray-200 rounded-full text-sm text-gray-500 flex items-center justify-center">
+		<m.div className="py-1 px-2 bg-gray-100 h-8 min-w-8 overflow-hidden hover:bg-gray-200 rounded-full text-sm text-gray-500 flex items-center justify-center">
 			{icon}
-			<motion.div
+			<m.div
 				animate={{
 					x: isDetached ? 8 : 0,
 					width: isDetached ? 0 : width,
@@ -60,12 +60,11 @@ const CollapsableMenuItem = ({
 				<span className="font-[500] pl-1" ref={ref}>
 					{label}
 				</span>
-			</motion.div>
-		</motion.div>
+			</m.div>
+		</m.div>
 	);
 };
 
-// Hook to use the context
 const useCollapsableMenu = () => {
 	const context = useContext(CollapsableMenuContext);
 	if (!context) {
@@ -111,7 +110,6 @@ const CollapsableMenu = () => {
 			setIsDetached(false);
 		}
 
-		// Reset the over home state when drag ends
 		setIsOverHome(false);
 	};
 
@@ -140,7 +138,7 @@ const CollapsableMenu = () => {
 					Release to snap back
 				</span>
 			</div>
-			<motion.div
+			<m.div
 				drag
 				dragControls={dragControls}
 				dragConstraints={
@@ -156,7 +154,6 @@ const CollapsableMenu = () => {
 						setIsDetached(true);
 					}
 
-					// Check if we're dragging over the island home area
 					if (isDetached && islandHome.current) {
 						const isWithinBounds = isWithinIslandHome(event);
 
@@ -174,6 +171,7 @@ const CollapsableMenu = () => {
 			>
 				<button
 					type="button"
+					aria-label="Drag to detach menu"
 					className={cn(
 						"w-7 h-1 bg-gray-300 rounded-full absolute -top-3 left-1/2 transition-transform duration-200 hover:scale-110 cursor-grab active:cursor-grabbing active:scale-100 -translate-x-1/2",
 						"after:content-[''] after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:w-[150%] after:rounded-full after:border after:border-red-500 after:border-dashed after:aspect-video",
@@ -195,7 +193,7 @@ const CollapsableMenu = () => {
 					icon={<EnvelopeIcon className="w-4 h-4" />}
 					label="Messages"
 				/>
-			</motion.div>
+			</m.div>
 			<button
 				type="button"
 				className="bg-gray-100 hover:bg-gray-200 hover:text-gray-500 cursor-pointer rounded-md px-2 py-1 text-xs font-[500] text-gray-400 absolute bottom-2 right-2"
@@ -207,6 +205,5 @@ const CollapsableMenu = () => {
 	);
 };
 
-// Export the provider and component
 export { CollapsableMenuProvider, useCollapsableMenu };
 export default CollapsableMenu;

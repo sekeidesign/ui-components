@@ -7,11 +7,6 @@ export const metadata = {
 	robots: { index: false, follow: false },
 };
 
-/**
- * A place to work on the social bar's interaction. Everything here runs on the
- * memory transport: no counts fetched, no writes to Redis, no localStorage — so
- * mashing the buttons costs nothing and leaves nothing behind.
- */
 export default function SocialLabPage() {
 	// Never on the live site; available locally and on preview deploys.
 	if (process.env.VERCEL_ENV === "production") notFound();

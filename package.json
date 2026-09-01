@@ -7,7 +7,8 @@
     "build": "node scripts/generate-previews.mjs && next build",
     "start": "next start",
     "lint": "next lint",
-    "content:sync": "node scripts/generate-previews.mjs"
+    "content:sync": "node scripts/generate-previews.mjs",
+    "doctor": "npx react-doctor@latest"
   },
   "dependencies": {
     "@ark-ui/react": "^5.15.1",
@@ -15,7 +16,7 @@
     "@heroicons/react": "^2.2.0",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
-    "@next/mdx": "^15.3.8",
+    "@next/mdx": "^15.5.22",
     "@types/mdx": "^2.0.14",
     "@upstash/redis": "^1.38.2",
     "@vercel/analytics": "^1.5.0",
@@ -25,8 +26,7 @@
     "lucide-react": "^1.28.0",
     "motion": "^12.19.1",
     "motion-plus": "https://api.motion.dev/registry?package=motion-plus&version=1.5.4&token=227e71e4be314f5a9e5ba600faa60c97e9323cf108da08d6962dcfe62c549fcd",
-    "next": "15.3.8",
-    "radix-ui": "^1.4.3",
+    "next": "15.5.22",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-use-measure": "^2.1.7",
@@ -44,8 +44,8 @@
     "@webgpu/types": "^0.1.72",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
+    "react-doctor": "^0.9.12",
     "tailwindcss": "^4",
-    "tailwindcss-bg-patterns": "^0.3.0",
     "typescript": "^5"
   }
 }

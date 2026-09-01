@@ -7,23 +7,19 @@ import {
   timeAtTrackProgress,
   trackProgressAtTime,
 } from "./lifeline-intro-timing"
+import { usePrefersReducedMotion } from "../use-prefers-reduced-motion"
 
 /** Tweak these */
 export const LIFELINE_LABELS_MS = 400
 export const LIFELINE_RAIL_MS = 1800
 /**
- * Track length (px on desktop, tall lifelines on mobile) the base rail
- * duration was tuned for — roughly a 40-year personal lifeline. Longer
- * tracks slow the sweep sublinearly so dense timelines stay readable,
- * capped so a 250-year nation doesn't become a screensaver.
+ * Track length the base rail duration was tuned for. Longer tracks slow the
+ * sweep sublinearly, capped so a 250-year timeline isn't a screensaver.
  */
 export const LIFELINE_REFERENCE_TRACK = 9000
 export const LIFELINE_RAIL_MAX_MS = 7200
 export const LIFELINE_RAIL_SCALE_POWER = 0.45
-/**
- * Keep fade stretching subtle — long fades lag behind the sweeping
- * line and read as out of sync.
- */
+/** Long fades lag behind the sweeping line and read as out of sync. */
 export const LIFELINE_FADE_SCALE_MAX = 1.5
 
 const INTRO_LAST_PLAYED_KEY = "lifeline-intro-last-played"
@@ -48,11 +44,11 @@ function markIntroPlayedToday() {
 export function useLifelineIntro(markerWidths: number[]) {
   // Skip straight to the settled end state for users who prefer reduced
   // motion, or who have already seen the sweep-in today.
-  const [shouldPlay] = useState(() => {
-    if (typeof window === "undefined") return true
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false
-    return !hasPlayedIntroToday()
-  })
+  const prefersReducedMotion = usePrefersReducedMotion()
+  const [playedToday] = useState(
+    () => typeof window !== "undefined" && hasPlayedIntroToday(),
+  )
+  const shouldPlay = !prefersReducedMotion && !playedToday
   const [isPlaying, setIsPlaying] = useState(true)
   const [isComplete, setIsComplete] = useState(false)
   const introTimeoutRef = useRef(0)
@@ -88,10 +84,8 @@ export function useLifelineIntro(markerWidths: number[]) {
         return Math.min(elapsedMs / railDuration, 1)
       }
 
-      // Mirrored in time: the sweep travels right-to-left, so the eased
-      // curve runs backwards and its slow region — the first (newest)
-      // markers — lands at the end of the journey. The rail decelerates
-      // into the present instead of easing out of the past.
+      // Mirrored in time: the sweep travels right-to-left, so the eased curve runs
+      // backwards and the rail decelerates into the present.
       return (
         1 -
         trackProgressAtTime(
@@ -108,9 +102,8 @@ export function useLifelineIntro(markerWidths: number[]) {
     (index: number) => {
       if (!shouldPlay || totalMarkersWidth <= 0) return 0
 
-      // The sweep front moves right-to-left, so a marker fades in when the
-      // front reaches its right edge — the rightmost (oldest) marker opens
-      // first, the leftmost (newest) last.
+      // The sweep front moves right-to-left, so the oldest (rightmost) marker opens
+      // first and the newest last.
       const offset = markerWidths
         .slice(0, index + 1)
         .reduce((sum, width) => sum + width, 0)

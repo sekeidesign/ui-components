@@ -5,9 +5,9 @@ export function clamp(value: number, min: number, max: number) {
 }
 
 /**
- * A composited layer resting on a fractional offset resamples its whole
- * subtree — text goes soft. Snapping to the device pixel grid (not whole
- * CSS pixels) keeps half-pixel steps on retina, so motion stays smooth.
+ * A layer resting on a fractional offset resamples its whole subtree and text
+ * goes soft. Snapping to the device pixel grid — not whole CSS pixels — keeps
+ * half-pixel steps on retina.
  */
 export function snapToDevicePixel(value: number) {
   const dpr = window.devicePixelRatio || 1
@@ -56,9 +56,8 @@ export function getMarkerHeight(marker: LifelineMarker, nextYear?: number) {
   return Math.min(520, Math.max(peopleOnly ? 148 : 188, height))
 }
 
-// Fixed rather than gap-based: varying width by time-to-next-marker meant
-// columns wrapped their photo grid to one or two rows inconsistently. A
-// uniform width keeps every column's layout (photos included) identical.
+// Fixed rather than gap-based: varying width by time-to-next-marker wrapped
+// each column's photo grid inconsistently.
 export function getMarkerWidth(marker: LifelineMarker) {
   const hasContent = hasMarkerContent(marker)
   const hasPeople = hasMarkerPeople(marker)

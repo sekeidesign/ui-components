@@ -3,10 +3,8 @@ import { Post } from "./Post";
 import type { TimelineEntry } from "@/lib/timeline";
 
 /**
- * The identity block for a post: kind, date, title and copy. Shared so a card
- * in the feed and the top of its own page can't drift apart — a page only
- * differs in leading with an h1, running the copy unclamped, and dropping the
- * card's "read more" affordance.
+ * The identity block for a post: kind, date, title and copy. Shared so a feed
+ * card and the top of its own page can't drift apart.
  */
 export function PostHeader({
 	entry,
@@ -42,10 +40,8 @@ export function PostHeader({
 	return (
 		<>
 			{isLaunch && entry.icon ? (
-				// Grouped with meta so the icon sits against their combined
-				// height — against the title's own single line alone, the row
-				// stretched to fit the icon and padded the title top and bottom.
-				// PhoneMedia takes over this role at md and up, where it has room.
+				// Grouped with meta so the icon sits against their combined height — against
+				// the title's single line the row stretched. PhoneMedia takes over at md and up.
 				<div className="flex items-center gap-3 self-stretch">
 					<div className="flex-1 min-w-0 flex flex-col gap-2.5">
 						{meta}
@@ -66,8 +62,6 @@ export function PostHeader({
 				<StarRating rating={entry.rating} />
 			)}
 
-			{/* Books skip the excerpt entirely — they're meant to read as a
-			    lighter-weight entry than the rest of the feed. */}
 			{entry.excerpt && !isBook && (
 				<Post.Description clamp={isPage ? null : entry.kind === "launch" ? 2 : 3}>
 					{entry.excerpt}

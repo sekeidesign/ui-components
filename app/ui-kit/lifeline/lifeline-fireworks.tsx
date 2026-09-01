@@ -5,6 +5,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type ReactNode,
@@ -39,10 +40,6 @@ void main() {
 }
 `
 
-/**
- * Additive point-glow fireworks in Old Glory red, white, and blue,
- * composited over a night-sky scrim via premultiplied canvas alpha.
- */
 const FRAGMENT_SHADER = `
 precision highp float;
 
@@ -129,10 +126,14 @@ function FireworksCanvas({
   onDone: () => void
 }) {
   const paletteRef = useRef(palette)
-  paletteRef.current = palette
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const onDoneRef = useRef(onDone)
-  onDoneRef.current = onDone
+
+  // Both are only read from the render loop below, which runs after commit.
+  useEffect(() => {
+    paletteRef.current = palette
+    onDoneRef.current = onDone
+  }, [palette, onDone])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -244,11 +245,12 @@ export function LifelineFireworksProvider({
   const [playing, setPlaying] = useState(false)
   const [effect, setEffect] = useState<LifelineEventEffect>("fireworks")
   const playingRef = useRef(false)
-  playingRef.current = playing
 
-  // The original also cross-fades a light page to dark for the show via
-  // next-themes, restoring after — dropped here since this site has no
-  // dark-mode toggle infrastructure. The canvas show itself is unaffected.
+  // Read from `launch`, an event callback, so a post-commit write is in time.
+  useEffect(() => {
+    playingRef.current = playing
+  }, [playing])
+
   const launch = useCallback((nextEffect: LifelineEventEffect) => {
     if (playingRef.current) return
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
@@ -261,8 +263,10 @@ export function LifelineFireworksProvider({
     setPlaying(false)
   }, [])
 
+  const value = useMemo(() => ({ launch }), [launch])
+
   return (
-    <LifelineFireworksContext.Provider value={{ launch }}>
+    <LifelineFireworksContext.Provider value={value}>
       {children}
       {playing && <FireworksCanvas palette={PALETTES[effect]} onDone={done} />}
     </LifelineFireworksContext.Provider>

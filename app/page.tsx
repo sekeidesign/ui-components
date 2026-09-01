@@ -5,20 +5,24 @@ import { TimelineFeed } from "./TimelineFeed";
 export default async function HomePage() {
 	const timeline = getTimeline();
 
-	// Entries that show in full in the feed compile their bodies here on the
-	// server — the prose travels in the RSC payload instead of shipping MDX to
-	// the client. Keyed off `inline`, not `!hasPage`: a post whose page is
-	// switched off while it's half-written must not spill into the feed instead.
+	// Inline entries compile their bodies here so the prose travels in the RSC
+	// payload instead of shipping MDX to the client. Keyed off `inline`, not
+	// `!hasPage`, so a half-written post can't spill into the feed.
 	const bodies: Record<string, ReactNode> = {};
-	await Promise.all(
-		timeline
-			.filter((entry) => entry.inline)
-			.map(async (entry) => {
+	const compiling: Promise<void>[] = [];
+	for (const entry of timeline) {
+		if (!entry.inline) continue;
+		compiling.push(
+			(async () => {
 				const { default: Body } = await import(
 					`../content/${entry.slug}/index.mdx`
 				);
 				bodies[entry.slug] = <Body />;
-			}),
+			})(),
+		);
+	}
+	await Promise.all(
+		compiling,
 	);
 
 	return <TimelineFeed entries={timeline} bodies={bodies} />;

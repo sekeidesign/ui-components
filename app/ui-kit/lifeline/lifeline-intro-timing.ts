@@ -84,10 +84,6 @@ function invertSmoothstep(value: number) {
   return (lo + hi) / 2
 }
 
-export function isSlowIntroYear(index: number) {
-  return index < LIFELINE_SLOW_YEARS
-}
-
 export function getTransitionMarkerFadeDuration(index: number) {
   if (index < LIFELINE_SLOW_YEARS) return LIFELINE_SLOW_MARKER_FADE_MS
 

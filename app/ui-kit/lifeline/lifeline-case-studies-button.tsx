@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import Link from "next/link";
 import { cn } from "../cn";
 import type { LifelinePhoto } from "./types";
@@ -10,15 +10,12 @@ import type { LifelinePhoto } from "./types";
 const CYCLE_MS = 400;
 
 /**
- * Compact stand-in for the old scattered/stacked photo grid: a pill with a
- * tiny thumbnail and a "X case studies" label. At rest it shows the first
- * photo; hovering cycles through the rest with a crossfade. Renders three
- * ways depending on context:
- * - `as="link"` — its own anchor (mobile entries aren't otherwise linked).
- * - `as="static"` — a plain chip, for callers whose ancestor is already
- *   the link (desktop's whole marker column, or a staticMedia entry) —
- *   nesting another anchor there would be invalid HTML.
- * - no `href` — disabled, "Coming soon" (no case study page yet).
+ * A pill with a thumbnail and an "X case studies" label; hovering cycles the
+ * rest with a crossfade. Renders three ways:
+ * - `as="link"` — its own anchor.
+ * - `as="static"` — a plain chip, when an ancestor is already the link
+ *   (nesting anchors is invalid HTML).
+ * - no `href` — disabled, "Coming soon".
  */
 export function LifelineCaseStudiesButton({
 	photos,
@@ -67,7 +64,7 @@ export function LifelineCaseStudiesButton({
 				aria-hidden="true"
 			>
 				<AnimatePresence>
-					<motion.img
+					<m.img
 						key={`${active.src}-${index}`}
 						src={active.src}
 						alt=""

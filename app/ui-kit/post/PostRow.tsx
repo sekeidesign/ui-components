@@ -8,12 +8,10 @@ import { PanelRow } from "../PanelRow";
 /**
  * Makes the whole card a click target for its post.
  *
- * Deliberately NOT an <a> wrapping the card: the card contains the reaction
- * buttons, the copy-link button and the source link, and nesting interactive
- * elements inside an anchor is invalid and breaks them. Instead the title stays
- * a real link — that's the keyboard and screen-reader path — and this adds a
- * redundant click area around it, bowing out whenever the click belongs to a
- * control or to a text selection.
+ * Deliberately NOT an <a> wrapping the card: it contains the reaction, copy-link
+ * and source controls, and nesting interactive elements in an anchor breaks
+ * them. The title stays a real link — the keyboard and screen-reader path — and
+ * this adds a redundant click area that bows out for controls and selections.
  */
 export function PostRow({
 	href,
@@ -63,7 +61,7 @@ export function PostRow({
 
 		// Match what a real link does with a modifier held.
 		if (event.metaKey || event.ctrlKey || event.shiftKey || event.button === 1) {
-			window.open(href, "_blank");
+			window.open(href, "_blank", "noopener");
 			return;
 		}
 
@@ -76,13 +74,8 @@ export function PostRow({
 			onClick={onClick}
 			onPointerEnter={onPointerEnter}
 			onPointerLeave={onPointerLeave}
-			// The row sits on the column's gray-100, so a touch of gray-200 over it
-			// reads as ~5 values darker. No important modifier needed now that the
-			// row itself doesn't carry the unlayered `.panel` class.
 			// The hover fill is suppressed while the pointer is inside an opted-out
-			// surface (a live demo), so poking at a component doesn't look like
-			// you're about to navigate. :has() does this in CSS — no pointer state
-			// to track and no re-render.
+			// surface (a live demo), via :has() — no pointer state to track.
 			className={cn("post-card cursor-pointer rounded-2xl", className)}
 		>
 			{children}

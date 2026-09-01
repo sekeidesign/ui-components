@@ -6,6 +6,7 @@ import {
 	type ReactNode,
 	type SetStateAction,
 	useContext,
+	useMemo,
 	useState,
 } from "react";
 
@@ -21,17 +22,16 @@ const HoverContext = createContext<HoverContextValue>({
 
 export function HoverProvider({ children }: { children: ReactNode }) {
 	const [hoveredId, setHoveredId] = useState<string | null>(null);
+	const value = useMemo(() => ({ hoveredId, setHoveredId }), [hoveredId]);
 
 	return (
-		<HoverContext.Provider value={{ hoveredId, setHoveredId }}>
+		<HoverContext.Provider value={value}>
 			{children}
 		</HoverContext.Provider>
 	);
 }
 
-// Pairs any number of elements under the same id — hovering one marks all
-// of them active, so e.g. a panel and its related sentence can highlight
-// each other regardless of which one triggered the hover.
+// Pairs any number of elements under one id: hovering one marks all active.
 export function useHoverGroup(id: string) {
 	const { hoveredId, setHoveredId } = useContext(HoverContext);
 

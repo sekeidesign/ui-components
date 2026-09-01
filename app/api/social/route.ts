@@ -20,9 +20,11 @@ function knownSlugs() {
 export async function GET(request: Request) {
 	const param = new URL(request.url).searchParams.get("slugs");
 	const known = knownSlugs();
-	const slugs = (param ? param.split(",") : [...known])
-		.map((s) => s.trim())
-		.filter((s) => known.has(s));
+	const slugs: string[] = [];
+	for (const raw of param ? param.split(",") : known) {
+		const slug = raw.trim();
+		if (known.has(slug)) slugs.push(slug);
+	}
 
 	const counts = await readCounts(slugs);
 	return NextResponse.json({ configured: isSocialConfigured, counts });

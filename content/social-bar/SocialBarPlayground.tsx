@@ -13,11 +13,7 @@ import { SocialProvider } from "@ui-kit/social/SocialProvider";
 /** Starting counts, so the digit roll has something to roll. */
 const SEED = { "playground": { fire: 132, link: 16 } };
 
-/**
- * The live social bar plus the knobs behind it. Runs on the memory transport,
- * so clicking here never reaches Redis — the bar is real, its persistence
- * isn't.
- */
+/** The live social bar plus its knobs, on the memory transport — clicking never reaches Redis. */
 export function SocialBarPlayground() {
 	const [gap, setGap] = useState(3);
 	const [dot, setDot] = useState(0.5);
@@ -40,16 +36,13 @@ export function SocialBarPlayground() {
 	} as CSSProperties;
 
 	return (
-		// The stage's own padding is off (previewClassName: p-0), so the panel can
-		// sit flush against its top, right and bottom edges. The bar side carries
-		// the padding instead.
+		// The stage's own padding is off (previewClassName: p-0), so the panel sits
+		// flush and the bar side carries the padding instead.
 		<div
 			style={vars}
 			className="flex flex-col md:flex-row items-stretch w-full self-stretch"
 		>
 			<div className="flex-1 flex items-center justify-center p-8 md:p-10">
-				{/* No code link here — it navigates away, and this is for poking at
-				    the interaction. The card's own footer already carries one. */}
 				<SocialProvider transport="memory" seed={SEED} slugs={["playground"]}>
 					<SocialBar slug="playground" sharePath="/p/social-bar" />
 				</SocialProvider>

@@ -21,10 +21,10 @@ export type EntryKind =
 /**
  * How much a live preview costs to leave running offscreen.
  *
- * `light` — DOM + transforms, idle cost near zero. Mounted once it comes near
- * the viewport and kept mounted, so interaction state survives scrolling.
+ * `light` — DOM + transforms. Mounted once it comes near the viewport and kept
+ *   mounted, so interaction state survives scrolling.
  * `heavy` — canvas, WebGL, video. An idle GPU context still costs, so these
- * unmount whenever they leave the nearby band.
+ *   unmount whenever they leave the nearby band.
  */
 export type PreviewCost = "light" | "heavy";
 
@@ -63,24 +63,21 @@ export interface TimelineEntry {
 	/** Book spine cloth colour for Book3D — covers rarely have a spine image. */
 	spineColor?: string;
 	/**
-	 * CSS aspect-ratio for the cover box, used wherever the cover isn't cropped
-	 * to a square — a full-width cover on mobile. Read off the file for covers
-	 * in public/, so a screenshot shows uncropped without anyone measuring it;
-	 * frontmatter overrides that, and a remote cover falls back to 16/9.
+	 * CSS aspect-ratio for the cover box, used wherever the cover isn't cropped to
+	 * a square. Read off the file for covers in public/; frontmatter overrides it,
+	 * and a remote cover falls back to 16/9.
 	 */
 	coverAspect?: string;
 	/**
-	 * Whether this entry gets its own /p/<slug> page — and so whether its card
-	 * is a link at all. Set `hasPage: false` to publish the card while the page
-	 * behind it is still half-written: the route 404s and nothing links to it.
-	 * Notes default to false because their body is already the whole post.
+	 * Whether this entry gets its own /p/<slug> page — and so whether its card is a
+	 * link at all. `hasPage: false` publishes the card while the page behind it is
+	 * half-written. Notes default to false.
 	 */
 	hasPage: boolean;
 	/**
-	 * Whether the body renders in full inside the feed card. True for a note
-	 * with no page of its own — there, the post IS the content. Kept separate
-	 * from `hasPage` so switching a page off doesn't spill an unfinished body
-	 * into the timeline instead.
+	 * Whether the body renders in full inside the feed card. True for a note with
+	 * no page of its own. Kept separate from `hasPage` so switching a page off
+	 * doesn't spill an unfinished body into the timeline.
 	 */
 	inline: boolean;
 	draft?: boolean;
@@ -102,10 +99,9 @@ function fail(slug: string, message: string): never {
 }
 
 /**
- * Card copy for entries that don't declare an `excerpt` — a book's review, say,
- * which is written once in the body and shown clamped on the card. Rough on
- * purpose: the card clamps to a couple of lines anyway, so this only has to
- * strip syntax, not render Markdown.
+ * Card copy for entries that don't declare an `excerpt`. Rough on purpose: the
+ * card clamps to a couple of lines, so this only strips syntax rather than
+ * rendering Markdown.
  */
 function deriveExcerpt(body: string): string | undefined {
 	const text = body
@@ -202,15 +198,12 @@ function parseEntry(slug: string): TimelineEntry {
 	if (data.linkLabel && !data.link)
 		fail(slug, "`linkLabel` set but no `link` to label");
 
-	// A note is short enough that a page would just be the same words alone, so
-	// it gets none by default. Everything else does, and `hasPage: false` takes
-	// it away again — the card still publishes, the page behind it doesn't.
+	// A note gets no page by default; `hasPage: false` takes it away from any
+	// other kind, leaving the card published and the page behind it gone.
 	const hasPage = data.hasPage ?? data.kind !== "note";
 
-	// Inline is a note without a page: the body IS the post, so the feed shows
-	// it in full. A note that does have a page (a role with case studies under
-	// it) keeps its body there, and switching any other kind's page off leaves
-	// its half-written body out of the feed rather than spilling it in.
+	// Inline is a note without a page: the body IS the post. Switching any other
+	// kind's page off leaves its half-written body out of the feed.
 	const inline = data.inline ?? (data.kind === "note" && !hasPage);
 
 	return {
@@ -244,29 +237,32 @@ function parseEntry(slug: string): TimelineEntry {
 function readTimeline(): TimelineEntry[] {
 	if (!fs.existsSync(CONTENT_ROOT)) return [];
 
-	return fs
-		.readdirSync(CONTENT_ROOT, { withFileTypes: true })
-		.filter((dirent) => dirent.isDirectory())
-		.map((dirent) => dirent.name)
-		.filter((slug) =>
-			fs.existsSync(path.join(CONTENT_ROOT, slug, "index.mdx")),
-		)
-		.map(parseEntry)
-		.filter((entry) => !entry.draft || process.env.NODE_ENV === "development")
-		// Slug breaks ties so posts sharing a date keep a stable order across
-		// builds instead of following directory read order.
-		.sort(
-			(a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug),
-		);
+	const isDev = process.env.NODE_ENV === "development";
+	const entries: TimelineEntry[] = [];
+
+	for (const dirent of fs.readdirSync(CONTENT_ROOT, { withFileTypes: true })) {
+		if (!dirent.isDirectory()) continue;
+		if (!fs.existsSync(path.join(CONTENT_ROOT, dirent.name, "index.mdx"))) {
+			continue;
+		}
+		const entry = parseEntry(dirent.name);
+		if (entry.draft && !isDev) continue;
+		entries.push(entry);
+	}
+
+	// Slug breaks ties so posts sharing a date keep a stable order across
+	// builds instead of following directory read order.
+	return entries.sort(
+		(a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug),
+	);
 }
 
 let cached: TimelineEntry[] | null = null;
 
 /**
  * Cached per process in production, since content is fixed at build time.
- * Re-read every call in development — the bundler does not track these fs
- * reads, so a cached registry would leave frontmatter edits invisible until a
- * dev server restart.
+ * Re-read every call in development — the bundler doesn't track these fs reads,
+ * so a cached registry would hide frontmatter edits until a restart.
  */
 export function getTimeline(): TimelineEntry[] {
 	if (process.env.NODE_ENV === "development") return readTimeline();
@@ -274,6 +270,3 @@ export function getTimeline(): TimelineEntry[] {
 	return cached;
 }
 
-export function getAllTags(): string[] {
-	return [...new Set(getTimeline().flatMap((entry) => entry.tags))].sort();
-}

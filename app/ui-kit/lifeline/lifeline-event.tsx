@@ -1,49 +1,5 @@
-import type {
-	LifelineEvent,
-	LifelineEventEffect,
-	LifelineEventImage,
-	LifelineEventSegment,
-} from "./types";
-
-function getEventContent(
-	event: LifelineEvent,
-): string | LifelineEventSegment[] {
-	if (typeof event === "object" && !Array.isArray(event) && "text" in event) {
-		return event.text;
-	}
-
-	return event;
-}
-
-export function getLifelineEventImage(
-	event: LifelineEvent,
-): LifelineEventImage | undefined {
-	if (typeof event === "object" && !Array.isArray(event) && "image" in event) {
-		return event.image;
-	}
-
-	return undefined;
-}
-
-export function getLifelineEventEffect(
-	event: LifelineEvent,
-): LifelineEventEffect | undefined {
-	if (typeof event === "object" && !Array.isArray(event) && "effect" in event) {
-		return event.effect;
-	}
-
-	return undefined;
-}
-
-export function getLifelineEventTitle(
-	event: LifelineEvent,
-): string | undefined {
-	if (typeof event === "object" && !Array.isArray(event) && "title" in event) {
-		return event.title;
-	}
-
-	return undefined;
-}
+import type { LifelineEvent } from "./types";
+import { getEventContent } from "./lifeline-event-utils";
 
 export function LifelineEventText({
 	event,
@@ -58,12 +14,21 @@ export function LifelineEventText({
 		return <span className={className}>{content}</span>;
 	}
 
+	// Keyed by where each segment starts in the source string, which is stable
+	// even when two segments carry the same text.
+	let cursor = 0;
+	const segments = content.map((segment) => {
+		const key = `${segment.type}-${cursor}`;
+		cursor += segment.value.length;
+		return { ...segment, key };
+	});
+
 	return (
 		<span className={className}>
-			{content.map((segment, index) =>
+			{segments.map((segment) =>
 				segment.type === "link" ? (
 					<a
-						key={index}
+						key={segment.key}
 						href={segment.href}
 						target="_blank"
 						rel="noopener noreferrer"
@@ -72,47 +37,10 @@ export function LifelineEventText({
 						{segment.value}
 					</a>
 				) : (
-					<span key={index}>{segment.value}</span>
+					<span key={segment.key}>{segment.value}</span>
 				),
 			)}
 		</span>
 	);
 }
 
-/** Always-visible media embedded in the timeline (image.inline). */
-export function LifelineEventMedia({
-	media,
-	className,
-}: {
-	media: LifelineEventImage;
-	className?: string;
-}) {
-	if (media.video) {
-		return (
-			<video
-				src={media.video}
-				poster={media.src}
-				autoPlay
-				muted
-				loop
-				playsInline
-				preload="metadata"
-				aria-label={media.alt}
-				className={className}
-			/>
-		);
-	}
-
-	return (
-		// eslint-disable-next-line @next/next/no-img-element
-		<img src={media.src} alt={media.alt} loading="lazy" className={className} />
-	);
-}
-
-export function getLifelineEventKey(event: LifelineEvent, index: number) {
-	const content = getEventContent(event);
-
-	if (typeof content === "string") return `${index}-${content}`;
-
-	return `${index}-${content.map((segment) => segment.value).join("")}`;
-}

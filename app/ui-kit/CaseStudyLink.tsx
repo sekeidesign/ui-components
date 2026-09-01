@@ -48,7 +48,7 @@ export function CaseStudyLink({
 					{description}
 				</p>
 			</div>
-			<ArrowUpRightIcon className="w-4 h-4 shrink-0 text-gray-300 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-gray-500" />
+			<ArrowUpRightIcon className="w-4 h-4 shrink-0 text-gray-300 transition-[transform,color] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-gray-500" />
 		</Link>
 	);
 }

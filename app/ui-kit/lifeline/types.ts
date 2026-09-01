@@ -1,5 +1,8 @@
-import type { CompanyIconId } from "./company-icon"
-
+/**
+ * Organization id on a lifeline marker. Free-form: the timeline reads cleanly
+ * whether or not a logo has been drawn for it.
+ */
+export type CompanyIconId = string
 
 export interface LifelineMentor {
   name: string
@@ -32,9 +35,8 @@ export interface LifelineEventImage {
 }
 
 /**
- * An always-visible photo/video card that floats over the timeline,
- * anchored to its marker's position and scrolling with the track —
- * scattered, tilted, and draggable, like photos loose in a notebook.
+ * An always-visible photo/video card anchored to its marker's position,
+ * scrolling with the track — tilted and draggable.
  */
 export interface LifelinePhoto extends LifelineEventImage {
   /** 0..1 across the marker's slot; defaults to a seeded scatter. */
@@ -49,10 +51,7 @@ export interface LifelinePhoto extends LifelineEventImage {
 
 export type LifelineEventEffect = "fireworks" | "fireworks-argentina"
 
-/**
- * Object form lets an event carry a cursor-following hover image
- * and/or a click-triggered easter egg effect.
- */
+/** Object form adds a cursor-following hover image and/or a click easter egg. */
 export interface LifelineEventObject {
   /** Bold lead-in rendered above the description — e.g. a role title. */
   title?: string
@@ -84,26 +83,18 @@ export interface LifelineMarker {
   met?: LifelineMetPerson[]
 }
 
-/**
- * A legend entry maps one of the two people slots to a subject-appropriate
- * label — "Mentors" for a person, "Presidents" for a nation.
- */
+/** Maps one of the two people slots to a label — "Mentors", "Presidents". */
 export interface LifelineLegendItem {
   type: "mentor" | "met"
   label: string
 }
 
 /**
- * How the timeline relates to the page around it.
- *
- * - `"page"` — the Lifeline *is* the page. It owns the wheel and the
- *   arrow keys, and nothing scrolls behind it.
- * - `"embed"` — the Lifeline is one module in a scrolling page. Wheel
- *   over it scrubs the rail, and at either end of the rail the wheel is
- *   handed back so the page carries on scrolling.
- * - `"auto"` — measured at runtime: page mode only when the timeline
- *   covers most of the viewport *and* there is nothing behind it left to
- *   scroll. Anything else is treated as embedded.
+ * - `"page"` — the Lifeline *is* the page: it owns the wheel and arrow keys.
+ * - `"embed"` — one module in a scrolling page: the wheel scrubs, and is
+ *   handed back at either end of the rail.
+ * - `"auto"` — page mode only when the timeline covers most of the viewport
+ *   *and* nothing behind it is left to scroll.
  */
 export type LifelineMode = "auto" | "page" | "embed"
 

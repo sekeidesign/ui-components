@@ -2,7 +2,7 @@
 
 import { cn } from "./cn";
 import { useFilters } from "./filters/FilterContext";
-import { KIND_META } from "./post/Post";
+import { KIND_META } from "./post/kind-meta";
 import type { EntryKind } from "@/lib/timeline";
 import {
 	FILTER_KINDS,
@@ -10,14 +10,8 @@ import {
 	type FilterSlug,
 } from "@/lib/timeline-filters";
 
-// Both states share size, radius and padding; only fill, border and text
-// colour change. Icons stay gray-400 in both, per the design.
-//
-// The OFF state already sets its own 1px hairline via `outline`, which
-// swallows the browser's default focus ring — without an explicit
-// focus-visible outline here, tabbing through the row shows no indication
-// of which tab is focused. focus-visible (not focus) so a mouse click
-// doesn't leave the ring lit.
+// The OFF state sets its own 1px hairline via `outline`, which swallows the
+// browser's default focus ring — hence the explicit focus-visible outline.
 const TAB_BASE =
 	"flex items-center gap-1 h-[26px] rounded-full text-[14px] leading-[1.43] font-[500] whitespace-nowrap cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900/40";
 const TAB_ON = "bg-white ring-1 ring-gray-500/10 shadow-skew text-gray-900/75";
@@ -38,9 +32,8 @@ export function TimelineTabs({
 }) {
 	const { selected, toggle, clear, active } = useFilters();
 	const total = Object.values(counts).reduce((sum, n) => sum + n, 0);
-	// Only lit on the feed. Off it nothing is filtered, so "everything" isn't
-	// the current state either — the whole row reads unselected and each tab is
-	// a way back to the feed rather than a toggle.
+	// Only lit on the feed. Off it nothing is filtered, so every tab reads
+	// unselected and each is a way back.
 	const showingAll = active && selected.size === 0;
 
 	return (

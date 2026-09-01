@@ -50,11 +50,7 @@ function writeStored(slug: string, counts: SocialCounts) {
 export function SocialProvider({
 	slugs,
 	children,
-	/**
-	 * "memory" keeps everything local: no counts fetched, nothing written to
-	 * Redis, and localStorage left alone. For working on the interaction
-	 * without spending commands or leaving state behind on real posts.
-	 */
+	/** "memory" keeps everything local: no counts fetched, nothing written to Redis or localStorage. */
 	transport = "api",
 	/** Starting counts, for the memory transport. */
 	seed,
@@ -75,16 +71,27 @@ export function SocialProvider({
 
 	const slugKey = slugs.join(",");
 
-	// Active state is read after mount: touching localStorage during render
-	// would mismatch the server HTML.
+	// Active state is read after mount: touching localStorage during render would
+	// mismatch the server HTML, so the reader's own reactions can only land once
+	// hydration is done. There is no earlier moment to derive this from.
 	useEffect(() => {
 		if (isMemory) return;
 		const stored: CountMap = {};
 		for (const slug of slugKey ? slugKey.split(",") : []) {
 			stored[slug] = readStored(slug);
 		}
+		// react-doctor-disable-next-line no-adjust-state-on-prop-change
 		setMine(stored);
 	}, [slugKey, isMemory]);
+
+	// Persisted here rather than inside the state updater, which React may
+	// invoke more than once.
+	useEffect(() => {
+		if (isMemory) return;
+		for (const [slug, counts] of Object.entries(mine)) {
+			writeStored(slug, counts);
+		}
+	}, [mine, isMemory]);
 
 	// Seeded once so the sandbox starts from realistic numbers.
 	useEffect(() => {
@@ -92,6 +99,10 @@ export function SocialProvider({
 	}, [isMemory, seed]);
 
 	// One request for the whole feed, not one per post.
+	//
+	// Client-side on purpose: the feed is a static page, so counts fetched on the
+	// server would be frozen into the HTML at build time and never move again.
+	// react-doctor-disable-next-line no-fetch-in-effect
 	useEffect(() => {
 		if (isMemory || !slugKey) return;
 		let cancelled = false;
@@ -152,7 +163,6 @@ export function SocialProvider({
 			setMine((prev) => {
 				const current = prev[slug] ?? emptyCounts();
 				const next = { ...current, [kind]: current[kind] + 1 };
-				if (!isMemory) writeStored(slug, next);
 				return { ...prev, [slug]: next };
 			});
 
@@ -164,7 +174,7 @@ export function SocialProvider({
 			clearTimeout(timers.current[slug]);
 			timers.current[slug] = setTimeout(() => flush(slug), FLUSH_DELAY);
 		},
-		[flush, isMemory],
+		[flush],
 	);
 
 	// Don't lose the last clicks when the reader navigates away mid-debounce.

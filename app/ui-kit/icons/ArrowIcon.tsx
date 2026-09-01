@@ -1,7 +1,4 @@
-/**
- * Points up at `rotate = 0`. Every other direction is the same glyph turned,
- * rather than eight hand-drawn variants that can drift apart.
- */
+/** Points up at `rotate = 0`; every other direction is the same glyph turned. */
 export const ArrowIcon = ({ size = 16, rotate = 0 }) => {
 	return (
 		<svg

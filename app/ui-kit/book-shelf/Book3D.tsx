@@ -1,25 +1,24 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import Image from "next/image";
 import type { CSSProperties } from "react";
 import { cn } from "../cn";
 import type { Book } from "./types";
-
-const WIDTH = 132;
-const HEIGHT = 188;
-const DEPTH = 26;
+import {
+	BOOK_DEPTH as DEPTH,
+	BOOK_HEIGHT as HEIGHT,
+	BOOK_WIDTH as WIDTH,
+} from "./constants";
 const GUTTER = 6;
 
-// 90 = spine squared to the viewer (shelved). Past 0 into negative territory
-// so the open pose isn't perfectly flat — the fore-edge (pages) catches a
-// sliver of light, matching how a pulled book actually sits.
+// 90 = spine squared to the viewer (shelved). Negative so the open pose isn't
+// perfectly flat and the fore-edge catches a sliver of light.
 const SPINE_ANGLE = 90;
 const COVER_ANGLE = -16;
 /**
- * Extra swing for the cover alone when `openMore` is set. Applied to a nested
- * rotation on the cover face rather than to the assembly: the cover, spine and
- * page-edge are siblings, so turning the assembly turns all three.
+ * Extra swing for the cover alone when `openMore` is set. Nested on the cover
+ * face rather than the assembly, which would turn spine and page-edge too.
  */
 const COVER_EXTRA_ANGLE = -10;
 
@@ -39,21 +38,16 @@ interface Book3DProps {
 	openMore?: boolean;
 	/** How far to slide over (px) to clear room for another book's popped
 	 * cover — animated with the same spring as the cover/spine rotation so
-	 * both moves read as one motion. */
+	 * both moves read as one m. */
 	shiftX?: number;
 	onClick?: () => void;
 	className?: string;
 	style?: CSSProperties;
 }
 
-// A real box, not a flattened card: cover, spine, and page-edge are three
-// separate faces hinged together in 3D space (`preserve-3d`), so rotating
-// the whole assembly around the spine's edge swings the cover into view
-// the way an actual book would — rather than faking depth with a 2D skew.
-//
-// Every book only reserves its spine's thickness in layout — the parent
-// shifts the trailing siblings over (BOOK_OPEN_SHIFT) to clear room for the
-// active book's popped cover instead of letting it overlap them.
+// Three faces hinged together in 3D (`preserve-3d`) rather than a 2D skew.
+// Each book reserves only its spine's thickness in layout; the parent shifts
+// trailing siblings by BOOK_OPEN_SHIFT to clear the open cover.
 export function Book3D({
 	book,
 	open,
@@ -64,7 +58,7 @@ export function Book3D({
 	style,
 }: Book3DProps) {
 	return (
-		<motion.button
+		<m.button
 			type="button"
 			aria-pressed={open}
 			aria-label={`${book.title} by ${book.author}`}
@@ -84,7 +78,7 @@ export function Book3D({
 			animate={{ x: shiftX }}
 			transition={SPRING}
 		>
-			<motion.div
+			<m.div
 				className="absolute top-0 left-0 cursor-pointer"
 				style={{
 					width: WIDTH,
@@ -105,7 +99,7 @@ export function Book3D({
 			>
 				{/* cover — hinged at the spine edge on its own, so it can lift
 				    without the spine and page-edge coming along */}
-				<motion.div
+				<m.div
 					className="absolute inset-0"
 					style={{
 						transformOrigin: "0% 50%",
@@ -131,13 +125,12 @@ export function Book3D({
 						/>
 						<span className="absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-black/15" />
 					</div>
-				</motion.div>
+				</m.div>
 
 				{/* spine */}
 				<div
 					className="absolute inset-y-0 left-0 flex flex-col rounded-[2px] items-center justify-between overflow-hidden py-3 gap-2"
 					style={{
-						// left: WIDTH,
 						width: DEPTH,
 						transformOrigin: "0% 50%",
 						transform: "rotateY(90deg)",
@@ -166,18 +159,7 @@ export function Book3D({
 						boxShadow: "inset -1px 0 1px rgba(0,0,0,0.1)",
 					}}
 				/>
-			</motion.div>
-		</motion.button>
+			</m.div>
+		</m.button>
 	);
 }
-
-// How far a shelved book's cover overshoots its reserved (spine-width) slot
-// when open — the amount trailing siblings need to shift right by so the
-// popped cover doesn't overlap them.
-const OPEN_SHIFT = WIDTH - DEPTH;
-
-export {
-	WIDTH as BOOK_WIDTH,
-	HEIGHT as BOOK_HEIGHT,
-	OPEN_SHIFT as BOOK_OPEN_SHIFT,
-};

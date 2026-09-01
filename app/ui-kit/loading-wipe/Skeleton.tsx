@@ -1,14 +1,6 @@
-/**
- * The content waiting underneath the sweep.
- *
- * A skeleton rather than a finished UI on purpose: the sweep is the subject,
- * and anything with real copy in it would pull the eye off the edge as it
- * travels. Static, too — a shimmer here would compete with the grain.
- */
 export function Skeleton() {
 	return (
-		// Centred rather than stretched: the stage takes its height from the
-		// control panel beside it, and a grid on flex-1 would pull the tiles into
+		// Centred rather than stretched: a grid on flex-1 would pull the tiles into
 		// columns half the card tall.
 		<div className="flex h-full w-full flex-col justify-center gap-5 p-6 md:p-8">
 			<div className="flex items-center gap-3">

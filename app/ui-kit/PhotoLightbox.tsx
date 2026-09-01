@@ -1,13 +1,18 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "./cn";
+import { usePrefersReducedMotion } from "./use-prefers-reduced-motion";
 
 const OPEN_MS = 420;
 const EASE = "cubic-bezier(0.32, 0.72, 0, 1)";
 /** Fraction of the viewport the expanded photo may occupy. */
 const FIT = 0.9;
+
+// Read at module scope: `document` is unavailable while React renders on the
+// server, and this component is only ever mounted from a click.
+const portalTarget = typeof document === "undefined" ? null : document.body;
 
 export interface LightboxRect {
 	left: number;
@@ -31,12 +36,6 @@ function computeTarget(aspect: number): LightboxRect {
 	return { left: (vw - width) / 2, top: (vh - height) / 2, width, height };
 }
 
-/**
- * Expands a clicked thumbnail into a centered, near-fullscreen view and
- * back — a FLIP animation on a fixed clone portaled to <body>. The
- * original thumbnail stays in the grid and is re-measured on dismiss so
- * the photo returns wherever it now is, even if the page scrolled.
- */
 export function PhotoLightbox({
 	photo,
 	start,
@@ -51,14 +50,10 @@ export function PhotoLightbox({
 	onClosed: () => void;
 }) {
 	const aspect = photo.height / photo.width;
-	const target = useRef<LightboxRect | null>(null);
-	if (target.current === null) target.current = computeTarget(aspect);
-	const { left, top, width, height } = target.current;
+	// Measured once, at mount: the FLIP's destination must not move under it.
+	const [{ left, top, width, height }] = useState(() => computeTarget(aspect));
 
-	const reduceMotion = useRef(
-		typeof window !== "undefined" &&
-			window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-	).current;
+	const reduceMotion = usePrefersReducedMotion();
 
 	const toTransform = useCallback(
 		(home: LightboxRect) =>
@@ -67,6 +62,10 @@ export function PhotoLightbox({
 	);
 
 	const [entered, setEntered] = useState(reduceMotion);
+	// Drives the will-change hint below: promoted for the flight, released once
+	// the transform lands. Starts settled under reduced motion, where there is
+	// no transition and so no transitionend.
+	const [settled, setSettled] = useState(reduceMotion);
 	const [transform, setTransform] = useState(() =>
 		reduceMotion ? "none" : toTransform(start),
 	);
@@ -95,37 +94,46 @@ export function PhotoLightbox({
 			onClosed();
 			return;
 		}
+		setSettled(false);
 		setEntered(false);
 		setTransform(toTransform(getHome() ?? start));
 		// transitionend is the primary signal; this is the safety net.
 		window.setTimeout(onClosed, OPEN_MS + 80);
 	}, [reduceMotion, onClosed, toTransform, getHome, start]);
 
-	useEffect(() => {
-		const onKeyDown = (event: KeyboardEvent) => {
-			if (event.key === "Escape") dismiss();
-		};
-		window.addEventListener("keydown", onKeyDown);
-		return () => window.removeEventListener("keydown", onKeyDown);
-	}, [dismiss]);
+	// A native modal dialog, for the focus trap and Escape a role="dialog" div
+	// doesn't get. Opened in a layout effect so the FLIP's first frame paints
+	// with it already in the top layer.
+	const dialogRef = useRef<HTMLDialogElement>(null);
+	useLayoutEffect(() => {
+		dialogRef.current?.showModal();
+	}, []);
+
+	if (!portalTarget) return null;
 
 	return createPortal(
-		<div
-			className="fixed inset-0 z-[999]"
-			role="dialog"
-			aria-modal="true"
+		<dialog
+			ref={dialogRef}
 			aria-label={photo.alt}
+			className="fixed inset-0 z-[999] h-auto w-auto max-h-none max-w-none overflow-hidden bg-transparent backdrop:bg-transparent"
+			// Escape runs the dismiss flight rather than closing outright.
+			onCancel={(event) => {
+				event.preventDefault();
+				dismiss();
+			}}
 		>
-			<div
+			<button
+				type="button"
+				aria-label="Close"
 				className={cn(
-					"absolute inset-0 cursor-zoom-out bg-black/70 transition-opacity",
+					"absolute inset-0 cursor-zoom-out bg-black/70 transition-opacity outline-hidden",
 					entered ? "opacity-100" : "opacity-0",
 				)}
 				style={{ transitionDuration: `${OPEN_MS}ms` }}
 				onClick={dismiss}
 			/>
 			<figure
-				className="absolute cursor-zoom-out overflow-hidden rounded-sm shadow-2xl"
+				className="absolute overflow-hidden rounded-sm shadow-2xl"
 				style={{
 					left,
 					top,
@@ -136,22 +144,29 @@ export function PhotoLightbox({
 					transition: reduceMotion
 						? undefined
 						: `transform ${OPEN_MS}ms ${EASE}`,
-					willChange: "transform",
+					willChange: settled ? undefined : "transform",
 				}}
-				onClick={dismiss}
 				onTransitionEnd={(event) => {
 					if (event.propertyName !== "transform") return;
 					if (closing.current) onClosed();
+					else setSettled(true);
 				}}
 			>
-				{/* eslint-disable-next-line @next/next/no-img-element */}
-				<img
-					src={photo.src}
-					alt={photo.alt}
-					className="block h-full w-full object-cover"
-				/>
+				<button
+					type="button"
+					aria-label="Close"
+					onClick={dismiss}
+					className="block h-full w-full cursor-zoom-out"
+				>
+					{/* eslint-disable-next-line @next/next/no-img-element */}
+					<img // react-doctor-disable-line nextjs-no-img-element -- arbitrary media, with no intrinsic size for next/image to work from
+						src={photo.src}
+						alt={photo.alt}
+						className="block h-full w-full object-cover"
+					/>
+				</button>
 			</figure>
-		</div>,
-		document.body,
+		</dialog>,
+		portalTarget,
 	);
 }

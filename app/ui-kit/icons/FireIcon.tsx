@@ -1,7 +1,3 @@
-/**
- * Two poses of the same flame, taken from the Paper design: the outline for the
- * resting state, the solid orange fill once the reader has reacted.
- */
 export const FireIcon = ({
 	size = 16,
 	filled = false,

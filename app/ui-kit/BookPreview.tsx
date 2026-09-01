@@ -36,7 +36,7 @@ const BookPreview = ({
 							style={{ fontFamily: "var(--font-geist-sans)" }}
 						>
 							<div className="w-16 aspect-[2/3] shrink-0 grow-0 rounded-[2px] ring ring-gray-400/15 overflow-hidden shadow-md bg-gray-100 relative">
-								<Image src={cover} alt="" fill className="object-cover" />
+								<Image src={cover} alt="" fill sizes="64px" className="object-cover" />
 							</div>
 							<div className="min-w-0 space-y-1 py-0.5">
 								<h2 className="font-[550] text-gray-800 leading-snug line-clamp-2">

@@ -9,7 +9,7 @@ import {
 	UserIcon,
 } from "@heroicons/react/24/outline";
 import { cn } from "@ui-kit/cn";
-import { AnimatePresence, LayoutGroup, motion } from "motion/react";
+import { AnimatePresence, LayoutGroup, m } from "motion/react";
 import Image from "next/image";
 import { useState } from "react";
 import useMeasure from "react-use-measure";
@@ -59,7 +59,7 @@ const ProfileButton = ({
 			</div>
 			<AnimatePresence mode="popLayout">
 				{open ? (
-					<motion.div
+					<m.div
 						key="chevron-down"
 						initial={{ opacity: 0, scale: 0.4, filter: "blur(2px)" }}
 						animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
@@ -74,9 +74,9 @@ const ProfileButton = ({
 							className={cn("w-3 h-3 text-gray-400 flex-shrink-0")}
 							strokeWidth={3}
 						/>
-					</motion.div>
+					</m.div>
 				) : (
-					<motion.div
+					<m.div
 						key="chevron-up"
 						initial={{ opacity: 0, scale: 0.4, filter: "blur(2px)" }}
 						animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
@@ -91,7 +91,7 @@ const ProfileButton = ({
 							className={cn("w-3 h-3 text-gray-400 flex-shrink-0")}
 							strokeWidth={3}
 						/>
-					</motion.div>
+					</m.div>
 				)}
 			</AnimatePresence>
 		</div>
@@ -162,7 +162,7 @@ const Sidebar = () => {
 				<LayoutGroup>
 					<Popover.Root open={open} onOpenChange={setOpen}>
 						<Popover.Trigger className="w-full relative z-10" ref={triggerRef}>
-							<motion.div
+							<m.div
 								whileTap={{
 									scale: 0.95,
 									y: 1,
@@ -178,7 +178,7 @@ const Sidebar = () => {
 									bounce: 0.2,
 								}}
 							>
-								<motion.div
+								<m.div
 									className={cn(
 										"absolute left-0 right-0 bottom-0 z-10 w-full bg-gray-50 ring ring-gray-200 transition-shadow duration-400",
 										open && " shadow-xl",
@@ -198,7 +198,7 @@ const Sidebar = () => {
 									}}
 								/>
 								<ProfileButton open={open} />
-							</motion.div>
+							</m.div>
 						</Popover.Trigger>
 						<Popover.Portal keepMounted>
 							<AnimatePresence>
@@ -213,7 +213,7 @@ const Sidebar = () => {
 										<Popover.Popup
 											finalFocus={false}
 											render={
-												<motion.div
+												<m.div
 													ref={contentRef}
 													className="w-[var(--anchor-width)] relative z-20"
 													initial={{ opacity: 0, y: 12, filter: "blur(8px)" }}
@@ -236,7 +236,7 @@ const Sidebar = () => {
 													}}
 												>
 													<PopoverContent />
-												</motion.div>
+												</m.div>
 											}
 										/>
 									</Popover.Positioner>

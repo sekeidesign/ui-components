@@ -3,9 +3,6 @@ import Link from "next/link";
 import { SparkleDivider } from "@ui-kit/SparkleDivider";
 import { TextLink } from "@ui-kit/TextLink";
 
-// Matches the site's existing type scale/palette (see AboutPanel,
-// WorkExperiencePanel) so case study prose reads as part of the same
-// system instead of default browser typography.
 export function useMDXComponents(components: MDXComponents): MDXComponents {
 	return {
 		h1: (props) => (
@@ -89,6 +86,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 		// eslint-disable-next-line @next/next/no-img-element -- MDX authors
 		// pass arbitrary images without known dimensions.
 		img: ({ alt, ...props }) => (
+			// react-doctor-disable-next-line nextjs-no-img-element -- MDX authors pass arbitrary images without known dimensions
 			<img
 				alt={alt}
 				className="w-full h-auto rounded-md border border-gray-200 shadow-skew bg-white my-6"
