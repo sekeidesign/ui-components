@@ -1,7 +1,7 @@
 "use client";
 
-import type { LifelineMarker } from "./ui-kit/lifeline";
-import { Lifeline } from "./ui-kit/lifeline";
+import { Lifeline } from "./ui-kit/lifeline/lifeline";
+import type { LifelineMarker } from "./ui-kit/lifeline/types";
 import { useHoverGroup } from "./ui-kit/HoverContext";
 
 export const BIRTH_YEAR = 1994;

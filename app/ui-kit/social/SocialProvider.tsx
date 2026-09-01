@@ -82,6 +82,15 @@ export function SocialProvider({
 		setMine(stored);
 	}, [slugKey, isMemory]);
 
+	// Persisted here rather than inside the state updater, which React may
+	// invoke more than once.
+	useEffect(() => {
+		if (isMemory) return;
+		for (const [slug, counts] of Object.entries(mine)) {
+			writeStored(slug, counts);
+		}
+	}, [mine, isMemory]);
+
 	// Seeded once so the sandbox starts from realistic numbers.
 	useEffect(() => {
 		if (isMemory && seed) setCounts(seed);
@@ -148,7 +157,6 @@ export function SocialProvider({
 			setMine((prev) => {
 				const current = prev[slug] ?? emptyCounts();
 				const next = { ...current, [kind]: current[kind] + 1 };
-				if (!isMemory) writeStored(slug, next);
 				return { ...prev, [slug]: next };
 			});
 
@@ -160,7 +168,7 @@ export function SocialProvider({
 			clearTimeout(timers.current[slug]);
 			timers.current[slug] = setTimeout(() => flush(slug), FLUSH_DELAY);
 		},
-		[flush, isMemory],
+		[flush],
 	);
 
 	// Don't lose the last clicks when the reader navigates away mid-debounce.

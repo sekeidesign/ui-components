@@ -28,18 +28,26 @@ const OpenGraphPreview = ({
 	const [error, setError] = useState("");
 
 	useEffect(() => {
+		// Overlapping runs can resolve out of order, so a superseded url's
+		// response must not land on top of the current one's.
+		let cancelled = false;
+
 		const fetchOG = async () => {
 			try {
 				const res = await fetch(`/api/og?url=${encodeURIComponent(url)}`);
 				const data = await res.json();
+				if (cancelled) return;
 				if (res.ok) setOg(data);
 				else setError(data.error || "Failed to fetch");
 			} catch (e) {
-				setError(`Something went wrong: ${e}`);
+				if (!cancelled) setError(`Something went wrong: ${e}`);
 			}
 		};
 
 		fetchOG();
+		return () => {
+			cancelled = true;
+		};
 	}, [url]);
 
 	if (error) return <span>Error: {error}</span>;

@@ -5,6 +5,7 @@ import {
 	createContext,
 	type ReactNode,
 	useContext,
+	useMemo,
 	useRef,
 	useState,
 } from "react";
@@ -28,9 +29,10 @@ const CollapsableMenuProvider = ({
 	children,
 }: CollapsableMenuProviderProps) => {
 	const [isDetached, setIsDetached] = useState(false);
+	const value = useMemo(() => ({ isDetached, setIsDetached }), [isDetached]);
 
 	return (
-		<CollapsableMenuContext.Provider value={{ isDetached, setIsDetached }}>
+		<CollapsableMenuContext.Provider value={value}>
 			{children}
 		</CollapsableMenuContext.Provider>
 	);
@@ -169,6 +171,7 @@ const CollapsableMenu = () => {
 			>
 				<button
 					type="button"
+					aria-label="Drag to detach menu"
 					className={cn(
 						"w-7 h-1 bg-gray-300 rounded-full absolute -top-3 left-1/2 transition-transform duration-200 hover:scale-110 cursor-grab active:cursor-grabbing active:scale-100 -translate-x-1/2",
 						"after:content-[''] after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:w-[150%] after:rounded-full after:border after:border-red-500 after:border-dashed after:aspect-video",

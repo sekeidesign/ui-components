@@ -61,7 +61,7 @@ export function PostRow({
 
 		// Match what a real link does with a modifier held.
 		if (event.metaKey || event.ctrlKey || event.shiftKey || event.button === 1) {
-			window.open(href, "_blank");
+			window.open(href, "_blank", "noopener");
 			return;
 		}
 

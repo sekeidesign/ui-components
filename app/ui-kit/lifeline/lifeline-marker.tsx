@@ -143,6 +143,11 @@ export const LifelineMarkerColumn = forwardRef<
                   const effect = getLifelineEventEffect(event)
 
                   return (
+                    // Pointer-only flourishes: the hover image is decorative and
+                    // the click is an easter egg. The column is already
+                    // primaryHref's anchor, so a role/tabIndex here would nest
+                    // interactive elements.
+                    // react-doctor-disable-next-line click-events-have-key-events no-noninteractive-element-interactions
                     <p
                       key={getLifelineEventKey(event, index)}
                       className={cn(

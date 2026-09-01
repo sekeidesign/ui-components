@@ -25,22 +25,37 @@ const bigSpringConfig: Transition = {
 	bounce: 0.2,
 };
 
+const VIDEO_DURATION = 15 * 60;
+
+/**
+ * Fixed peaks per bar rather than `Math.random()` in the keyframes: random
+ * values differ between the server and the browser (a hydration mismatch), and
+ * re-roll on every render, which restarted the loop on each duration tick.
+ */
+const WAVEFORM_BARS = [
+	{ id: "bar-1", peaks: ["7px", "3px"] },
+	{ id: "bar-2", peaks: ["4px", "9px"] },
+	{ id: "bar-3", peaks: ["10px", "5px"] },
+	{ id: "bar-4", peaks: ["5px", "8px"] },
+	{ id: "bar-5", peaks: ["8px", "4px"] },
+];
+
+const REST_HEIGHT = "2px";
+
+function formatTime(seconds: number) {
+	const mins = Math.floor(seconds / 60);
+	const secs = seconds % 60;
+	return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+}
+
 interface WaveformProps {
 	isPlaying: boolean;
 }
 
 function Waveform({ isPlaying }: WaveformProps) {
-	const bars = [
-		{ id: "bar-1", height: 1 },
-		{ id: "bar-2", height: 1 },
-		{ id: "bar-3", height: 1 },
-		{ id: "bar-4", height: 1 },
-		{ id: "bar-5", height: 1 },
-	];
-
 	return (
 		<div className="flex gap-0.5 h-3 items-center justify-center flex-shrink-0">
-			{bars.map((bar) => (
+			{WAVEFORM_BARS.map((bar) => (
 				<motion.div
 					key={bar.id}
 					className="bg-slate-50 rounded-full w-0.5"
@@ -48,16 +63,16 @@ function Waveform({ isPlaying }: WaveformProps) {
 						isPlaying
 							? {
 									height: [
-										`${bar.height * 2}px`,
-										`${Math.random() * 10 + 2}px`,
-										`${Math.random() * 10 + 2}px`,
-										`${bar.height * 2}px`,
+										REST_HEIGHT,
+										bar.peaks[0],
+										bar.peaks[1],
+										REST_HEIGHT,
 									],
 								}
-							: { height: "2px" }
+							: { height: REST_HEIGHT }
 					}
 					transition={{
-						duration: 0.5, // Random duration between 0.5-1s
+						duration: 0.5,
 						repeat: isPlaying ? Infinity : 0,
 						repeatType: "reverse",
 						ease: "easeInOut",
@@ -150,6 +165,7 @@ function MediaContent({
 			<div className="flex gap-2 items-center w-full justify-center">
 				<button
 					type="button"
+					aria-label="Previous track"
 					className="flex items-center justify-center rounded-2xl w-12 h-12 hover:bg-zinc-800 transition-colors"
 				>
 					<BackwardIcon className="w-8 h-8 text-white opacity-50" />
@@ -158,6 +174,7 @@ function MediaContent({
 				<button
 					type="button"
 					onClick={onTogglePlay}
+					aria-label={isPlaying ? "Pause" : "Play"}
 					className="flex items-center justify-center rounded-2xl relative z-20 w-12 h-12 active:scale-90 hover:bg-zinc-800 transition-all"
 				>
 					<AnimatePresence mode="popLayout" initial={false}>
@@ -187,6 +204,7 @@ function MediaContent({
 
 				<button
 					type="button"
+					aria-label="Next track"
 					className="flex items-center justify-center rounded-2xl w-12 h-12 hover:bg-zinc-800 transition-colors"
 				>
 					<ForwardIcon className="w-8 h-8 text-white opacity-50" />
@@ -223,7 +241,6 @@ export default function DynamicIsland({
 	title: string;
 	subtitle: string;
 }) {
-	const VIDEO_DURATION = 15 * 60; // 25 minutes
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [duration, setDuration] = useState(0);
 	const [isExpanded, setIsExpanded] = useState(false);
@@ -263,12 +280,6 @@ export default function DynamicIsland({
 			}
 		};
 	}, [isPlaying]);
-
-	const formatTime = (seconds: number) => {
-		const mins = Math.floor(seconds / 60);
-		const secs = seconds % 60;
-		return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-	};
 
 	const progress = Math.min(duration / VIDEO_DURATION, 1);
 
@@ -312,6 +323,7 @@ export default function DynamicIsland({
 					type="button"
 					onClick={() => setIsExpanded(true)}
 					onWheel={handleWheel}
+					aria-label="Expand now playing"
 					className="w-full h-full absolute inset-0 cursor-pointer z-10"
 				/>
 				<AnimatePresence mode="popLayout">

@@ -36,18 +36,24 @@ export function Figure({ src, alt, caption }: FigureProps) {
 
 	return (
 		<figure className="my-6 p-1 rounded-xl bg-gray-50 shadow-skew ring ring-gray-500/10">
-			{/* eslint-disable-next-line @next/next/no-img-element -- arbitrary
-			case-study screenshots without known dimensions. */}
-			<img
-				ref={imgRef}
-				src={src}
-				alt={alt}
-				className={cn(
-					"w-full h-auto rounded-lg border border-gray-200 shadow-skew bg-white cursor-zoom-in",
-					open && "invisible",
-				)}
+			<button
+				type="button"
 				onClick={openLightbox}
-			/>
+				className="block w-full cursor-zoom-in"
+				aria-label={`Expand image: ${alt}`}
+			>
+				{/* eslint-disable-next-line @next/next/no-img-element -- arbitrary
+				case-study screenshots without known dimensions. */}
+				<img
+					ref={imgRef}
+					src={src}
+					alt={alt}
+					className={cn(
+						"w-full h-auto rounded-lg border border-gray-200 shadow-skew bg-white",
+						open && "invisible",
+					)}
+				/>
+			</button>
 			{caption && (
 				<figcaption className="p-1 pt-2 text-sm text-gray-400">
 					{caption}

@@ -9,15 +9,20 @@ export default async function HomePage() {
 	// payload instead of shipping MDX to the client. Keyed off `inline`, not
 	// `!hasPage`, so a half-written post can't spill into the feed.
 	const bodies: Record<string, ReactNode> = {};
-	await Promise.all(
-		timeline
-			.filter((entry) => entry.inline)
-			.map(async (entry) => {
+	const compiling: Promise<void>[] = [];
+	for (const entry of timeline) {
+		if (!entry.inline) continue;
+		compiling.push(
+			(async () => {
 				const { default: Body } = await import(
 					`../content/${entry.slug}/index.mdx`
 				);
 				bodies[entry.slug] = <Body />;
-			}),
+			})(),
+		);
+	}
+	await Promise.all(
+		compiling,
 	);
 
 	return <TimelineFeed entries={timeline} bodies={bodies} />;

@@ -219,7 +219,7 @@ const photos: Photo[] = [
 ];
 
 export function PhotographyGrid() {
-	const refs = useRef<(HTMLDivElement | null)[]>([]);
+	const refs = useRef<(HTMLButtonElement | null)[]>([]);
 	const [active, setActive] = useState<{
 		index: number;
 		start: LightboxRect;
@@ -256,12 +256,13 @@ export function PhotographyGrid() {
 		<>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-px grid-flow-row-dense">
 				{photos.map((photo, index) => (
-					<div
+					<button
+						type="button"
 						key={photo.src}
 						ref={(el) => {
 							refs.current[index] = el;
 						}}
-						className={`panel overflow-hidden cursor-zoom-in ${
+						className={`panel block w-full overflow-hidden cursor-zoom-in ${
 							photo.span === "full" ? "col-span-1 md:col-span-2" : ""
 						} ${active?.index === index ? "invisible" : ""}`}
 						onClick={() => open(index)}
@@ -274,7 +275,7 @@ export function PhotographyGrid() {
 							className="w-full h-auto"
 							sizes="(min-width: 768px) 50vw, 100vw"
 						/>
-					</div>
+					</button>
 				))}
 			</div>
 

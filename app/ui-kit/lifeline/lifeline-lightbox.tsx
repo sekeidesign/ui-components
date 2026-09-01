@@ -11,6 +11,10 @@ import { createPortal } from "react-dom"
 import { cn } from "../cn"
 import type { LifelinePhoto } from "./types"
 
+// Read at module scope: `document` is unavailable while React renders on the
+// server, and this component is only ever mounted from a press.
+const portalTarget = typeof document === "undefined" ? null : document.body
+
 const OPEN_MS = 520
 /** Gentle start, soft landing — quint front-loaded the travel and read as a jump. */
 const EASE = "cubic-bezier(0.32, 0.72, 0, 1)"
@@ -187,7 +191,7 @@ export function LifelineLightbox({
   // No gesture may pan while the lightbox is up — iOS rubber-bands the body
   // behind a fixed overlay and can leave the page stuck offset. React's root
   // touch listeners are passive, so this needs a native non-passive one.
-  const rootRef = useRef<HTMLDivElement>(null)
+  const rootRef = useRef<HTMLDialogElement>(null)
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
@@ -227,20 +231,19 @@ export function LifelineLightbox({
     window.setTimeout(onClosed, OPEN_MS + 120)
   }, [reduceMotion, onClosed, toTransform, getHome, start])
 
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") dismiss()
-    }
-    window.addEventListener("keydown", onKeyDown)
-    return () => window.removeEventListener("keydown", onKeyDown)
-  }, [dismiss])
+  // A native modal dialog, for the focus trap and Escape a role="dialog" div
+  // doesn't get. Opened in a layout effect so the FLIP's first frame paints
+  // with it already in the top layer.
+  useLayoutEffect(() => {
+    rootRef.current?.showModal()
+  }, [])
+
+  if (!portalTarget) return null
 
   return createPortal(
-    <div
+    <dialog
       ref={rootRef}
-      className="fixed inset-0 z-[999] touch-none overscroll-contain"
-      role="dialog"
-      aria-modal="true"
+      className="fixed inset-0 z-[999] h-auto w-auto max-h-none max-w-none touch-none overflow-hidden overscroll-contain bg-transparent backdrop:bg-transparent"
       aria-label={photo.alt}
       // React events bubble the component tree even from a portal — without this a
       // backdrop press would reach the card's drag handlers and the track's scrubber.
@@ -248,10 +251,17 @@ export function LifelineLightbox({
       onPointerMove={(event) => event.stopPropagation()}
       onPointerUp={(event) => event.stopPropagation()}
       onClick={(event) => event.stopPropagation()}
+      // Escape runs the dismiss flight rather than closing outright.
+      onCancel={(event) => {
+        event.preventDefault()
+        dismiss()
+      }}
     >
-      <div
+      <button
+        type="button"
+        aria-label="Close"
         className={cn(
-          "absolute inset-0 cursor-zoom-out bg-black/70 transition-opacity",
+          "absolute inset-0 cursor-zoom-out bg-black/70 transition-opacity outline-hidden",
           entered ? "opacity-100" : "opacity-0",
         )}
         // Synced to the media's travel — a faster fade left the clone
@@ -261,7 +271,7 @@ export function LifelineLightbox({
       />
       <figure
         ref={figureRef}
-        className="absolute cursor-zoom-out overflow-hidden rounded-xl shadow-2xl ring-1 ring-black/10"
+        className="absolute overflow-hidden rounded-xl shadow-2xl ring-1 ring-black/10"
         style={{
           left,
           top,
@@ -274,20 +284,26 @@ export function LifelineLightbox({
           // re-rasterizes the shadowed, corner-clipped media mid-scale.
           willChange: "transform",
         }}
-        onClick={dismiss}
         onTransitionEnd={(event) => {
           if (event.propertyName !== "transform") return
           if (closing.current) onClosed()
           else setSettled(true)
         }}
       >
-        <LightboxMedia
-          photo={photo}
-          playing={settled}
-          mediaTime={start.mediaTime}
-        />
+        <button
+          type="button"
+          aria-label="Close"
+          onClick={dismiss}
+          className="block h-full w-full cursor-zoom-out"
+        >
+          <LightboxMedia
+            photo={photo}
+            playing={settled}
+            mediaTime={start.mediaTime}
+          />
+        </button>
       </figure>
-    </div>,
-    document.body,
+    </dialog>,
+    portalTarget,
   )
 }

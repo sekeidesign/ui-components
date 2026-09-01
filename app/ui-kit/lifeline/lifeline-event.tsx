@@ -58,12 +58,21 @@ export function LifelineEventText({
 		return <span className={className}>{content}</span>;
 	}
 
+	// Keyed by where each segment starts in the source string, which is stable
+	// even when two segments carry the same text.
+	let cursor = 0;
+	const segments = content.map((segment) => {
+		const key = `${segment.type}-${cursor}`;
+		cursor += segment.value.length;
+		return { ...segment, key };
+	});
+
 	return (
 		<span className={className}>
-			{content.map((segment, index) =>
+			{segments.map((segment) =>
 				segment.type === "link" ? (
 					<a
-						key={index}
+						key={segment.key}
 						href={segment.href}
 						target="_blank"
 						rel="noopener noreferrer"
@@ -72,7 +81,7 @@ export function LifelineEventText({
 						{segment.value}
 					</a>
 				) : (
-					<span key={index}>{segment.value}</span>
+					<span key={segment.key}>{segment.value}</span>
 				),
 			)}
 		</span>

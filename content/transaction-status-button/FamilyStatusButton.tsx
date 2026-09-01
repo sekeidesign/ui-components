@@ -22,23 +22,30 @@ const FamilyStatusButton = () => {
 	const [status, setStatus] = useState<keyof typeof statuses>("analyzing");
 
 	useEffect(() => {
+		const timers = new Set<number>();
+		const at = (delay: number, run: () => void) => {
+			timers.add(
+				window.setTimeout(() => {
+					run();
+				}, delay),
+			);
+		};
+
 		const cycle = () => {
-			setTimeout(() => {
-				setStatus("success");
-			}, 1800);
-			setTimeout(() => {
+			timers.clear();
+			at(1800, () => setStatus("success"));
+			at(3200, () => setStatus("analyzing"));
+			at(4800, () => setStatus("warning"));
+			at(6400, () => {
 				setStatus("analyzing");
-			}, 3200);
-			setTimeout(() => {
-				setStatus("warning");
-			}, 4800);
-			setTimeout(() => {
-				setStatus("analyzing");
-				setTimeout(cycle, 0);
-			}, 6400);
+				at(0, cycle);
+			});
 		};
 
 		cycle();
+		return () => {
+			for (const timer of timers) window.clearTimeout(timer);
+		};
 	}, []);
 
 	return (

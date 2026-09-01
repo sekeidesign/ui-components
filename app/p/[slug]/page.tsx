@@ -7,9 +7,11 @@ import { TagRow } from "@ui-kit/TagRow";
 import { getTimeline } from "@/lib/timeline";
 
 export function generateStaticParams() {
-	return getTimeline()
-		.filter((entry) => entry.hasPage)
-		.map((entry) => ({ slug: entry.slug }));
+	const params: { slug: string }[] = [];
+	for (const entry of getTimeline()) {
+		if (entry.hasPage) params.push({ slug: entry.slug });
+	}
+	return params;
 }
 
 export async function generateMetadata({

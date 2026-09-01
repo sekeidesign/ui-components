@@ -8,6 +8,7 @@ import {
 	createContext,
 	type ReactNode,
 	useContext,
+	useMemo,
 	useRef,
 	useState,
 } from "react";
@@ -33,9 +34,13 @@ const ExperimentRoot = ({
 }: ExperimentRootProps) => {
 	const ref = useRef<HTMLDivElement>(null);
 	const isRootInView = useInView(ref, { once: false, amount: "some" });
+	const context = useMemo(
+		() => ({ sourceUrl, isRootInView }),
+		[sourceUrl, isRootInView],
+	);
 
 	return (
-		<ExperimentContext.Provider value={{ sourceUrl, isRootInView }}>
+		<ExperimentContext.Provider value={context}>
 			<motion.div
 				ref={ref}
 				className="flex gap-px w-full"

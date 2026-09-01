@@ -6,6 +6,7 @@ import {
 	type ReactNode,
 	type SetStateAction,
 	useContext,
+	useMemo,
 	useState,
 } from "react";
 
@@ -21,9 +22,10 @@ const HoverContext = createContext<HoverContextValue>({
 
 export function HoverProvider({ children }: { children: ReactNode }) {
 	const [hoveredId, setHoveredId] = useState<string | null>(null);
+	const value = useMemo(() => ({ hoveredId, setHoveredId }), [hoveredId]);
 
 	return (
-		<HoverContext.Provider value={{ hoveredId, setHoveredId }}>
+		<HoverContext.Provider value={value}>
 			{children}
 		</HoverContext.Provider>
 	);

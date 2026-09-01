@@ -5,6 +5,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type ReactNode,
@@ -254,8 +255,10 @@ export function LifelineFireworksProvider({
     setPlaying(false)
   }, [])
 
+  const value = useMemo(() => ({ launch }), [launch])
+
   return (
-    <LifelineFireworksContext.Provider value={{ launch }}>
+    <LifelineFireworksContext.Provider value={value}>
       {children}
       {playing && <FireworksCanvas palette={PALETTES[effect]} onDone={done} />}
     </LifelineFireworksContext.Provider>

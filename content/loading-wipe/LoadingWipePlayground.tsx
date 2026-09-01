@@ -308,9 +308,9 @@ export function LoadingWipePlayground() {
 				<ControlSection label="Colour" />
 				<div className="flex flex-wrap gap-1.5 px-3 py-2">
 					{PRESETS.map((preset) => {
-						const active = preset.colors.every(
-							(c, i) => c === params.colors[i],
-						);
+						const active =
+							preset.colors.length === params.colors.length &&
+							preset.colors.every((c, i) => c === params.colors[i]);
 						return (
 							<button
 								key={preset.name}

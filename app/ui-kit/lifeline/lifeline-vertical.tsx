@@ -104,22 +104,33 @@ function LifelineVerticalEvent({
 		}
 	};
 
+	const activate = !interactive
+		? undefined
+		: image
+			? openMedia
+			: effect && fireworks
+				? () => fireworks.launch(effect)
+				: undefined;
+
 	return (
 		<>
 			<p
 				ref={textRef}
 				className={cn(
 					"max-w-full text-left text-sm leading-[1.55] tracking-[-0.01em]",
-					interactive && (image || effect) && "cursor-pointer",
+					activate && "cursor-pointer",
 				)}
-				onClick={
-					!interactive
-						? undefined
-						: image
-							? openMedia
-							: effect && fireworks
-								? () => fireworks.launch(effect)
-								: undefined
+				role={activate ? "button" : undefined}
+				tabIndex={activate ? 0 : undefined}
+				onClick={activate}
+				onKeyDown={
+					activate
+						? (event) => {
+								if (event.key !== "Enter" && event.key !== " ") return;
+								event.preventDefault();
+								activate();
+							}
+						: undefined
 				}
 			>
 				<LifelineEventText event={event} />

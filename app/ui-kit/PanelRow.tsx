@@ -25,8 +25,13 @@ export function PanelRow({
 	onPointerLeave?: PointerEventHandler<HTMLDivElement>;
 }) {
 	return (
+		// The click is a redundant target for the title link inside the card,
+		// which is the keyboard and screen-reader path — so this box carries no
+		// semantics of its own and needs no key handler of its own.
+		// react-doctor-disable-next-line click-events-have-key-events
 		<motion.div
 			id={id}
+			role={onClick ? "presentation" : undefined}
 			onClick={onClick}
 			onPointerEnter={onPointerEnter}
 			onPointerLeave={onPointerLeave}
