@@ -20,13 +20,28 @@ const geistMono = Geist_Mono({
 	subsets: ["latin"],
 });
 
+/**
+ * What relative OG paths resolve against. On a preview deployment that has to
+ * be the deployment's own URL: pinned to the production domain, a preview's
+ * card points at whatever production is serving, so anything new — a share card
+ * that only exists on this branch — resolves to a 404 there.
+ */
+const siteUrl =
+	// Keyed off VERCEL_URL rather than VERCEL_ENV alone: a preview build with
+	// the host missing would interpolate to a bare "https://", and new URL()
+	// throwing here takes down every page in the app.
+	process.env.VERCEL_ENV !== "production" && process.env.VERCEL_URL
+		? `https://${process.env.VERCEL_URL}`
+		: "https://www.sekei.xyz";
+
 export const metadata: Metadata = {
 	title: {
 		default: "PG Gonni | Building software in Montréal",
 		template: "%s | PG Gonni",
 	},
 	description: "Design Engineer making beautiful software",
-	metadataBase: new URL("https://www.sekei.xyz"),
+	// react-doctor-disable-next-line no-unguarded-throwing-parse-call -- siteUrl is either a literal or "https://" plus a non-empty host, so both branches parse
+	metadataBase: new URL(siteUrl),
 	openGraph: {
 		title: "PG Gonni | Building software in Montréal",
 		description: "Design Engineer making beautiful software",
