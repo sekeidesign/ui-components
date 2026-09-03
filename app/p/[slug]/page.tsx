@@ -4,6 +4,7 @@ import { ExperimentDivider } from "@ui-kit/Experiment";
 import { PanelRow } from "@ui-kit/PanelRow";
 import { PostCard } from "@ui-kit/post/PostCard";
 import { TagRow } from "@ui-kit/TagRow";
+import { bookCardEntry } from "@/lib/og/book-card";
 import { getTimeline } from "@/lib/timeline";
 
 export function generateStaticParams() {
@@ -32,9 +33,12 @@ export async function generateMetadata({
 		openGraph: {
 			title,
 			description: entry.excerpt,
-			// The site card, not the post's cover: a cover is drawn at its own ratio,
-			// and half of them are WebP, which LinkedIn won't render.
-			images: "/og-image.jpg",
+			// A book draws its own card in opengraph-image.tsx, and an image set
+			// here would win over that file — so books get none, and everything
+			// else falls back to the site card. Not the post's own cover: a cover
+			// is drawn at its own ratio, and half of them are WebP, which LinkedIn
+			// won't render.
+			...(bookCardEntry(slug) ? {} : { images: "/og-image.jpg" }),
 		},
 	};
 }
