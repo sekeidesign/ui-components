@@ -5,32 +5,13 @@ import { useHighlight } from "@highlighters/react";
 import { type ReactNode, useMemo, useState } from "react";
 import { usePrefersReducedMotion } from "../use-prefers-reduced-motion";
 
-/**
- * Runs a highlighter pen over every quotation in a write-up's body.
- *
- * A book review quotes its book constantly, and the quotes are the part worth
- * finding again on a second read. Marking them in the MDX would mean editing
- * every review and remembering to do it in the next one, so this matches them
- * in the rendered prose instead: @highlighters walks the text under this
- * element, finds the runs the pattern describes and draws over them. It paints
- * on top rather than wrapping anything, so selection, search and the reading
- * order are all untouched.
- */
-
-/**
- * A quoted run, straight or curly. `[^"“”]` rather than a lazy `.` so a match
- * can't run from one quotation's close into the next one's open — the library
- * matches against the body's text with element boundaries flattened away, and
- * a greedy pattern would swallow whole paragraphs between two quotes.
- */
 const QUOTATION = /["“][^"“”]+["”]/g;
 
 /** Soft sage from the pen's `mild` set, well under half strength. */
 const PEN: HighlightOptions = {
-	color: { palette: "mild", swatch: "green" },
-	opacity: 0.4,
-	// Off-screen quotes draw as they're scrolled to, rather than all of them
-	// against a page the reader hasn't reached yet.
+	color: { palette: "mild", swatch: "yellow" },
+	opacity: 0.8,
+	tip: {type: "chisel", angle: 8},
 	animation: { trigger: "in-view", threshold: 0.35 },
 };
 
