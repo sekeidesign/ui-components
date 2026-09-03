@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ExperimentDivider } from "@ui-kit/Experiment";
 import { PanelRow } from "@ui-kit/PanelRow";
 import { PostCard } from "@ui-kit/post/PostCard";
+import { QuotedProse } from "@ui-kit/post/QuotedProse";
 import { TagRow } from "@ui-kit/TagRow";
 import { bookCardEntry } from "@/lib/og/book-card";
 import { getTimeline } from "@/lib/timeline";
@@ -66,7 +67,16 @@ export default async function PostPage({
 
 			<PanelRow className="flex flex-col gap-6 md:p-8 p-4">
 				<article>
-					<Body />
+					{/* A review's quotations are its substance, so a book's body reads
+					    with them marked. Other kinds quote people in passing, where a
+					    pen over every pair of quotes would be noise. */}
+					{entry.kind === "book" ? (
+						<QuotedProse>
+							<Body />
+						</QuotedProse>
+					) : (
+						<Body />
+					)}
 				</article>
 				{entry.tags.length > 0 && <TagRow tags={entry.tags} />}
 			</PanelRow>

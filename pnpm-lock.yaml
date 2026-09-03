@@ -17,6 +17,9 @@ importers:
       '@heroicons/react':
         specifier: ^2.2.0
         version: 2.2.0(react@19.1.1)
+      '@highlighters/react':
+        specifier: ^2.0.0
+        version: 2.0.0(react@19.1.1)
       '@mdx-js/loader':
         specifier: ^3.1.1
         version: 3.1.1
@@ -312,6 +315,16 @@ packages:
     resolution: {integrity: sha512-LMcepvRaS9LYHJGsF0zzmgKCUim/X3N/DQKc4jepAXJ7l8QxJ1PmxJzqplF2Z3FE4PqBAIGyJAQ/w4B5dsqbtQ==}
     peerDependencies:
       react: '>= 16 || ^19.0.0-rc'
+
+  '@highlighters/core@2.0.0':
+    resolution: {integrity: sha512-OxuorhZZeqDIExovmOBdYLJLLqHsDXTU/YzsO42BPbNTSXqA579dWjoZHJI4I7Wg9jOt7EVLp60aIrNTQTyiqQ==}
+    engines: {node: '>=18'}
+
+  '@highlighters/react@2.0.0':
+    resolution: {integrity: sha512-SUzKsKXfYPVSigslKrmzcQ2c2dmSfNyPa84Nu1JHJTHGTcAhS8RC8pbivYHB+56rvPThkfHwiR0QhAYCJWNhrw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      react: '>=18.0.0'
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -3991,6 +4004,13 @@ snapshots:
 
   '@heroicons/react@2.2.0(react@19.1.1)':
     dependencies:
+      react: 19.1.1
+
+  '@highlighters/core@2.0.0': {}
+
+  '@highlighters/react@2.0.0(react@19.1.1)':
+    dependencies:
+      '@highlighters/core': 2.0.0
       react: 19.1.1
 
   '@humanfs/core@0.19.1': {}
