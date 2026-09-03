@@ -54,22 +54,16 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 			/>
 		),
 		a: ({ href, children, ...props }) => {
-			// Both footnote links are same-page jumps rehype generated, not links
-			// the author wrote: plain anchors, no router, no prose styling.
 			if (isFootnoteRef(props) || isFootnoteBackref(props)) {
 				const { className, ...rest } = props;
 				return (
 					<a
 						href={href}
 						{...rest}
-						// rehype puts its own class on the backref, so this merges
-						// instead of letting the spread win.
 						className={cn(
-							"no-underline transition-colors",
-							// The ref inherits type and colour from the sup above it; it
-							// only owns its hover affordance.
+							"no-underline ",
 							isFootnoteRef(props)
-								? "rounded-xs px-[2px] hover:bg-gray-200/60 hover:text-gray-900"
+								? "rounded-xs px-[2px] hover:text-gray-600 hover:underline focus:underline focus:outline-none focus:text-gray-600 focus:bg-gray-200"
 								: "ml-1 text-gray-400 hover:text-gray-900",
 							className,
 						)}
@@ -131,7 +125,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 			// `align-super` sits the marker up near the cap line, which reads as a
 			// jump mid-sentence. Baseline plus a small nudge keeps it in the line.
 			<sup
-				className="relative -top-[0.3em] align-baseline font-mono text-[11px] leading-none text-gray-400"
+				className="relative -top-[0.3em] p-1 font-mono text-[11px] text-gray-400"
 				{...props}
 			/>
 		),

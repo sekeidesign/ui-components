@@ -4,12 +4,14 @@ import { cn } from "./cn";
 export function StarRating({
 	rating,
 	size = 14,
+	className,
 }: {
 	rating: number;
 	size?: number;
+	className?: string;
 }) {
 	return (
-		<div className="flex gap-0.5" aria-label={`${rating} out of 5`}>
+		<div className={cn("flex gap-0.5", className)} aria-label={`${rating} out of 5`}>
 			{Array.from({ length: 5 }, (_, i) => (
 				// biome-ignore lint/suspicious/noArrayIndexKey: fixed-length star row
 				<StarIcon

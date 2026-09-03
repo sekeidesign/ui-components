@@ -59,7 +59,7 @@ export function PostHeader({
 			)}
 
 			{isBook && entry.rating !== undefined && (
-				<StarRating rating={entry.rating} />
+				<StarRating rating={entry.rating} className="mb-2" />
 			)}
 
 			{entry.excerpt && !isBook && (

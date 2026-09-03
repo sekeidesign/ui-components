@@ -9,9 +9,11 @@ const QUOTATION = /["“][^"“”]+["”]/g;
 
 /** Soft sage from the pen's `mild` set, well under half strength. */
 const PEN: HighlightOptions = {
-	color: { palette: "mild", swatch: "yellow" },
+	color: { palette: "mild", swatch: "green" },
 	opacity: 0.8,
-	tip: {type: "chisel", angle: 8},
+	tip: {type: "chisel", angle: 1, angleJitter: 6},
+	edge: {waviness: 1, frequency: 32},
+	ink: {streakiness: 1, startEndBuildup: 1, flow: 1},
 	animation: { trigger: "in-view", threshold: 0.35 },
 };
 
