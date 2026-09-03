@@ -31,6 +31,7 @@
     "react-dom": "^19.0.0",
     "react-use-measure": "^2.1.7",
     "remark-frontmatter": "^5.0.0",
+    "remark-gfm": "^4.0.1",
     "remark-mdx-frontmatter": "^5.2.0",
     "slot-text": "^0.3.3",
     "tailwind-merge": "^3.3.1"

@@ -57,6 +57,9 @@ const withMDX = createMDX({
     remarkPlugins: [
       ["remark-frontmatter"],
       ["remark-mdx-frontmatter", { name: "frontmatter" }],
+      // Footnotes: `[^1]` in the body, `[^1]: ...` anywhere in the file. Also
+      // brings the rest of GFM (tables, strikethrough, autolinks).
+      ["remark-gfm"],
     ] as unknown as RemarkPlugins,
   },
 });

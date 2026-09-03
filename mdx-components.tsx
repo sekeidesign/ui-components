@@ -1,7 +1,20 @@
 import type { MDXComponents } from "mdx/types";
 import Link from "next/link";
+import { cn } from "@ui-kit/cn";
 import { SparkleDivider } from "@ui-kit/SparkleDivider";
 import { TextLink } from "@ui-kit/TextLink";
+
+/** rehype's id for the sr-only heading that opens the footnotes section. */
+const FOOTNOTE_LABEL_ID = "footnote-label";
+
+// remark-gfm marks its generated footnote nodes with data attributes. They
+// survive the hast -> JSX conversion as literal props, which the MDXComponents
+// prop types don't know about.
+const hasFlag = (props: object, flag: string) => flag in props;
+const isFootnoteRef = (props: object) => hasFlag(props, "data-footnote-ref");
+const isFootnoteBackref = (props: object) =>
+	hasFlag(props, "data-footnote-backref");
+const isFootnoteSection = (props: object) => hasFlag(props, "data-footnotes");
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
 	return {
@@ -11,17 +24,23 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 				{...props}
 			/>
 		),
-		h2: ({ children, ...props }) => (
-			<>
-				<SparkleDivider className="mt-10 mb-10" />
-				<h2
-					className="text-xl font-[550] text-gray-900 leading-snug mb-3"
-					{...props}
-				>
-					{children}
-				</h2>
-			</>
-		),
+		h2: ({ children, ...props }) =>
+			// remark-gfm opens the footnotes section with an sr-only "Footnotes"
+			// heading. It isn't a section break, so it gets no divider — the
+			// section renderer below draws its own.
+			props.id === FOOTNOTE_LABEL_ID ? (
+				<h2 {...props}>{children}</h2>
+			) : (
+				<>
+					<SparkleDivider className="mt-10 mb-10" />
+					<h2
+						className="text-xl font-[550] text-gray-900 leading-snug mb-3"
+						{...props}
+					>
+						{children}
+					</h2>
+				</>
+			),
 		h3: (props) => (
 			<h3
 				className="text-base font-[550] text-gray-900 leading-snug mt-8 mb-2"
@@ -34,8 +53,32 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 				{...props}
 			/>
 		),
-		a: ({ href, children, ...props }) =>
-			href?.startsWith("http") ? (
+		a: ({ href, children, ...props }) => {
+			// Both footnote links are same-page jumps rehype generated, not links
+			// the author wrote: plain anchors, no router, no prose styling.
+			if (isFootnoteRef(props) || isFootnoteBackref(props)) {
+				const { className, ...rest } = props;
+				return (
+					<a
+						href={href}
+						{...rest}
+						// rehype puts its own class on the backref, so this merges
+						// instead of letting the spread win.
+						className={cn(
+							"no-underline transition-colors",
+							// The ref inherits type and colour from the sup above it; it
+							// only owns its hover affordance.
+							isFootnoteRef(props)
+								? "rounded-xs px-[2px] hover:bg-gray-200/60 hover:text-gray-900"
+								: "ml-1 text-gray-400 hover:text-gray-900",
+							className,
+						)}
+					>
+						{children}
+					</a>
+				);
+			}
+			return href?.startsWith("http") ? (
 				<TextLink href={href} hasFavicon>
 					{children}
 				</TextLink>
@@ -47,7 +90,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 				>
 					{children}
 				</Link>
-			),
+			);
+		},
 		ul: (props) => (
 			<ul
 				className="list-disc pl-5 text-gray-500 text-[15px] font-[420] leading-relaxed space-y-1 mb-4"
@@ -83,6 +127,36 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 				{...props}
 			/>
 		),
+		sup: (props) => (
+			// `align-super` sits the marker up near the cap line, which reads as a
+			// jump mid-sentence. Baseline plus a small nudge keeps it in the line.
+			<sup
+				className="relative -top-[0.3em] align-baseline font-mono text-[11px] leading-none text-gray-400"
+				{...props}
+			/>
+		),
+		section: ({ children, ...props }) => {
+			if (!isFootnoteSection(props))
+				return <section {...props}>{children}</section>;
+			const { className, ...rest } = props;
+			// Notes are apparatus, not prose: a size down from the body. The ol/li/p
+			// renderers still run inside the list, so these walk over their classes.
+			return (
+				<section
+					{...rest}
+					className={cn(
+						"mt-10",
+						"[&_ol]:mb-0 [&_ol]:space-y-2 [&_ol]:text-[13px]",
+						"[&_li]:scroll-mt-24 [&_li]:marker:text-gray-400",
+						"[&_p]:mb-0 [&_p]:text-[13px] [&_p]:leading-relaxed",
+						className,
+					)}
+				>
+					<SparkleDivider className="mb-8" />
+					{children}
+				</section>
+			);
+		},
 		// eslint-disable-next-line @next/next/no-img-element -- MDX authors
 		// pass arbitrary images without known dimensions.
 		img: ({ alt, ...props }) => (
