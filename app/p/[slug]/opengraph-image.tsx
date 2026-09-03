@@ -99,15 +99,16 @@ const PLATE_BLEED = 44;
 
 /**
  * The bottom band the book dissolves over, and the ramp across it. Three stops
- * rather than two: a straight ramp is still half-transparent at the midpoint,
- * which left the cover legible under it. Opaque before the band ends, so the
- * crop at the card's edge lands in solid ground.
+ * rather than two: a straight ramp is still half-transparent at its midpoint,
+ * which left the cover legible high up the band. Front-loading the ramp fades
+ * it early and then eases, so the ground only goes fully opaque on the card's
+ * last row rather than well above it.
  */
 const PLATE_FADE = Math.round(PLATE_HEIGHT * 0.42);
 const PLATE_FADE_RAMP = [
 	"rgba(243, 244, 246, 0) 0%",
 	"rgba(243, 244, 246, 0.72) 46%",
-	`${GRAY[100]} 84%`,
+	`${GRAY[100]} 100%`,
 ].join(", ");
 
 /** What's left for the copy once the book has its side. */
