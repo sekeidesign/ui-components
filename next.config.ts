@@ -12,6 +12,13 @@ const nextConfig: NextConfig = {
 
   pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
 
+  // The book share card reads Geist off disk to hand Satori raw font bytes.
+  // Nothing imports those files, so tracing can't see them and the deployed
+  // function would ship without them — the route 500s on the first share.
+  outputFileTracingIncludes: {
+    "/p/**": ["./lib/og/fonts/*.ttf"],
+  },
+
   async redirects() {
     return [
       // Filters moved from route segments to a query param, so several can be
