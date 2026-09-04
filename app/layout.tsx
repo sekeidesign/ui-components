@@ -20,16 +20,9 @@ const geistMono = Geist_Mono({
 	subsets: ["latin"],
 });
 
-/**
- * What relative OG paths resolve against. On a preview deployment that has to
- * be the deployment's own URL: pinned to the production domain, a preview's
- * card points at whatever production is serving, so anything new — a share card
- * that only exists on this branch — resolves to a 404 there.
- */
+// Pinned to the production domain, a preview's OG paths resolve against
+// whatever production serves — so a card that only exists on the branch 404s.
 const siteUrl =
-	// Keyed off VERCEL_URL rather than VERCEL_ENV alone: a preview build with
-	// the host missing would interpolate to a bare "https://", and new URL()
-	// throwing here takes down every page in the app.
 	process.env.VERCEL_ENV !== "production" && process.env.VERCEL_URL
 		? `https://${process.env.VERCEL_URL}`
 		: "https://www.sekei.xyz";

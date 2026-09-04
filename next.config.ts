@@ -12,9 +12,8 @@ const nextConfig: NextConfig = {
 
   pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
 
-  // The book share card reads Geist off disk to hand Satori raw font bytes.
-  // Nothing imports those files, so tracing can't see them and the deployed
-  // function would ship without them — the route 500s on the first share.
+  // Nothing imports the OG card's fonts, so tracing can't find them on its own
+  // and the deployed function would ship without them.
   outputFileTracingIncludes: {
     "/p/**": ["./lib/og/fonts/*.ttf"],
   },

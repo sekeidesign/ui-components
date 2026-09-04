@@ -8,14 +8,6 @@ import {
 import { bookCardEntry } from "@/lib/og/book-card";
 import { getTimeline } from "@/lib/timeline";
 
-/**
- * The share card for a book page: the same header — kind, date, title, author,
- * rating — with the book itself blown up beside it.
- *
- * Only books get one. `generateImageMetadata` returns nothing for every other
- * kind, which leaves the site card from `generateMetadata` in place.
- */
-
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -34,7 +26,6 @@ const DATE_FORMAT = new Intl.DateTimeFormat("en-US", {
 	timeZone: "UTC",
 });
 
-/** Prerenders each card at build, so a share never waits on a cover fetch. */
 export function generateStaticParams() {
 	return getTimeline()
 		.filter((entry) => bookCardEntry(entry.slug))
@@ -60,24 +51,15 @@ export async function generateImageMetadata({
 	];
 }
 
-/* -------------------------------------------------------------------------- */
-/*  The book, flattened                                                        */
-/* -------------------------------------------------------------------------- */
-
 /**
- * Satori has no 3D transforms, so Book3D's hinged faces can't be reused — the
- * open pose gets projected to 2D by hand instead. Same source constants, so the
- * card and the shelf stay the same book.
- *
- * In the open pose the assembly turns COVER_ANGLE about the spine edge. That
- * foreshortens the cover to `cos θ` of its width and swings the fore-edge out
- * past its right side by `sin θ` of the book's depth. The spine ends up behind
- * the cover at that angle, which is why nothing here draws one.
+ * Satori has no 3D transforms, so Book3D's open pose is projected to 2D here.
+ * Turning the assembly COVER_ANGLE about the spine edge foreshortens the cover
+ * to cos θ of its width and swings the fore-edge sin θ of the depth past its
+ * right side. The spine lands behind the cover, so nothing draws one.
  */
 const COVER_ANGLE = 16;
 const RADIANS = (COVER_ANGLE * Math.PI) / 180;
 
-/** Cover height. The site draws it at ~106px; a share card can afford more. */
 const PLATE_HEIGHT = 560;
 const PLATE_SCALE = PLATE_HEIGHT / BOOK_HEIGHT;
 
@@ -85,39 +67,20 @@ const COVER_WIDTH = BOOK_WIDTH * Math.cos(RADIANS) * PLATE_SCALE;
 const EDGE_WIDTH = BOOK_DEPTH * Math.sin(RADIANS) * PLATE_SCALE;
 const PLATE_WIDTH = COVER_WIDTH + EDGE_WIDTH;
 
-/** Card padding, and the gap between the copy and the book. */
 const PAD_X = 72;
 const PAD_Y = 64;
 const GAP = 56;
-
-/**
- * How far the book runs past the bottom edge — the shelf's own `-mb-11`, which
- * stands its books on a line below the panel. Out of flow and bottom-anchored
- * rather than centred with the copy, for the same reason.
- */
 const PLATE_BLEED = 44;
-
-/**
- * The bottom band the book dissolves over, and the ramp across it. Three stops
- * rather than two: a straight ramp is still half-transparent at its midpoint,
- * which left the cover legible high up the band. Front-loading the ramp fades
- * it early and then eases, so the ground only goes fully opaque on the card's
- * last row rather than well above it.
- */
 const PLATE_FADE = Math.round(PLATE_HEIGHT * 0.42);
+const COPY_WIDTH = size.width - PAD_X * 2 - PLATE_WIDTH - GAP;
+
+// Alpha-zero gray-100, not `transparent` — that interpolates through black.
 const PLATE_FADE_RAMP = [
 	"rgba(243, 244, 246, 0) 0%",
 	"rgba(243, 244, 246, 0.72) 46%",
 	`${GRAY[100]} 100%`,
 ].join(", ");
 
-/** What's left for the copy once the book has its side. */
-const COPY_WIDTH = size.width - PAD_X * 2 - PLATE_WIDTH - GAP;
-
-/**
- * PostMedia's drop-shadow, scaled up with the book — it's written in Book3D's
- * own coordinate space, where the card shrinks it and this card grows it.
- */
 const PLATE_SHADOW = [
 	`0 ${26 * PLATE_SCALE}px ${24 * PLATE_SCALE}px rgba(15,23,42,0.22)`,
 	`0 ${10 * PLATE_SCALE}px ${10 * PLATE_SCALE}px rgba(15,23,42,0.16)`,
@@ -154,8 +117,6 @@ function BookPlate({ cover, alt }: { cover: string; alt: string }) {
 					height={PLATE_HEIGHT}
 					style={{ width: "100%", height: "100%", objectFit: "cover" }}
 				/>
-				{/* Book3D's sheen over the artwork, so a flat cover still reads as a
-				    surface catching light. */}
 				<div
 					style={{
 						position: "absolute",
@@ -166,7 +127,6 @@ function BookPlate({ cover, alt }: { cover: string; alt: string }) {
 				/>
 			</div>
 
-			{/* Fore-edge: the sliver of pages the turn exposes past the cover. */}
 			<div
 				style={{
 					display: "flex",
@@ -182,15 +142,8 @@ function BookPlate({ cover, alt }: { cover: string; alt: string }) {
 	);
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Header parts                                                               */
-/* -------------------------------------------------------------------------- */
-
-/**
- * KIND_META's filled book mark, inlined — the icon modules are client
- * components. No <title>: Satori has no accessibility tree to put it in and
- * paints it as literal text on the card.
- */
+// No <title> in these: Satori has no accessibility tree and paints it as
+// visible text on the card.
 function BookMark({ size: px }: { size: number }) {
 	return (
 		<svg width={px} height={px} viewBox="0 0 16 16" fill="none">
@@ -217,14 +170,11 @@ function Star({ size: px, filled }: { size: number; filled: boolean }) {
 	);
 }
 
-/** Longer titles step down so a three-word title never wraps past two lines. */
 function titleSize(title: string) {
 	if (title.length <= 14) return 76;
 	if (title.length <= 24) return 64;
 	return 54;
 }
-
-/* -------------------------------------------------------------------------- */
 
 export default async function Image({
 	params,
@@ -233,7 +183,6 @@ export default async function Image({
 }) {
 	const { slug } = await params;
 	const entry = bookCardEntry(slug);
-	// generateImageMetadata already filtered these out; this is only the type guard.
 	if (!entry || !entry.cover) return new Response("Not found", { status: 404 });
 
 	const fonts = await geistForOg();
@@ -253,13 +202,6 @@ export default async function Image({
 		>
 			<BookPlate cover={entry.cover} alt={entry.title} />
 
-			{/* The book dissolving into the card's own ground, the way PhoneMedia
-			    dissolves its device. A layer over rather than a mask on: a mask
-			    applies to the element's whole rendering, and the shadow would come
-			    away with the cover. Full width, so the shadow's spread either side
-			    of the book fades with it. The ramp starts from an alpha-zero
-			    gray-100 rather than `transparent`, which interpolates through
-			    black. */}
 			<div
 				style={{
 					display: "flex",
@@ -272,9 +214,7 @@ export default async function Image({
 				}}
 			/>
 
-			{/* Last, so it paints over both: Satori ignores z-index and draws in
-			    tree order. The book and the fade are out of flow, so leading with
-			    them costs the copy nothing in layout. */}
+			{/* Satori ignores z-index and paints in tree order, so the copy comes last. */}
 			<div
 				style={{
 					display: "flex",

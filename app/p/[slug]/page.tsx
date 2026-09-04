@@ -34,11 +34,9 @@ export async function generateMetadata({
 		openGraph: {
 			title,
 			description: entry.excerpt,
-			// A book draws its own card in opengraph-image.tsx, and an image set
-			// here would win over that file — so books get none, and everything
-			// else falls back to the site card. Not the post's own cover: a cover
-			// is drawn at its own ratio, and half of them are WebP, which LinkedIn
-			// won't render.
+			// Books draw their own card in opengraph-image.tsx; an image set here
+			// would win over that file. The rest get the site card rather than
+			// their own cover, half of which are WebP that LinkedIn won't render.
 			...(bookCardEntry(slug) ? {} : { images: "/og-image.jpg" }),
 		},
 	};
@@ -67,9 +65,6 @@ export default async function PostPage({
 
 			<PanelRow className="flex flex-col gap-6 md:p-8 p-4">
 				<article>
-					{/* A review's quotations are its substance, so a book's body reads
-					    with them marked. Other kinds quote people in passing, where a
-					    pen over every pair of quotes would be noise. */}
 					{entry.kind === "book" ? (
 						<QuotedProse>
 							<Body />
