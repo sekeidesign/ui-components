@@ -87,8 +87,8 @@ export const MARKERS: LifelineMarker[] = [
 		age: 2025 - BIRTH_YEAR,
 		events: [
 			{
-				title: "Head of Product",
-				text: "Joined as Head of Product Design, promoted to Head of Product in 2026. Own the product roadmap — defining priorities and strategy while staying hands-on in design and engineering, bringing product, design, and engineering together as one function.",
+				title: "Founding Product Design Engineer",
+				text: "Own the product end to end — shaping it, thinking through the flows, and delivering it with code. Define priorities and strategy, design and build in the same loop, and maintain the design system across React, Tailwind, and Motion.",
 			},
 		],
 		companies: [{ id: "tato", name: "Tato", href: "/case-studies/tato" }],
