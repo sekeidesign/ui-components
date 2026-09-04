@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import { ExperimentDivider } from "@ui-kit/Experiment";
 import { PanelRow } from "@ui-kit/PanelRow";
 import { PostCard } from "@ui-kit/post/PostCard";
+import { QuotedProse } from "@ui-kit/post/QuotedProse";
 import { TagRow } from "@ui-kit/TagRow";
+import { bookCardEntry } from "@/lib/og/book-card";
 import { getTimeline } from "@/lib/timeline";
 
 export function generateStaticParams() {
@@ -32,9 +34,10 @@ export async function generateMetadata({
 		openGraph: {
 			title,
 			description: entry.excerpt,
-			// The site card, not the post's cover: a cover is drawn at its own ratio,
-			// and half of them are WebP, which LinkedIn won't render.
-			images: "/og-image.jpg",
+			// Books draw their own card in opengraph-image.tsx; an image set here
+			// would win over that file. The rest get the site card rather than
+			// their own cover, half of which are WebP that LinkedIn won't render.
+			...(bookCardEntry(slug) ? {} : { images: "/og-image.jpg" }),
 		},
 	};
 }
@@ -62,7 +65,13 @@ export default async function PostPage({
 
 			<PanelRow className="flex flex-col gap-6 md:p-8 p-4">
 				<article>
-					<Body />
+					{entry.kind === "book" ? (
+						<QuotedProse>
+							<Body />
+						</QuotedProse>
+					) : (
+						<Body />
+					)}
 				</article>
 				{entry.tags.length > 0 && <TagRow tags={entry.tags} />}
 			</PanelRow>

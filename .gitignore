@@ -5,7 +5,9 @@
 /coverage
 
 # next.js
-/.next/
+# Any dist dir, so a build run with NEXT_DIST_DIR set (to avoid clobbering a
+# running dev server) doesn't show up as untracked.
+/.next*/
 /out/
 
 # production
@@ -36,4 +38,3 @@ pnpm-debug.log*
 *.tsbuildinfo
 next-env.d.ts
 .env*
-/.next-build/

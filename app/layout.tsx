@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { Sidebar } from "./Sidebar";
@@ -20,13 +21,30 @@ const geistMono = Geist_Mono({
 	subsets: ["latin"],
 });
 
+// Self-hosted rather than next/font/google: this Next's bundled font list
+// predates Geist Pixel, so there's no Geist_Pixel export to import.
+const geistPixel = localFont({
+	src: "./fonts/GeistPixel-Regular.ttf",
+	variable: "--font-geist-pixel",
+	weight: "400",
+	display: "swap",
+});
+
+// Pinned to the production domain, a preview's OG paths resolve against
+// whatever production serves — so a card that only exists on the branch 404s.
+const siteUrl =
+	process.env.VERCEL_ENV !== "production" && process.env.VERCEL_URL
+		? `https://${process.env.VERCEL_URL}`
+		: "https://www.sekei.xyz";
+
 export const metadata: Metadata = {
 	title: {
 		default: "PG Gonni | Building software in Montréal",
 		template: "%s | PG Gonni",
 	},
 	description: "Design Engineer making beautiful software",
-	metadataBase: new URL("https://www.sekei.xyz"),
+	// react-doctor-disable-next-line no-unguarded-throwing-parse-call -- siteUrl is either a literal or "https://" plus a non-empty host, so both branches parse
+	metadataBase: new URL(siteUrl),
 	openGraph: {
 		title: "PG Gonni | Building software in Montréal",
 		description: "Design Engineer making beautiful software",
@@ -52,7 +70,7 @@ export default function RootLayout({
 		<html lang="en">
 			<Analytics />
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+				className={`${geistSans.variable} ${geistMono.variable} ${geistPixel.variable} antialiased`}
 				style={{ backgroundColor: "var(--color-gray-200)" }}
 			>
 				<MotionProvider>

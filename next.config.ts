@@ -12,6 +12,12 @@ const nextConfig: NextConfig = {
 
   pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
 
+  // Nothing imports the OG card's fonts, so tracing can't find them on its own
+  // and the deployed function would ship without them.
+  outputFileTracingIncludes: {
+    "/p/**": ["./lib/og/fonts/*.ttf"],
+  },
+
   async redirects() {
     return [
       // Filters moved from route segments to a query param, so several can be
@@ -57,6 +63,9 @@ const withMDX = createMDX({
     remarkPlugins: [
       ["remark-frontmatter"],
       ["remark-mdx-frontmatter", { name: "frontmatter" }],
+      // Footnotes: `[^1]` in the body, `[^1]: ...` anywhere in the file. Also
+      // brings the rest of GFM (tables, strikethrough, autolinks).
+      ["remark-gfm"],
     ] as unknown as RemarkPlugins,
   },
 });
