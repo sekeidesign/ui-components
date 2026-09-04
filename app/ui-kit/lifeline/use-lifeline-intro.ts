@@ -9,7 +9,6 @@ import {
 } from "./lifeline-intro-timing"
 import { usePrefersReducedMotion } from "../use-prefers-reduced-motion"
 
-/** Tweak these */
 export const LIFELINE_LABELS_MS = 400
 export const LIFELINE_RAIL_MS = 1800
 /**

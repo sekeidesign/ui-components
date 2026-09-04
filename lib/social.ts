@@ -4,7 +4,6 @@ export type SocialKind = "fire" | "link";
 
 export const SOCIAL_KINDS: SocialKind[] = ["fire", "link"];
 
-/** Counts for one post. */
 export type SocialCounts = Record<SocialKind, number>;
 
 /**

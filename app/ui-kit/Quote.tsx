@@ -15,7 +15,7 @@ export function Quote({ children, cite }: QuoteProps) {
 			data-highlight-exclude
 			
 		>
-			<div className={cn("border-l-2 border-gray-200 px-4 my-6 md:pl-6 md:my-7 py-1")}>
+			<div className={cn("border-l-2 border-gray-200 pl-4 my-6 md:my-7 pb-1")}>
 				<blockquote
 					className={cn(
 						"font-pixel text-xl md:text-3xl text-gray-700 leading-snug",

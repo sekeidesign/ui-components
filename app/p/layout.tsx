@@ -8,7 +8,7 @@ export default function PostLayout({
 }>) {
 	return (
 		<>
-			<PanelRow className="md:px-8 px-4 py-3">
+			<PanelRow className="md:px-8 px-3 py-3">
 				<BackLink />
 			</PanelRow>
 			{children}
