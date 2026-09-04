@@ -26,14 +26,18 @@ export async function generateMetadata({
 	if (!entry || !entry.hasPage) return {};
 
 	const title = `${entry.title} | PG Gonni`;
+	const description =
+		entry.kind === "book"
+			? `Thoughts on ${entry.title} by PG Gonni`
+			: entry.excerpt;
 	return {
 		// The root layout templates the tab title, so this passes the bare entry
 		// title and keeps the full string for OG, which isn't templated.
 		title: entry.title,
-		description: entry.excerpt,
+		description,
 		openGraph: {
 			title,
-			description: entry.excerpt,
+			description,
 			// Books draw their own card in opengraph-image.tsx; an image set here
 			// would win over that file. The rest get the site card rather than
 			// their own cover, half of which are WebP that LinkedIn won't render.
