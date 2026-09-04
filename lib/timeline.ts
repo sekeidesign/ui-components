@@ -56,7 +56,6 @@ export interface TimelineEntry {
 	subtitle?: string;
 	/** Square mark: company or app icon. public/ path or absolute URL. */
 	icon?: string;
-	/** Book author. */
 	author?: string;
 	/** Book rating, 0–5. */
 	rating?: number;

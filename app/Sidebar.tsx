@@ -41,9 +41,7 @@ export const Sidebar = () => {
 
 			<ProfileCard />
 
-			<div className="panel p-4 md:flex-1">
-				<TimelineTabs available={available} counts={counts} />
-			</div>
+			<TimelineTabs available={available} counts={counts} />
 
 			<Footer className="md:grid hidden" />
 		</div>

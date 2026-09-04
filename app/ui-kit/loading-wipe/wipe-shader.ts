@@ -163,7 +163,6 @@ export function hexToRgb(hex: string): [number, number, number] {
 /** `wipeDistance` is the swappable core: replace it for a radial or dissolve variant. */
 export const WIPE_WGSL = /* wgsl */ `
 struct Params {
-  // Sweep axis: dot(uv, dir) + bias runs 0 -> 1 across the square.
   dir: vec2f,
   bias: f32,
   progress: f32,
@@ -178,7 +177,6 @@ struct Params {
   // Device pixels, so grain is the same gauge at any size.
   resolution: vec2f,
   _pad: vec2f,
-  // Ribbon stops, revealed edge -> surface. w unused.
   stops: array<vec4f, 4>,
 }
 

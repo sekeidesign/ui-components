@@ -11,7 +11,7 @@ export const TooltipProvider = Tooltip.Provider;
  */
 const handle = Tooltip.createHandle<string>();
 
-/** The trigger. `payload` is the label this control should show. */
+/** `payload` is the label this control should show. */
 export function TooltipTrigger(
 	props: React.ComponentProps<typeof Tooltip.Trigger> & { payload: string },
 ) {

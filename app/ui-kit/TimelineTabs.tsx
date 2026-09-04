@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { cn } from "./cn";
 import { useFilters } from "./filters/FilterContext";
 import { KIND_META } from "./post/kind-meta";
@@ -35,38 +36,43 @@ export function TimelineTabs({
 	// Only lit on the feed. Off it nothing is filtered, so every tab reads
 	// unselected and each is a way back.
 	const showingAll = active && selected.size === 0;
+	// A post page carries its own back link, and on mobile the sidebar stacks
+	// above the post rather than sitting beside it — two ways back in a column.
+	const onPost = usePathname().startsWith("/p/");
 
 	return (
-		// Wraps rather than scrolls: the sidebar is narrower than the feed was.
-		<div className="flex flex-wrap items-center gap-1.5">
-			<button
-				type="button"
-				aria-pressed={showingAll}
-				onClick={clear}
-				className={cn(TAB_BASE, "px-2", showingAll ? TAB_ON : TAB_OFF)}
-			>
-				All posts
-				<Count value={total} />
-			</button>
+		<div className={cn("panel p-4 md:flex-1", onPost && "hidden md:block")}>
+			{/* Wraps rather than scrolls: the sidebar is narrower than the feed was. */}
+			<div className="flex flex-wrap items-center gap-1.5">
+				<button
+					type="button"
+					aria-pressed={showingAll}
+					onClick={clear}
+					className={cn(TAB_BASE, "px-2", showingAll ? TAB_ON : TAB_OFF)}
+				>
+					All posts
+					<Count value={total} />
+				</button>
 
-			{available.map((slug) => {
-				const isOn = selected.has(slug);
-				const { Icon } = KIND_META[FILTER_KINDS[slug]];
+				{available.map((slug) => {
+					const isOn = selected.has(slug);
+					const { Icon } = KIND_META[FILTER_KINDS[slug]];
 
-				return (
-					<button
-						key={slug}
-						type="button"
-						aria-pressed={isOn}
-						onClick={() => toggle(slug)}
-						className={cn(TAB_BASE, "pl-1.5 pr-2", isOn ? TAB_ON : TAB_OFF)}
-					>
-						<Icon filled={isOn} className="text-gray-400" />
-						{FILTER_LABELS[slug]}
-						<Count value={counts[FILTER_KINDS[slug]] ?? 0} />
-					</button>
-				);
-			})}
+					return (
+						<button
+							key={slug}
+							type="button"
+							aria-pressed={isOn}
+							onClick={() => toggle(slug)}
+							className={cn(TAB_BASE, "pl-1.5 pr-2", isOn ? TAB_ON : TAB_OFF)}
+						>
+							<Icon filled={isOn} className="text-gray-400" />
+							{FILTER_LABELS[slug]}
+							<Count value={counts[FILTER_KINDS[slug]] ?? 0} />
+						</button>
+					);
+				})}
+			</div>
 		</div>
 	);
 }

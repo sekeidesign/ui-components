@@ -12,7 +12,6 @@ import {
 import { clamp, snapToDevicePixel } from "./lifeline-utils"
 import type { LifelineEventImage } from "./types"
 
-/** Tweak these */
 const FOLLOW_EASE = 0.16
 const TILT_FACTOR = 0.14
 const TILT_MAX_DEG = 7

@@ -1,6 +1,5 @@
 import { clamp } from "./lifeline-utils"
 
-/** Tweak these */
 export const LIFELINE_SLOW_YEARS = 5
 export const LIFELINE_SLOW_TIME_RATIO = 0.38
 export const LIFELINE_SLOW_MARKER_FADE_MS = 420

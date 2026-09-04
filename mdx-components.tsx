@@ -6,6 +6,8 @@ import { TextLink } from "@ui-kit/TextLink";
 
 /** rehype's id for the sr-only heading that opens the footnotes section. */
 const FOOTNOTE_LABEL_ID = "footnote-label";
+const FOOTNOTE_ID_PREFIX = "user-content-fn-";
+const FOOTNOTE_REF_ID_PREFIX = "user-content-fnref-";
 
 // remark-gfm marks its generated footnote nodes with data attributes. They
 // survive the hast -> JSX conversion as literal props, which the MDXComponents
@@ -15,6 +17,33 @@ const isFootnoteRef = (props: object) => hasFlag(props, "data-footnote-ref");
 const isFootnoteBackref = (props: object) =>
 	hasFlag(props, "data-footnote-backref");
 const isFootnoteSection = (props: object) => hasFlag(props, "data-footnotes");
+
+function BackToQuote() {
+	return (
+		<svg
+			viewBox="0 0 24 24"
+			fill="none"
+			xmlns="http://www.w3.org/2000/svg"
+			aria-hidden="true"
+			className="ml-0.5 inline-block size-4 shrink-0 align-[-0.3em] text-gray-400 group-hover:text-gray-900 group-focus-visible:text-gray-900"
+		>
+			<path
+				d="M11.1387 8.44305L14.5817 5L18.0248 8.44305"
+				stroke="currentColor"
+				strokeWidth="1.5"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+			/>
+			<path
+				d="M14.5817 5.19922V13.3753C14.5817 16.4826 12.0628 19.0015 8.95558 19.0015H5.97461"
+				stroke="currentColor"
+				strokeWidth="1.5"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+			/>
+		</svg>
+	);
+}
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
 	return {
@@ -54,17 +83,17 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 			/>
 		),
 		a: ({ href, children, ...props }) => {
-			if (isFootnoteRef(props) || isFootnoteBackref(props)) {
+			// The li renderer below wraps the whole note in the jump link, so the
+			// backref can only contribute the icon — a nested anchor would not parse.
+			if (isFootnoteBackref(props)) return <BackToQuote />;
+			if (isFootnoteRef(props)) {
 				const { className, ...rest } = props;
 				return (
 					<a
 						href={href}
 						{...rest}
 						className={cn(
-							"no-underline ",
-							isFootnoteRef(props)
-								? "rounded-xs px-[2px] hover:text-gray-600 hover:underline focus:underline focus:outline-none focus:text-gray-600 focus:bg-gray-200"
-								: "ml-1 text-gray-400 hover:text-gray-900",
+							"no-underline rounded-xs px-[2px] hover:text-gray-600 hover:underline focus:underline focus:outline-none focus:text-gray-600 focus:bg-gray-200",
 							className,
 						)}
 					>
@@ -98,7 +127,26 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 				{...props}
 			/>
 		),
-		li: (props) => <li className="pl-1" {...props} />,
+		li: ({ children, ...props }) => {
+			const id = typeof props.id === "string" ? props.id : "";
+			if (!id.startsWith(FOOTNOTE_ID_PREFIX))
+				return (
+					<li className="pl-1" {...props}>
+						{children}
+					</li>
+				);
+			const name = id.slice(FOOTNOTE_ID_PREFIX.length);
+			return (
+				<li className="pl-1" {...props}>
+					<a
+						href={`#${FOOTNOTE_REF_ID_PREFIX}${name}`}
+						className="group block no-underline focus:outline-none"
+					>
+						{children}
+					</a>
+				</li>
+			);
+		},
 		strong: (props) => (
 			<strong className="font-[600] text-gray-900" {...props} />
 		),

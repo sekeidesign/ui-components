@@ -11,12 +11,6 @@ import { AppIcon, BookCover, Media, PhoneMedia } from "./PostMedia";
 import { PostRow } from "./PostRow";
 
 /**
- * The card grammar: how a post arranges its copy. The artwork slots live in
- * PostMedia, and both are reachable as `Post.*` — see the namespace at the
- * bottom of this file.
- */
-
-/**
  * How a card arranges its copy and its artwork.
  *
  * `aside` — artwork beside the copy at every width, for a book cover or phone.
@@ -63,7 +57,7 @@ export function Post({
 	);
 }
 
-/** The text column. min-w-0 so long words can't push the media off the card. */
+/** min-w-0 so long words can't push the media off the card. */
 function Body({ children }: { children: ReactNode }) {
 	return (
 		<div className="flex-1 min-w-0 flex flex-col items-start gap-2.5">

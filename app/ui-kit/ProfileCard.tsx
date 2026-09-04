@@ -12,35 +12,20 @@ import Link from "next/link";
 import { useRef } from "react";
 import { cn } from "./cn";
 
-/** Degrees of lean at the card's edge. */
 const MAX_TILT = 10;
 
-/**
- * How far the light travels across the card, in px. Every gradient layer is
- * grown by twice this so it still covers its box at full offset.
- */
 const OFFSET_FACTOR = 100;
 
 const SPRING = { stiffness: 350, damping: 20 };
 
-/**
- * The seal, as a mask over a moving gradient. Lives in public/ so its ~22KB of
- * path data stays out of the client bundle.
- */
 const SEAL_MASK = 'url("/ai-seal.svg")';
 const SEAL_SIZE = 97;
 
-/** Counter-clockwise, so it sits like something pressed on slightly askew. */
 const SEAL_ROTATION = -12;
 
-/**
- * Bright and dimmed white in bands, twice the seal's size so there's gradient
- * left to travel into as the highlight tracks the pointer.
- */
 const SEAL_SHEEN =
 	"linear-gradient(135deg, rgba(255,255,255,0.3) 0%, #fff 25%, rgba(255,255,255,0.35) 50%, #fff 75%, rgba(255,255,255,0.3) 100%)";
 
-/** The whole card is the link, so the tilt has to live on the anchor itself. */
 const MotionLink = m.create(Link);
 
 export function ProfileCard({ className }: { className?: string }) {
@@ -73,8 +58,6 @@ export function ProfileCard({ className }: { className?: string }) {
 			href="/timeline"
 			style={{ transformPerspective: 500, z, rotateX, rotateY }}
 			onPointerMove={(event) => {
-				// A finger has no hover, so a tap would otherwise leave the card parked at
-				// whatever angle it was released at.
 				if (event.pointerType !== "mouse" || !cardRef.current) return;
 
 				const rect = cardRef.current.getBoundingClientRect();
@@ -103,12 +86,7 @@ export function ProfileCard({ className }: { className?: string }) {
 				if (event.pointerType === "mouse") z.set(10);
 			}}
 			className={cn(
-				// bg-gray-100 spelled out rather than the `panel` class: that one is unlayered
-				// CSS, so it outranks every Tailwind utility.
 				"bg-gray-100 p-4 flex flex-col gap-4 relative overflow-hidden hover:will-change-transform",
-				// The transparent ring at rest declares the box-shadow composite, so both fade
-				// instead of snapping. Don't pair it with `shadow-transparent` — tailwind-merge
-				// reads that as the same group as shadow-skew and drops one.
 				"ring ring-transparent",
 				"rounded-sm hover:rounded-xl hover:ring-gray-500/6 hover:shadow-skew",
 				"transition-[border-radius,box-shadow] duration-300 ease-out",
@@ -142,12 +120,16 @@ export function ProfileCard({ className }: { className?: string }) {
 				className="absolute -right-3 -bottom-3 z-0 pointer-events-none"
 			/>
 
-			<div className="relative z-10 flex items-start justify-between gap-4">
+			<div className="relative z-10 items-center flex md:items-start md:justify-between gap-2.5 md:gap-4">
 				<Portrait offsetX={offsetX} offsetY={offsetY} />
+				<div className="relative z-10 flex-1 block md:hidden">
+					<h1 className="font-[550] text-gray-800 w-full">PG Gonni</h1>
+					<h2 className="font-[450] text-xs text-gray-500 w-full">Design Engineer</h2>
+				</div>
 				<Coordinates />
 			</div>
 
-			<div className="relative z-10">
+			<div className="relative z-10 hidden md:block">
 				<h1 className="font-[550] text-gray-800 w-full">PG Gonni</h1>
 				<h2 className="font-[450] text-gray-500 w-full">Design Engineer</h2>
 			</div>
@@ -155,7 +137,6 @@ export function ProfileCard({ className }: { className?: string }) {
 	);
 }
 
-/** The two addresses as coordinates, in mono so the two lines column up. */
 const PLACES = [
 	{ place: "Forlì", lat: "44.2093° N", lon: "12.0673° E" },
 	{ place: "Montréal", lat: "45.4905° N", lon: "73.5587° W" },
@@ -163,9 +144,8 @@ const PLACES = [
 
 function Coordinates() {
 	return (
-		<div className="flex flex-col items-end gap-0.5 shrink-0 font-mono text-[9px] leading-[1.5] font-[350] text-gray-300">
+		<div className="hidden md:flex flex-col items-end gap-0.5 shrink-0 font-mono text-[9px] leading-[1.5] font-[350] text-gray-300">
 			{PLACES.map(({ place, lat, lon }) => (
-				// The place name is what a screen reader gets; on screen the numbers stand alone.
 				<span key={place}>
 					<span className="sr-only">{`${place}: `}</span>
 					{lat}, {lon}
@@ -180,7 +160,6 @@ function Sweep({
 	offsetY,
 	className,
 	style,
-	/** Multiplier on the box it fills, for layers that need more travel. */
 	scale = 1,
 }: {
 	offsetX: MotionValue<number>;
@@ -202,7 +181,7 @@ function Sweep({
 			}}
 			transition={{ type: "spring", ...SPRING }}
 			className={cn(
-				"absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none bg-linear-to-br",
+				"hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none bg-linear-to-br",
 				className,
 			)}
 		/>
@@ -217,7 +196,7 @@ function Portrait({
 	offsetY: MotionValue<number>;
 }) {
 	return (
-		<div className="relative z-10 w-16 h-19 shrink-0 rounded-sm overflow-hidden ring ring-gray-500/10 ring-inset inset-shadow-xs">
+		<div className="relative z-10 w-8 h-10 md:w-16 md:h-19 shrink-0 rounded-sm overflow-hidden ring ring-gray-500/10 ring-inset inset-shadow-xs">
 			<Sweep
 				offsetX={offsetX}
 				offsetY={offsetY}
@@ -239,8 +218,6 @@ function Portrait({
 				alt="PG Gonni"
 				width={332}
 				height={365}
-				// Mirrored so the gaze runs into the card. Photo only — the recess and its
-				// light stay put.
 				className="relative z-30 size-full object-cover -scale-x-100"
 			/>
 		</div>

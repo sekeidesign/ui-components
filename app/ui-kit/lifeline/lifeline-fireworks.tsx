@@ -12,7 +12,6 @@ import {
 } from "react"
 import type { LifelineEventEffect } from "./types"
 
-/** Tweak these */
 const DURATION_S = 7.5
 const MAX_DPR = 1.5
 

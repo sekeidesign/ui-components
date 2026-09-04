@@ -79,7 +79,6 @@ export function Media({
  */
 const PHONE = { width: 120, height: 257, top: 1, fade: 79 };
 
-/** A screenshot in a phone: a rounded rect with a hairline outline and a layered shadow, no bezel artwork. */
 export function PhoneMedia({
 	src,
 	alt,
