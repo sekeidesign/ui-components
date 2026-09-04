@@ -6,7 +6,6 @@ import {
 	BOOK_WIDTH,
 } from "@ui-kit/book-shelf/constants";
 import { bookCardEntry } from "@/lib/og/book-card";
-import { getTimeline } from "@/lib/timeline";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -25,12 +24,6 @@ const DATE_FORMAT = new Intl.DateTimeFormat("en-US", {
 	year: "numeric",
 	timeZone: "UTC",
 });
-
-export function generateStaticParams() {
-	return getTimeline()
-		.filter((entry) => bookCardEntry(entry.slug))
-		.map((entry) => ({ slug: entry.slug }));
-}
 
 export async function generateImageMetadata({
 	params,
