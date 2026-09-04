@@ -8,7 +8,7 @@ export function AboutPanel() {
 			<Avatar />
 			<p className="text-gray-500 text-base font-[450] leading-normal cursor-default">
 				<span className="pb-1 block">
-					Head of Product at{" "}
+					Founding Product Design Engineer at{" "}
 					<TextLink href="https://www.tato.co" hasFavicon>
 						Tato
 					</TextLink>
