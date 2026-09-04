@@ -49,7 +49,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 		),
 		p: (props) => (
 			<p
-				className="text-gray-500 text-[15px] font-[420] leading-relaxed mb-4"
+				className="text-gray-600 text-[15px] font-[420] leading-relaxed mb-4"
 				{...props}
 			/>
 		),
@@ -88,13 +88,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 		},
 		ul: (props) => (
 			<ul
-				className="list-disc pl-5 text-gray-500 text-[15px] font-[420] leading-relaxed space-y-1 mb-4"
+				className="list-disc pl-5 text-gray-600 text-[15px] font-[420] leading-relaxed space-y-1 mb-4"
 				{...props}
 			/>
 		),
 		ol: (props) => (
 			<ol
-				className="list-decimal pl-5 text-gray-500 text-[15px] font-[420] leading-relaxed space-y-1 mb-4"
+				className="list-decimal pl-5 text-gray-600 text-[15px] font-[420] leading-relaxed space-y-1 mb-4"
 				{...props}
 			/>
 		),
@@ -104,7 +104,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 		),
 		blockquote: (props) => (
 			<blockquote
-				className="border-l-2 border-gray-300 pl-4 text-gray-500 italic mb-4"
+				className="border-l-2 border-gray-300 pl-4 text-gray-600 italic mb-4"
 				{...props}
 			/>
 		),

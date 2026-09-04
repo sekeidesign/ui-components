@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { Sidebar } from "./Sidebar";
@@ -18,6 +19,15 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
 	variable: "--font-geist-mono",
 	subsets: ["latin"],
+});
+
+// Self-hosted rather than next/font/google: this Next's bundled font list
+// predates Geist Pixel, so there's no Geist_Pixel export to import.
+const geistPixel = localFont({
+	src: "./fonts/GeistPixel-Regular.ttf",
+	variable: "--font-geist-pixel",
+	weight: "400",
+	display: "swap",
 });
 
 // Pinned to the production domain, a preview's OG paths resolve against
@@ -60,7 +70,7 @@ export default function RootLayout({
 		<html lang="en">
 			<Analytics />
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+				className={`${geistSans.variable} ${geistMono.variable} ${geistPixel.variable} antialiased`}
 				style={{ backgroundColor: "var(--color-gray-200)" }}
 			>
 				<MotionProvider>
